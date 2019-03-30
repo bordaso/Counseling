@@ -1,38 +1,51 @@
 package org.Backend;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = Config.class)
+public class AppTest {
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
+	@Autowired
+	private UseMe useme;
+
+	@Autowired
+	private TestInt tt;
+
+	@Test
+	public void thisShouldBeNotNull() {
+		assertNotNull(useme);
+
+	}
+
+	@Test
+	public void thisShouldBeNotNulToo() {
+		assertNotNull(tt);
+
+	}
+
+	@Test
+	public void thisShouldBeTrue() {
+		assertTrue(useme.callMeBaby());
+
+	}
+
+	@Test
+	public void thisShouldBeTrueAsWell() {
+
+		assertTrue(tt.returnMe());
+
+	}
+
 }
