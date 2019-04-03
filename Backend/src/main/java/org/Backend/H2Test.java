@@ -6,15 +6,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+@PropertySource("classpath:db.properties")
 @Component
 public class H2Test {
 	
 	
-	   static final String DB_URL = "jdbc:h2:~/test";  
-	   static final String USER = "sa"; 
-	   static final String PASS = ""; 
+	@Autowired
+	private Environment env;
+	
+//	   static final String DB_URL = "jdbc:h2:~/test";  
+//	   static final String USER = "sa"; 
+//	   static final String PASS = ""; 
 	  
 	   public void callMeH2() { 
 		   
@@ -24,9 +31,12 @@ public class H2Test {
 	      try { 
 	             
 	         System.out.println("Connecting to database..."); 
-	         conn = DriverManager.getConnection(DB_URL,USER,PASS);  
+	        // conn = DriverManager.getConnection(DB_URL,USER,PASS);  
+	         conn = DriverManager.getConnection(env.getProperty("db.url"),env.getProperty("db.username"),env.getProperty("db.password")); 
 	         System.out.println("Connected database successfully..."); 
-	         stmt = conn.createStatement();	         
+	         stmt = conn.createStatement();	    
+	         
+	 
 	         
 	         System.out.println("Creating table in given database..."); 
 	         sql =  "CREATE TABLE IF NOT EXISTS   REGISTRATION " + 
@@ -68,8 +78,23 @@ public class H2Test {
 	         } 
 	         
 	         
-	         String dropEverythingSql = "DROP ALL OBJECTS";	        
-		     stmt.executeUpdate(dropEverythingSql);
+	         
+//	         String dropEverythingSql = "DROP ALL OBJECTS";	        
+//		     stmt.executeUpdate(dropEverythingSql);
+//	         
+//	    *****THIS IS NOT NEEDED BECAUSE:
+//	         hbm2ddl closes the connection after creating the table, so h2 discards it.
+//
+//	         If you have your connection-url configured like this
+//
+//	         jdbc:h2:mem:test
+//	         the content of the database is lost at the moment the last connection is closed.
+//
+//	         If you want to keep your content you have to configure the url like this
+//
+//	         jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+//	         If doing so, h2 will keep its content as long as the vm lives.
+
 	         	       
 	         rs.close(); 
 	         stmt.close(); 
