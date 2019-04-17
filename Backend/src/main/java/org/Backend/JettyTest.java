@@ -1,40 +1,40 @@
 package org.Backend;
 
-import java.awt.GraphicsEnvironment;
-import java.lang.Thread.UncaughtExceptionHandler;
+import java.net.URI;
+import java.net.URL;
 
 import javax.faces.webapp.FacesServlet;
-import javax.swing.JOptionPane;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.util.resource.ResourceCollection;
-import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.util.resource.Resource;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import com.sun.faces.config.ConfigureListener;
 
-public class JettyTest implements UncaughtExceptionHandler {
+public class JettyTest   {
 
 	private final Server server;
+	
+//	private Logger logger = LoggerFactory.getLogger(JettyTest.class);
+//	final String message = "Hello logging!";
 
 	public static final String SERVER_REFERENCE = "jettyInMemory";
 
 	public static void main(String[] args) throws Exception {
 		int port = 54321;
-
 		JettyTest embeddedServer = new JettyTest(port);
 		embeddedServer.listen();
 	}
 
 	public JettyTest(int port) {
 
-		Thread.setDefaultUncaughtExceptionHandler(this);
 
 		this.server = new Server();
 
@@ -51,12 +51,15 @@ public class JettyTest implements UncaughtExceptionHandler {
 
 			// final String webappDir =
 			// this.getClass().getClassLoader().getResource("org/Backend/NAH3").toExternalForm();
-
-			final String webappDir = this.getClass().getClassLoader().getResource("webapp").toExternalForm();
+			//String absolutePath = this.getClass().getProtectionDomain().getCodeSource().toString();
+			//final String webappDir = this.getClass().getResource("/webapp").toExternalForm();
 			// webappDir IS  file:/C:/Users/Oliver/consultancy_poc_workspace_v2/Main/Backend/target/classes/webapp
 			// try it file:/C:/Users/Oliver/consultancy_poc_workspace_v2/Main/Frontend/src/main/resources/webapp
-			System.out.println(webappDir);
-			WebAppContext webappContext = new WebAppContext();
+			//System.out.println(webappDir);
+			//ServletContextHandler webappContext = new ServletContextHandler();
+			ServletContextHandler webappContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+//			webappContext.setContextPath("/");
+//			webappContext.setResourceBase(new ClassPathResource("webapp").getURI().toString());
 
 			/*
 			 * WebAppContext webappContext = new WebAppContext(webappDir, "/") {
@@ -84,25 +87,58 @@ public class JettyTest implements UncaughtExceptionHandler {
 			 * /Backend/target/classes/org/Backend
 			 */
 			// Workaround to support JSF annotation scanning in Maven environment (part2)
-			try {
+		
 
-				webappContext.setBaseResource(new ResourceCollection(new String[] { webappDir, "./target" }));
+				
+//				String basePath = "/profiles.sm/";
+//				URL resource = LanguageDetection.class.getResource(basePath + "myResource.txt");
+				//webappContext.setBaseResource(new ResourceCollection(new String[] { "webapp"}));
+				
+				  String  baseStr  = "/webapp";  //... contains: helloWorld.html, login.html, etc. and folder: other/xxx.html
+				  // getProtectionDomain().getCodeSource().getLocation();
+				 // URL     baseUrl  = JettyTest.class.getResource( JettyTest.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm()+baseStr ); 
+				  String  basePath = JettyTest.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm()+baseStr; //baseUrl.toExternalForm();
+
+		
+				 
+				  
+			      URL webRootLocation = this.getClass().getResource("/webapp/index.html");
+			
+			      URI webRootUri = URI.create(webRootLocation.toURI().toASCIIString().replaceFirst("/index.html$","/"));
+			      System.err.printf("//////////////////////////////////////////////////Web Root URI: %s%n",webRootUri);
+
+			      //  ServletContextHandler context = new ServletContextHandler();
+			      webappContext.setContextPath("/");
+			      webappContext.setBaseResource(Resource.newResource(webRootUri));
+			      webappContext.setWelcomeFiles(new String[] { "index.html" });
+
+			      webappContext.getMimeTypes().addMimeMapping("txt","text/plain;charset=utf-8");
+			
+
+				  
+				  //webappContext.setResourceBase( basePath );
+				
+				
+				//webappContext.setResourceBase(new ClassPathResource("webapp").getURI().toString());
+	
+				
+				//webappContext.setBaseResource(new ResourceCollection(new String[] { webappDir, "./target" }));
 				//C:\Users\Oliver\consultancy_poc_workspace_v2\Main\Frontend\target\classes\index.xhtml
 				//webappContext.setBaseResource(new ResourceCollection(new String[] { "file:/C:/Users/Oliver/consultancy_poc_workspace_v2/Main/Frontend/target/classes/webapp"}));
 				// webappContext.setResourceAlias("/WEB-INF/classes/", "/classes/");
-			} catch (Exception e) {
-			}
-
+		
 			webappContext.setDisplayName("Angular 6 and Primefaces 6 on Jetty Embedded 9 with Spring 5 and Hibernate and Jersey with Jackson Example");
-			webappContext.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
+			//webappContext.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
 
 			// add server reference to context ...
-			webappContext.setAttribute(SERVER_REFERENCE, this);
+			//webappContext.setAttribute(SERVER_REFERENCE, this);
 			
 	
 			initializeJSF(webappContext);
 			initializeJersey(webappContext);
 
+		
+            webappContext.addServlet(DefaultServlet.class,"/").setInitOrder(2);
 
 			server.setHandler(webappContext);
 
@@ -115,7 +151,7 @@ public class JettyTest implements UncaughtExceptionHandler {
 		}
 	}
 
-	private void initializeJersey(WebAppContext webappContext) {
+	private void initializeJersey(ServletContextHandler webappContext) {
 		ServletHolder serHol = webappContext.addServlet(ServletContainer.class, "/rest/*");
 		serHol.setInitOrder(1);
 		serHol.setInitParameter("jersey.config.server.provider.packages", "org.Backend");
@@ -138,7 +174,7 @@ public class JettyTest implements UncaughtExceptionHandler {
 		}
 	}
 
-	private void initializeJSF(WebAppContext context) {
+	private void initializeJSF(ServletContextHandler context) {
 
 		// JSF parameters ...
 		context.setInitParameter("com.sun.faces.forceLoadConfiguration", "true");
@@ -161,7 +197,6 @@ public class JettyTest implements UncaughtExceptionHandler {
 
 		// Add to web context ...
 		context.addServlet(jsfServlet, "*.xhtml");
-		context.setWelcomeFiles(new String[] { "index.xhtml" });
 	}
 
 	public void shutdown() {
@@ -181,13 +216,5 @@ public class JettyTest implements UncaughtExceptionHandler {
 				}
 			}
 		}.start();
-	}
-
-	@Override
-	public void uncaughtException(Thread thread, Throwable e) {
-		if (!GraphicsEnvironment.isHeadless()) {
-			String message = "[" + e.getClass() + "] " + e.getMessage();
-			JOptionPane.showMessageDialog(null, message, "An uncaught error occured!", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 }
