@@ -18,14 +18,11 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 
 import com.sun.faces.config.ConfigureListener;
 
-public class JettyTest   {
+public class JettyTest {
 
 	private final Server server;
-	
-//	private Logger logger = LoggerFactory.getLogger(JettyTest.class);
-//	final String message = "Hello logging!";
 
-	public static final String SERVER_REFERENCE = "jettyInMemory";
+	// private Logger logger = LoggerFactory.getLogger(JettyTest.class);
 
 	public static void main(String[] args) throws Exception {
 		int port = 54321;
@@ -34,7 +31,6 @@ public class JettyTest   {
 	}
 
 	public JettyTest(int port) {
-
 
 		this.server = new Server();
 
@@ -45,104 +41,28 @@ public class JettyTest   {
 			httpConnector.setPort(port);
 			httpConnector.setIdleTimeout(5000);
 			server.addConnector(httpConnector);
-			// log.info("Http connector started on port: " + port);
 
-			// WebApp Context Handler
-
-			// final String webappDir =
-			// this.getClass().getClassLoader().getResource("org/Backend/NAH3").toExternalForm();
-			//String absolutePath = this.getClass().getProtectionDomain().getCodeSource().toString();
-			//final String webappDir = this.getClass().getResource("/webapp").toExternalForm();
-			// webappDir IS  file:/C:/Users/Oliver/consultancy_poc_workspace_v2/Main/Backend/target/classes/webapp
-			// try it file:/C:/Users/Oliver/consultancy_poc_workspace_v2/Main/Frontend/src/main/resources/webapp
-			//System.out.println(webappDir);
-			//ServletContextHandler webappContext = new ServletContextHandler();
 			ServletContextHandler webappContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
-//			webappContext.setContextPath("/");
-//			webappContext.setResourceBase(new ClassPathResource("webapp").getURI().toString());
 
-			/*
-			 * WebAppContext webappContext = new WebAppContext(webappDir, "/") {
-			 * 
-			 * // Workaround to support JSF annotation scanning in Maven environment (part1)
-			 * 
-			 * @Override public String getResourceAlias(String alias) {
-			 * 
-			 * System.out.println("IAM LOOKING FOR  "+alias);
-			 * 
-			 * final Map<String, String> resourceAliases = (Map<String, String>)
-			 * getResourceAliases();
-			 * 
-			 * if (resourceAliases == null) { return null; } for (Entry<String, String>
-			 * oneAlias : resourceAliases.entrySet()) {
-			 * System.out.println("oneAlias:  "+oneAlias.getKey()); if
-			 * (alias.startsWith(oneAlias.getKey())) {
-			 * System.out.println(alias.replace(oneAlias.getKey(), oneAlias.getValue()));
-			 * 
-			 * return alias.replace(oneAlias.getKey(), oneAlias.getValue()); } } return
-			 * null; } } ;
-			 * 
-			 * // file:/C:/Users/Oliver/consultancy_poc_workspace_v2/Main/Backend/target/
-			 * classes/webapp/WEB-INF/faces-config.xml ///
-			 * /Backend/target/classes/org/Backend
-			 */
-			// Workaround to support JSF annotation scanning in Maven environment (part2)
-		
+			URL webRootLocation = this.getClass().getResource("/webapp/index.html");
 
-				
-//				String basePath = "/profiles.sm/";
-//				URL resource = LanguageDetection.class.getResource(basePath + "myResource.txt");
-				//webappContext.setBaseResource(new ResourceCollection(new String[] { "webapp"}));
-				
-				  String  baseStr  = "/webapp";  //... contains: helloWorld.html, login.html, etc. and folder: other/xxx.html
-				  // getProtectionDomain().getCodeSource().getLocation();
-				 // URL     baseUrl  = JettyTest.class.getResource( JettyTest.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm()+baseStr ); 
-				  String  basePath = JettyTest.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm()+baseStr; //baseUrl.toExternalForm();
+			URI webRootUri = URI.create(webRootLocation.toURI().toASCIIString().replaceFirst("/index.html$", "/"));
+			System.err.printf("//////////////////////////////////////////////////Web Root URI: %s%n", webRootUri);
 
-		
-				 
-				  
-			      URL webRootLocation = this.getClass().getResource("/webapp/index.html");
-			
-			      URI webRootUri = URI.create(webRootLocation.toURI().toASCIIString().replaceFirst("/index.html$","/"));
-			      System.err.printf("//////////////////////////////////////////////////Web Root URI: %s%n",webRootUri);
+			webappContext.setContextPath("/");
+			webappContext.setBaseResource(Resource.newResource(webRootUri));
+			webappContext.setWelcomeFiles(new String[] { "index.html" });
+			webappContext.getMimeTypes().addMimeMapping("txt", "text/plain;charset=utf-8");
 
-			      //  ServletContextHandler context = new ServletContextHandler();
-			      webappContext.setContextPath("/");
-			      webappContext.setBaseResource(Resource.newResource(webRootUri));
-			      webappContext.setWelcomeFiles(new String[] { "index.html" });
+			webappContext.setDisplayName(
+					"Angular 6 and Primefaces 6 on Jetty Embedded 9 with Spring 5 and Hibernate and Jersey with Jackson Example");
 
-			      webappContext.getMimeTypes().addMimeMapping("txt","text/plain;charset=utf-8");
-			
-
-				  
-				  //webappContext.setResourceBase( basePath );
-				
-				
-				//webappContext.setResourceBase(new ClassPathResource("webapp").getURI().toString());
-	
-				
-				//webappContext.setBaseResource(new ResourceCollection(new String[] { webappDir, "./target" }));
-				//C:\Users\Oliver\consultancy_poc_workspace_v2\Main\Frontend\target\classes\index.xhtml
-				//webappContext.setBaseResource(new ResourceCollection(new String[] { "file:/C:/Users/Oliver/consultancy_poc_workspace_v2/Main/Frontend/target/classes/webapp"}));
-				// webappContext.setResourceAlias("/WEB-INF/classes/", "/classes/");
-		
-			webappContext.setDisplayName("Angular 6 and Primefaces 6 on Jetty Embedded 9 with Spring 5 and Hibernate and Jersey with Jackson Example");
-			//webappContext.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
-
-			// add server reference to context ...
-			//webappContext.setAttribute(SERVER_REFERENCE, this);
-			
-	
 			initializeJSF(webappContext);
 			initializeJersey(webappContext);
 
-		
-            webappContext.addServlet(DefaultServlet.class,"/").setInitOrder(2);
+			webappContext.addServlet(DefaultServlet.class, "/").setInitOrder(2);
 
 			server.setHandler(webappContext);
-
-			// Start server ...
 			server.start();
 
 		} catch (Exception e) {
@@ -155,18 +75,17 @@ public class JettyTest   {
 		ServletHolder serHol = webappContext.addServlet(ServletContainer.class, "/rest/*");
 		serHol.setInitOrder(1);
 		serHol.setInitParameter("jersey.config.server.provider.packages", "org.Backend");
-		serHol.setInitParameter("jersey.config.server.provider.classnames", "org.glassfish.jersey.jackson.JacksonFeature");
-	
+		serHol.setInitParameter("jersey.config.server.provider.classnames",
+				"org.glassfish.jersey.jackson.JacksonFeature");
 
 		// Enable Spring to inject beans into Jersey
 		AnnotationConfigWebApplicationContext wac = new AnnotationConfigWebApplicationContext();
-		wac.register(Config.class); 
+		wac.register(Config.class);
 		webappContext.addEventListener(new ContextLoaderListener(wac));
 
 	}
 
 	private void listen() {
-		// Listen for connections ...
 		try {
 			server.join();
 		} catch (InterruptedException e) {

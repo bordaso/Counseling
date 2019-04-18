@@ -19,10 +19,6 @@ public class H2Test {
 	@Autowired
 	private Environment env;
 	
-//	   static final String DB_URL = "jdbc:h2:~/test";  
-//	   static final String USER = "sa"; 
-//	   static final String PASS = ""; 
-	  
 	   public void callMeH2() { 
 		   
 	      Connection conn = null; 
@@ -30,8 +26,7 @@ public class H2Test {
 	      String sql = null;
 	      try { 
 	             
-	         System.out.println("Connecting to database..."); 
-	        // conn = DriverManager.getConnection(DB_URL,USER,PASS);  
+	         System.out.println("Connecting to database...");  
 	         conn = DriverManager.getConnection(env.getProperty("db.url"),env.getProperty("db.username"),env.getProperty("db.password")); 
 	         System.out.println("Connected database successfully..."); 
 	         stmt = conn.createStatement();	    
