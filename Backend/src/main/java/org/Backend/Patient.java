@@ -1,7 +1,6 @@
 package org.Backend;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -20,43 +21,33 @@ import org.springframework.stereotype.Component;
 @Entity
 @Table
 @Component
-public class Employee extends User implements Serializable {
-	
+public class Patient extends User implements Serializable {
+
 	private static final long serialVersionUID = 1L; 
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column
 	private Long id;
 	
 	@Column(updatable = false, nullable = false)
-	private String personalId;
+	private Long medicalId;
 	
 	@Column
-	private Employee reportsTo;
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="employee_id")
+	private Employee counselor;	
 	
-	@Column
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy="counselor")
-	private List<Patient> patientList;
-	
-	@OneToMany(mappedBy="employee")
+	@OneToMany(mappedBy="patient")
 	private Set<BookingDetails> bookingDetails;
 	
-	public Set<BookingDetails> getBookingDetails() {
-		return bookingDetails;
-	}
-
-	public void setBookingDetails(Set<BookingDetails> bookingDetails) {
-		this.bookingDetails = bookingDetails;
-	}
-
 	@Version
     @Column(name = "optlock", columnDefinition = "integer DEFAULT 0", nullable = false)
-    private long version = 0L;	
-
-	public Employee() {
+    private long version = 0L;
+	
+	public Patient() {
 		super();
-		this.type=UserType.EMPLOYEE;
+		this.type=UserType.PATIENT;
 	}
 
 	public Long getId() {
@@ -66,31 +57,31 @@ public class Employee extends User implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public Long getMedicalId() {
+		return medicalId;
+	}
+
+	public void setMedicalId(Long medicalId) {
+		this.medicalId = medicalId;
+	}
+
+	public Employee getCounselor() {
+		return counselor;
+	}
+
+	public void setCounselor(Employee counselor) {
+		this.counselor = counselor;
+	}
+
+	public Set<BookingDetails> getBookingDetails() {
+		return bookingDetails;
+	}
+
+	public void setBookingDetails(Set<BookingDetails> bookingDetails) {
+		this.bookingDetails = bookingDetails;
+	}
 	
-	public String getPersonalId() {
-		return personalId;
-	}
-
-	public void setPersonalId(String personalId) {
-		this.personalId = personalId;
-	}
-	
-	public Employee getReportsTo() {
-		return reportsTo;
-	}
-
-	public void setReportsTo(Employee reportsTo) {
-		this.reportsTo = reportsTo;
-	}
-
-	public List<Patient> getPatientList() {
-		return patientList;
-	}
-
-	public void setPatientList(List<Patient> patientList) {
-		this.patientList = patientList;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -99,8 +90,8 @@ public class Employee extends User implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((medicalId == null) ? 0 : medicalId.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((personalId == null) ? 0 : personalId.hashCode());
 		return result;
 	}
 
@@ -112,24 +103,24 @@ public class Employee extends User implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Employee other = (Employee) obj;
+		Patient other = (Patient) obj;
+		if (medicalId == null) {
+			if (other.medicalId != null)
+				return false;
+		} else if (!medicalId.equals(other.medicalId))
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (personalId == null) {
-			if (other.personalId != null)
-				return false;
-		} else if (!personalId.equals(other.personalId))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", name=" + name + ", email=" + email + "]";
+		return "Patient [id=" + id + ", name=" + name + ", email=" + email + ", counselor=" + counselor + "]";
 	}
 	
-
+	
 }
