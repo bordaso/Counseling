@@ -2,7 +2,6 @@ package org.Backend;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -20,7 +19,7 @@ public class AppTest {
 	
 		@Autowired
 		private H2Test testMeH2;
-	
+			
 		@Autowired
 		private EmpDao dao;
 		
@@ -30,14 +29,19 @@ public class AppTest {
 		@Before
 		public void setup() {
 			emp.setName("testEmp");
+			emp.setEmail("test@test.hu");
+			emp.setUsername("tester");
+			emp.setPassword("abc123");
+			emp.setPersonalId("emp01");
+			
 		} 
-		
+			
 		@Test
 		public void testH2() {
 		assertNotNull(testMeH2);
 		testMeH2.callMeH2();			
 		}
-	 
+		
 		@Test
 		public void testDaoSave() {
 			assertNotNull(dao);		
@@ -54,7 +58,7 @@ public class AppTest {
 			assertNotNull(dao.selectEmployee("testEmp").get(0));
 			assertTrue(dao.deleteEmployee("testEmp")==0);
 			}
-		
+			
 		@Test
 		public void testDaoUpdate() {
 			assertNotNull(dao);

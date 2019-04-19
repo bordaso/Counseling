@@ -7,9 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -23,21 +20,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class Patient extends User implements Serializable {
 
-	private static final long serialVersionUID = 1L; 
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column
-	private Long id;
+	private static final long serialVersionUID = 1L;
 	
 	@Column(updatable = false, nullable = false)
 	private Long medicalId;
 	
-	@Column
+	
 	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="employee_id")
 	private Employee counselor;	
 	
+	@Column
 	@OneToMany(mappedBy="patient")
 	private Set<BookingDetails> bookingDetails;
 	
@@ -48,14 +41,6 @@ public class Patient extends User implements Serializable {
 	public Patient() {
 		super();
 		this.type=UserType.PATIENT;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Long getMedicalId() {

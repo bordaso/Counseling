@@ -43,6 +43,7 @@ public class Message implements Serializable {
 	@Column
 	private Long replyToId;
 	
+	@Column
 	@OneToMany(mappedBy="msgId")
 	private Set<MessageDetails> messageDetails;
 	

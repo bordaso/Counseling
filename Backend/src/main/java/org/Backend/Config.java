@@ -45,7 +45,9 @@ public class Config {
 	      props.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
 
 	      factoryBean.setHibernateProperties(props);
-	      factoryBean.setAnnotatedClasses(Employee.class);
+	      factoryBean.setAnnotatedClasses(User.class, Employee.class, Patient.class, 
+	    		  Bookings.class, BookingDetails.class, Message.class, MessageDetails.class,
+	    		  NotificationSetup.class);
 	      return factoryBean;
 	   }
 	

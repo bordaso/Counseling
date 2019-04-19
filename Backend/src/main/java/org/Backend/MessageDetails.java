@@ -25,7 +25,7 @@ public class MessageDetails implements Serializable {
 	@Column
 	private Long id;
 	
-	@Column(updatable = false, nullable = false)
+	//@Column(updatable = false, nullable = false)
 	@ManyToOne
 	private Message msgId;
 	

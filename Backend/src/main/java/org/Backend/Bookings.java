@@ -47,7 +47,7 @@ public class Bookings implements Serializable {
 	@Column(updatable = false, nullable = false)
 	private String room;
 
-	@Column
+	//@Column
 	@OneToOne(mappedBy = "boookingNotifId", cascade = CascadeType.ALL,
     fetch = FetchType.LAZY, optional = false)
 	private NotificationSetup notificationId;
@@ -55,6 +55,7 @@ public class Bookings implements Serializable {
 	@Column
 	private boolean archived;
 
+	@Column
 	@OneToMany(mappedBy="booking")
 	private Set<BookingDetails> bookingDetails;
 

@@ -8,9 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -24,11 +21,6 @@ public class Employee extends User implements Serializable {
 	
 	private static final long serialVersionUID = 1L; 
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
-	
 	@Column(updatable = false, nullable = false)
 	private String personalId;
 	
@@ -39,6 +31,7 @@ public class Employee extends User implements Serializable {
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy="counselor")
 	private List<Patient> patientList;
 	
+	@Column
 	@OneToMany(mappedBy="employee")
 	private Set<BookingDetails> bookingDetails;
 	
@@ -57,14 +50,6 @@ public class Employee extends User implements Serializable {
 	public Employee() {
 		super();
 		this.type=UserType.EMPLOYEE;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 	
 	public String getPersonalId() {

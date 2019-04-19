@@ -24,7 +24,7 @@ public class NotificationSetup implements Serializable {
 	@Column
 	private Long id;
 	
-	@Column
+	//@Column
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
 	private Bookings boookingNotifId;

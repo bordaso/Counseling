@@ -31,19 +31,20 @@ public class BookingDetails implements Serializable {
 	@Column
 	private Long id;
 	
-	@Column(updatable = false, nullable = false)
-	@ManyToOne 
 	//@MapsId("bookingId")
+	//@Column(updatable = false, nullable = false)
+	@ManyToOne 
 	private Bookings booking;
 	
-	@Column
-	@ManyToOne 
 	//@MapsId("employeeId")
+	//@Column
+	@ManyToOne 
 	private Employee employee;
 	
-	@Column
-	@ManyToOne 
+
 	//@MapsId("patientId")
+	//@Column
+	@ManyToOne 
 	private Patient patient;
 	
 	@Column
