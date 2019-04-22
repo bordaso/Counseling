@@ -1,6 +1,9 @@
 package org.Backend;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.faces.webapp.FacesServlet;
@@ -24,7 +27,22 @@ public class JettyTest {
 
 	// private Logger logger = LoggerFactory.getLogger(JettyTest.class);
 
+	@SuppressWarnings(value = { "unused" })
+	private static void loadTimeWeavingStartup(String[] args) throws URISyntaxException, IOException {
+		String currentPath = JettyTest.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()
+				.replace('/', File.separator.charAt(0)).substring(1);
+		if (args.length == 0 /* && Runtime.getRuntime().maxMemory()/1024/1024<980 */) {
+			Runtime.getRuntime().exec(
+					"java -jar -javaagent:C:/Users/Oliver/.m2/repository/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar -javaagent:C:/Users/Oliver/.m2/repository/org/springframework/spring-instrument/5.1.6.RELEASE/spring-instrument-5.1.6.RELEASE.jar "
+							+ currentPath + " restart");
+			return;
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
+
+		// loadTimeWeavingStartup(args);
+
 		int port = 54321;
 		JettyTest embeddedServer = new JettyTest(port);
 		embeddedServer.listen();

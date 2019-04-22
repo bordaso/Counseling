@@ -2,6 +2,7 @@ package org.Backend;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
@@ -15,11 +16,26 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class EmpDaoImpl implements EmpDao {
-
+public class EmployeeDaoImpl implements EmployeeDao {
+	
 	@Autowired
-	private SessionFactory sessionFactory;
+	protected SessionFactory sessionFactory;
+	
+	protected CriteriaBuilder cb;	
+	
+	private EmployeeDao proxy;
+	
+	
+	@PostConstruct
+	public void createCriteriaBuilder() {
+		cb = sessionFactory.getCriteriaBuilder();
+	} 	
 
+	@Override
+	public void setMyProxy(EmployeeDao proxy) {
+		this.proxy=proxy;		
+	}	
+	
 	@Transactional
 	@Override
 	public void saveEmployee(Employee input) {
@@ -31,10 +47,9 @@ public class EmpDaoImpl implements EmpDao {
 	@Override
 	public void updateEmployee(String oldName, String newName) {	
 		
-	    CriteriaBuilder cbuilder = sessionFactory.getCriteriaBuilder();
-		CriteriaUpdate<Employee> update = cbuilder.createCriteriaUpdate(Employee.class);
+		CriteriaUpdate<Employee> update = cb.createCriteriaUpdate(Employee.class);
 		Root<Employee> root = update.from(Employee.class);		
-	    update.set(root.get(Employee_.name), newName).where(cbuilder.equal(root.get(Employee_.name), oldName));
+	    update.set(root.get(Employee_.name), newName).where(cb.equal(root.get(Employee_.name), oldName));
 	    
 		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
@@ -42,12 +57,11 @@ public class EmpDaoImpl implements EmpDao {
 
 	@Transactional
 	@Override
-	public List<Employee> selectEmployee(String inputName) {
+	public List<Employee> selectEmployeeByName(String inputName) {
 		
-		CriteriaBuilder cbuilder = sessionFactory.getCriteriaBuilder();
-		CriteriaQuery<Employee> query = cbuilder.createQuery(Employee.class);
+		CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
 		Root<Employee> root = query.from(Employee.class);
-		query.where( cbuilder.equal( root.get( Employee_.name ), inputName ) );
+		query.where( cb.equal( root.get( Employee_.name ), inputName ) );
 		TypedQuery<Employee> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
 				
 		return queryExecuted.getResultList();		
@@ -56,13 +70,15 @@ public class EmpDaoImpl implements EmpDao {
 
 	@Transactional
 	@Override
-	public int deleteEmployee(String inputName) {
+	public void deleteEmployee(Long id) {
+//		CriteriaDelete<Employee> query = cb.createCriteriaDelete(Employee.class);
+//		query.from(Employee.class);
+//		sessionFactory.getCurrentSession().createQuery(query).executeUpdate();
 		
-		CriteriaDelete<Employee> query = sessionFactory.getCriteriaBuilder().createCriteriaDelete(Employee.class);
-		query.from(Employee.class);
-		sessionFactory.getCurrentSession().createQuery(query).executeUpdate();
+		String hql = "delete from Employee where id= :id";
+		sessionFactory.getCurrentSession().createQuery(hql).setParameter("id", id).executeUpdate();
 		
-		return selectEmployee(inputName).size();
+		//return proxy.selectEmployee(inputName).size();
 	}
 
 }

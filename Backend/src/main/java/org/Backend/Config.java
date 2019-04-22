@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
+//@EnableAspectJAutoProxy(proxyTargetClass=true)
+//@EnableLoadTimeWeaving(aspectjWeaving=AspectJWeaving.ENABLED)
+//@EnableSpringConfigured
 @ComponentScan
 public class Config {  
 	
