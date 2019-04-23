@@ -12,21 +12,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Entity
 @Table
+@Scope("prototype")
 @Component
 public class Employee extends User implements Serializable {
+	
+//	 @PreUpdate
+//	  private void preUpdate() {
+//	    throw new UnsupportedOperationException();
+//	  }
 	
 	private static final long serialVersionUID = 1L; 
 	
 	@Column(updatable = false, nullable = false)
 	private String personalId;
 	
-	@Column
+	@Column(columnDefinition = "BINARY(1000)")
 	private Employee reportsTo;
-	
+
 	@Column
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy="counselor")
 	private List<Patient> patientList;
@@ -34,14 +41,6 @@ public class Employee extends User implements Serializable {
 	@Column
 	@OneToMany(mappedBy="employee")
 	private Set<BookingDetails> bookingDetails;
-	
-	public Set<BookingDetails> getBookingDetails() {
-		return bookingDetails;
-	}
-
-	public void setBookingDetails(Set<BookingDetails> bookingDetails) {
-		this.bookingDetails = bookingDetails;
-	}
 
 	@Version
     @Column(name = "optlock", columnDefinition = "integer DEFAULT 0", nullable = false)
@@ -76,6 +75,16 @@ public class Employee extends User implements Serializable {
 		this.patientList = patientList;
 	}
 
+	
+	public Set<BookingDetails> getBookingDetails() {
+		return bookingDetails;
+	}
+
+	public void setBookingDetails(Set<BookingDetails> bookingDetails) {
+		this.bookingDetails = bookingDetails;
+	}
+	
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

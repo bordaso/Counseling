@@ -13,10 +13,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Entity
 @Table
+@Scope("prototype")
 @Component
 public class Patient extends User implements Serializable {
 

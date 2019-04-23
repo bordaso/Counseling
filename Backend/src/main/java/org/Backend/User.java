@@ -45,6 +45,9 @@ public class User implements Serializable {
 	@Column(updatable = false, nullable = false)
 	protected String password;
 	
+	@Column
+	protected Boolean archivedUser;
+	
 	@Version
     @Column(name = "optlock", columnDefinition = "integer DEFAULT 0", nullable = false)
     private long version = 0L;	
@@ -107,6 +110,14 @@ public class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Boolean getArchived() {
+		return archivedUser;
+	}
+
+	public void setArchived(Boolean archivedUser) {
+		this.archivedUser = archivedUser;
 	}
 
 	public static long getSerialversionuid() {
