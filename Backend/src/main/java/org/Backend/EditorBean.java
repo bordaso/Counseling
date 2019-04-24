@@ -1,5 +1,6 @@
 package org.Backend;
 
+import org.Backend.Entities.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
