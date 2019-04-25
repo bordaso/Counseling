@@ -29,16 +29,16 @@
 			<artifactId>spring-orm</artifactId>
 			<version>5.1.6.RELEASE</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework</groupId> -->
-<!-- 			<artifactId>spring-aspects</artifactId> -->
-<!-- 			<version>5.1.6.RELEASE</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework</groupId> -->
-<!-- 			<artifactId>spring-instrument</artifactId> -->
-<!-- 			<version>5.1.6.RELEASE</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework</groupId> -->
+		<!-- <artifactId>spring-aspects</artifactId> -->
+		<!-- <version>5.1.6.RELEASE</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework</groupId> -->
+		<!-- <artifactId>spring-instrument</artifactId> -->
+		<!-- <version>5.1.6.RELEASE</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -136,21 +136,35 @@
 			<version>2.3.3</version>
 		</dependency>
 
+		<!-- PDF generation -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13</version>
+		</dependency>
+
+		<!-- for Base64 -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.12</version>
+		</dependency>
+
 	</dependencies>
-	
-<!-- 	<build> -->
-<!--     <plugins> -->
-<!--       <plugin> -->
-<!--         <groupId>org.apache.maven.plugins</groupId> -->
-<!--         <artifactId>maven-compiler-plugin</artifactId> -->
-<!--         <version>3.8.0</version> -->
-<!--         <configuration> -->
-<!--           <compilerArgs> -->
-<!--             <arg>-javaagent:C:/Users/Oliver/.m2/repository/org/springframework/spring-instrument/5.1.6.RELEASE/spring-instrument-5.1.6.RELEASE.jar</arg> -->
-<!--             <arg>-javaagent:"C:/Users/Oliver/.m2/repository/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar"</arg> -->
-<!--           </compilerArgs> -->
-<!--         </configuration> -->
-<!--       </plugin> -->
-<!--     </plugins> -->
-<!--   </build> -->
+
+	<!-- <build> -->
+	<!-- <plugins> -->
+	<!-- <plugin> -->
+	<!-- <groupId>org.apache.maven.plugins</groupId> -->
+	<!-- <artifactId>maven-compiler-plugin</artifactId> -->
+	<!-- <version>3.8.0</version> -->
+	<!-- <configuration> -->
+	<!-- <compilerArgs> -->
+	<!-- <arg>-javaagent:C:/Users/Oliver/.m2/repository/org/springframework/spring-instrument/5.1.6.RELEASE/spring-instrument-5.1.6.RELEASE.jar</arg> -->
+	<!-- <arg>-javaagent:"C:/Users/Oliver/.m2/repository/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar"</arg> -->
+	<!-- </compilerArgs> -->
+	<!-- </configuration> -->
+	<!-- </plugin> -->
+	<!-- </plugins> -->
+	<!-- </build> -->
 </project>

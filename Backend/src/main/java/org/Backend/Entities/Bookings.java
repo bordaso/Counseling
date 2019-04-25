@@ -33,6 +33,10 @@ public class Bookings implements Serializable {
 	
 	@Column(updatable = false, nullable = false)
 	private String title;
+	
+	@Column
+	@OneToMany(mappedBy="booking")
+	private Set<BookingDetails> bookingDetails;
 
 	@Lob
 	@Column(columnDefinition = "BINARY(1000)")
@@ -49,15 +53,11 @@ public class Bookings implements Serializable {
 
 	//@Column
 	@OneToOne(mappedBy = "boookingNotifId", cascade = CascadeType.ALL,
-    fetch = FetchType.LAZY, optional = false)
+    fetch = FetchType.EAGER, optional = false)
 	private NotificationSetup notificationId;
 
 	@Column
 	private boolean archived;
-
-	@Column
-	@OneToMany(mappedBy="booking")
-	private Set<BookingDetails> bookingDetails;
 
 	@Version
 	@Column(name = "optlock", columnDefinition = "integer DEFAULT 0", nullable = false)

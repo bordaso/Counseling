@@ -184,7 +184,6 @@ public class PatientTest {
 			
 			assertTrue(empDao.selectEmployeeByName("testEmp").size()==1);
 			assertTrue(empDao.selectEmployeeByName("testEmpBoss").size()==1);
-			
 			assertTrue(empDao.selectEmployeeByName("testEmp").get(0).getPatientList().size()==2);
 			assertTrue(empDao.selectEmployeeByName("testEmpBoss").get(0).getPatientList().size()==0);			
 			}
