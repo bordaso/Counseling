@@ -20,9 +20,9 @@ public interface BookingDetailsDao {
 
 	List<BookingDetails> selectBookingDetailsByBooking(Bookings booking);
 	
-	List<BookingDetails> selectBookingDetailsByEmployee(String personalId);
+	List<BookingDetails> selectBookingDetailsByEmployee(Employee employee);
 	
-	List<BookingDetails> selectBookingDetailsByPatient(Long medicalId);
+	List<BookingDetails> selectBookingDetailsByPatient(Patient patient);
 	
 	List<BookingDetails> selectAllBookingDetails();
 

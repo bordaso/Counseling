@@ -10,11 +10,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
+import org.Backend.Entities.BookingDetails;
+import org.Backend.Entities.BookingDetails_;
 import org.Backend.Entities.Bookings;
-import org.Backend.Entities.Employee;
 import org.Backend.Entities.NotificationSetup;
-import org.Backend.Entities.Patient;
-import org.Backend.Entities.Patient_;
+import org.Backend.Entities.NotificationSetup_;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -34,196 +34,122 @@ public class NotificationSetupDaoImpl implements NotificationSetupDao {
 	public void createCriteriaBuilder() {
 		cb = sessionFactory.getCriteriaBuilder();
 	}
-	
+
 	@Transactional
 	@Override
 	public void setMyProxy(NotificationSetupDao proxy) {
 		this.proxy = proxy;
 	}
-	
+
 	@Transactional
 	@Override
 	public void saveNotificationSetup(NotificationSetup input) {
-		 
-		
+		sessionFactory.getCurrentSession().save(input);
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateNotificationSetup(NotificationSetup toBeUpdated) {
-		 
-		
+		sessionFactory.getCurrentSession().update(toBeUpdated);
 	}
-	
+
 	@Transactional
 	@Override
 	public void deleteNotificationSetup(Long id) {
-		 
-		
+		String hql = "delete from NotificationSetup where id= :id";
+		sessionFactory.getCurrentSession().createQuery(hql).setParameter("id", id).executeUpdate();
 	}
-	
-	@Transactional
-	@Override
-	public NotificationSetup selectNotificationSetupById(Long id) {
-		 
-		return null;
-	}
-	
-	@Transactional
-	@Override
-	public NotificationSetup selectNotificationSetupByBooking(Bookings booking) {
-		 
-		return null;
-	}
-	
+
 	@Transactional
 	@Override
 	public List<NotificationSetup> selectAllNotificationSetup() {
-		 
-		return null;
+		CriteriaQuery<NotificationSetup> query = cb.createQuery(NotificationSetup.class);
+		query.from(NotificationSetup.class);
+		TypedQuery<NotificationSetup> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList();
 	}
-	
+
+	@Transactional
+	@Override
+	public NotificationSetup selectNotificationSetupById(Long id) {
+		CriteriaQuery<NotificationSetup> query = cb.createQuery(NotificationSetup.class);
+		Root<NotificationSetup> root = query.from(NotificationSetup.class);
+		query.where(cb.equal(root.get(NotificationSetup_.id), id));
+		TypedQuery<NotificationSetup> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList().get(0);
+	}
+
+	@Transactional
+	@Override
+	public NotificationSetup selectNotificationSetupByBooking(Bookings booking) {
+		CriteriaQuery<NotificationSetup> query = cb.createQuery(NotificationSetup.class);
+		Root<NotificationSetup> root = query.from(NotificationSetup.class);
+		query.where(cb.equal(root.get(NotificationSetup_.boookingNotifId), booking));
+		TypedQuery<NotificationSetup> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList().get(0);
+	}
+
 	@Transactional
 	@Override
 	public void updateNotificationSetupBookings(Long id, Bookings booking) {
-		 
-		
+		CriteriaUpdate<NotificationSetup> update = cb.createCriteriaUpdate(NotificationSetup.class);
+		Root<NotificationSetup> root = update.from(NotificationSetup.class);
+		update.set(root.get(NotificationSetup_.boookingNotifId), booking)
+				.where(cb.equal(root.get(NotificationSetup_.id), id));
+
+		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateNotificationSetupRecurringTime(Long id, long newTime) {
-		 
-		
+		CriteriaUpdate<NotificationSetup> update = cb.createCriteriaUpdate(NotificationSetup.class);
+		Root<NotificationSetup> root = update.from(NotificationSetup.class);
+		update.set(root.get(NotificationSetup_.recurringTime), newTime)
+				.where(cb.equal(root.get(NotificationSetup_.id), id));
+
+		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateNotificationSetupContent(Long id, String content) {
-		 
-		
+		CriteriaUpdate<NotificationSetup> update = cb.createCriteriaUpdate(NotificationSetup.class);
+		Root<NotificationSetup> root = update.from(NotificationSetup.class);
+		update.set(root.get(NotificationSetup_.content), content).where(cb.equal(root.get(NotificationSetup_.id), id));
+
+		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateNotificationSetupEmail(Long id, boolean newValue) {
-		 
-		
+		CriteriaUpdate<NotificationSetup> update = cb.createCriteriaUpdate(NotificationSetup.class);
+		Root<NotificationSetup> root = update.from(NotificationSetup.class);
+		update.set(root.get(NotificationSetup_.email), newValue).where(cb.equal(root.get(NotificationSetup_.id), id));
+
+		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateNotificationSetupSms(Long id, boolean newValue) {
-		 
-		
+		CriteriaUpdate<NotificationSetup> update = cb.createCriteriaUpdate(NotificationSetup.class);
+		Root<NotificationSetup> root = update.from(NotificationSetup.class);
+		update.set(root.get(NotificationSetup_.sms), newValue).where(cb.equal(root.get(NotificationSetup_.id), id));
+
+		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
-	
+
 	@Transactional
 	@Override
 	public void clearNotificationSetup() {
-		 
-		
-	}
-	
-	
-	
-/*
-	@Transactional
-	@Override
-	public void savePatient(Patient input) {
-		sessionFactory.getCurrentSession().save(input);
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatientCounselor(Long id, Employee counselor) {
-		CriteriaUpdate<Patient> update = cb.createCriteriaUpdate(Patient.class);
-		Root<Patient> root = update.from(Patient.class);
-		update.set(root.get(Patient_.counselor), counselor).where(cb.equal(root.get(Patient_.id), id));
-	
-		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
-	}
-
-	@Transactional
-	@Override
-	public void updatePatientPhone(Long id, Long newPhone) {
-		CriteriaUpdate<Patient> update = cb.createCriteriaUpdate(Patient.class);
-		Root<Patient> root = update.from(Patient.class);
-		update.set(root.get(Patient_.phoneNumber), newPhone).where(cb.equal(root.get(Patient_.id), id));
-		
-		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatient(Patient toBeUpdated) {
-		sessionFactory.getCurrentSession().update(toBeUpdated);
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatientName(String oldName, String newName) {
-		CriteriaUpdate<Patient> update = cb.createCriteriaUpdate(Patient.class);
-		Root<Patient> root = update.from(Patient.class);
-		update.set(root.get(Patient_.name), newName).where(cb.equal(root.get(Patient_.name), oldName));
-		
-		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatientNameWithHQL(String oldName, String newName, Patient emp) {		
-		String hql = "update from Patient set name= :newName where name= :oldName";
-		sessionFactory.getCurrentSession().createQuery(hql).setParameter("oldName", oldName).setParameter("newName", newName).executeUpdate();			
-			
-	}
-	
-	@Transactional
-	@Override
-	public List<Patient> selectAllPatient() {
-		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
-		query.from(Patient.class);
-		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList();
-	}
-
-	@Transactional
-	@Override
-	public List<Patient> selectPatientByName(String inputName) {
-		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
-		Root<Patient> root = query.from(Patient.class);
-		query.where(cb.equal(root.get(Patient_.name), inputName));
-		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList();
-	}
-
-	@Transactional
-	@Override
-	public List<Patient> selectPatientById(Long id) {
-		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
-		Root<Patient> root = query.from(Patient.class);
-		query.where(cb.equal(root.get(Patient_.id), id));
-		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList();
-	}
-
-	@Transactional
-	@Override
-	public void deletePatient(Long id) {
-		String hql = "delete from Patient where id= :id";
-		sessionFactory.getCurrentSession().createQuery(hql).setParameter("id", id).executeUpdate();		
-	}
-
-	@Transactional
-	@Override
-	public void clearPatient() {
-		CriteriaDelete<Patient> query = cb.createCriteriaDelete(Patient.class);
-		query.from(Patient.class);
+		CriteriaDelete<NotificationSetup> query = cb.createCriteriaDelete(NotificationSetup.class);
+		query.from(NotificationSetup.class);
 		sessionFactory.getCurrentSession().createQuery(query).executeUpdate();
 	}
-*/
-}
 
+}

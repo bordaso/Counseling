@@ -11,10 +11,11 @@ import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
 import org.Backend.Entities.BookingDetails;
+import org.Backend.Entities.BookingDetails_;
 import org.Backend.Entities.Bookings;
+import org.Backend.Entities.Bookings_;
 import org.Backend.Entities.Employee;
 import org.Backend.Entities.Patient;
-import org.Backend.Entities.Patient_;
 import org.Backend.Enums.BookingResponse;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,201 +36,134 @@ public class BookingDetailsDaoImpl implements BookingDetailsDao {
 	public void createCriteriaBuilder() {
 		cb = sessionFactory.getCriteriaBuilder();
 	}
-	
+
 	@Transactional
 	@Override
 	public void setMyProxy(BookingDetailsDao proxy) {
 		this.proxy = proxy;
 	}
-	
+
 	@Transactional
 	@Override
 	public void saveBookingDetails(BookingDetails input) {
-		 
-		
+		sessionFactory.getCurrentSession().save(input);
+
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateBookingDetails(BookingDetails toBeUpdated) {
-		 
-		
+		sessionFactory.getCurrentSession().update(toBeUpdated);
+
 	}
-	
+
 	@Transactional
 	@Override
 	public void deleteBookingDetails(Long id) {
-		 
-		
+		String hql = "delete from BookingDetails where id= :id";
+		sessionFactory.getCurrentSession().createQuery(hql).setParameter("id", id).executeUpdate();
+
 	}
-	
-	@Transactional
-	@Override
-	public BookingDetails selectBookingDetailsById(Long id) {
-		 
-		return null;
-	}
-	
-	@Transactional
-	@Override
-	public List<BookingDetails> selectBookingDetailsByBooking(Bookings booking) {
-		 
-		return null;
-	}
-	
-	@Transactional
-	@Override
-	public List<BookingDetails> selectBookingDetailsByEmployee(String personalId) {
-		 
-		return null;
-	}
-	
-	@Transactional
-	@Override
-	public List<BookingDetails> selectBookingDetailsByPatient(Long medicalId) {
-		 
-		return null;
-	}
-	
+
 	@Transactional
 	@Override
 	public List<BookingDetails> selectAllBookingDetails() {
-		 
-		return null;
+		CriteriaQuery<BookingDetails> query = cb.createQuery(BookingDetails.class);
+		query.from(BookingDetails.class);
+		TypedQuery<BookingDetails> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList();
 	}
-	
+
+	@Transactional
+	@Override
+	public BookingDetails selectBookingDetailsById(Long id) {
+		CriteriaQuery<BookingDetails> query = cb.createQuery(BookingDetails.class);
+		Root<BookingDetails> root = query.from(BookingDetails.class);
+		query.where(cb.equal(root.get(BookingDetails_.id), id));
+		TypedQuery<BookingDetails> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList().get(0);
+	}
+
+	@Transactional
+	@Override
+	public List<BookingDetails> selectBookingDetailsByBooking(Bookings booking) {
+		CriteriaQuery<BookingDetails> query = cb.createQuery(BookingDetails.class);
+		Root<BookingDetails> root = query.from(BookingDetails.class);
+		query.where(cb.equal(root.get(BookingDetails_.booking), booking));
+		TypedQuery<BookingDetails> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList();
+	}
+
+	@Transactional
+	@Override
+	public List<BookingDetails> selectBookingDetailsByEmployee(Employee employee) {
+		CriteriaQuery<BookingDetails> query = cb.createQuery(BookingDetails.class);
+		Root<BookingDetails> root = query.from(BookingDetails.class);
+		query.where(cb.equal(root.get(BookingDetails_.employee), employee));
+		TypedQuery<BookingDetails> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList();
+	}
+
+	@Transactional
+	@Override
+	public List<BookingDetails> selectBookingDetailsByPatient(Patient patient) {
+		CriteriaQuery<BookingDetails> query = cb.createQuery(BookingDetails.class);
+		Root<BookingDetails> root = query.from(BookingDetails.class);
+		query.where(cb.equal(root.get(BookingDetails_.patient), patient));
+		TypedQuery<BookingDetails> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList();
+	}
+
 	@Transactional
 	@Override
 	public void updateBookingDetailsBookings(Long id, Bookings booking) {
-		 
-		
+		CriteriaUpdate<BookingDetails> update = cb.createCriteriaUpdate(BookingDetails.class);
+		Root<BookingDetails> root = update.from(BookingDetails.class);
+		update.set(root.get(BookingDetails_.booking), booking).where(cb.equal(root.get(BookingDetails_.id), id));
+
+		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateBookingDetailsEmployee(Long id, Employee employee) {
-		 
-		
+		CriteriaUpdate<BookingDetails> update = cb.createCriteriaUpdate(BookingDetails.class);
+		Root<BookingDetails> root = update.from(BookingDetails.class);
+		update.set(root.get(BookingDetails_.employee), employee).where(cb.equal(root.get(BookingDetails_.id), id));
+
+		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateBookingDetailsPatient(Long id, Patient patient) {
-		 
-		
+		CriteriaUpdate<BookingDetails> update = cb.createCriteriaUpdate(BookingDetails.class);
+		Root<BookingDetails> root = update.from(BookingDetails.class);
+		update.set(root.get(BookingDetails_.patient), patient).where(cb.equal(root.get(BookingDetails_.id), id));
+
+		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateBookingDetailsResponse(Long id, BookingResponse newValue) {
-		 
-		
+		CriteriaUpdate<BookingDetails> update = cb.createCriteriaUpdate(BookingDetails.class);
+		Root<BookingDetails> root = update.from(BookingDetails.class);
+		update.set(root.get(BookingDetails_.response), newValue).where(cb.equal(root.get(BookingDetails_.id), id));
+
+		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
 	}
-	
+
 	@Transactional
 	@Override
 	public void clearBookingDetails() {
-		 
-		
-	}
-
-	/*
-	@Transactional
-	@Override
-	public void savePatient(Patient input) {
-		sessionFactory.getCurrentSession().save(input);
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatientCounselor(Long id, Employee counselor) {
-		CriteriaUpdate<Patient> update = cb.createCriteriaUpdate(Patient.class);
-		Root<Patient> root = update.from(Patient.class);
-		update.set(root.get(Patient_.counselor), counselor).where(cb.equal(root.get(Patient_.id), id));
-	
-		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
-	}
-
-	@Transactional
-	@Override
-	public void updatePatientPhone(Long id, Long newPhone) {
-		CriteriaUpdate<Patient> update = cb.createCriteriaUpdate(Patient.class);
-		Root<Patient> root = update.from(Patient.class);
-		update.set(root.get(Patient_.phoneNumber), newPhone).where(cb.equal(root.get(Patient_.id), id));
-		
-		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatient(Patient toBeUpdated) {
-		sessionFactory.getCurrentSession().update(toBeUpdated);
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatientName(String oldName, String newName) {
-		CriteriaUpdate<Patient> update = cb.createCriteriaUpdate(Patient.class);
-		Root<Patient> root = update.from(Patient.class);
-		update.set(root.get(Patient_.name), newName).where(cb.equal(root.get(Patient_.name), oldName));
-		
-		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatientNameWithHQL(String oldName, String newName, Patient emp) {		
-		String hql = "update from Patient set name= :newName where name= :oldName";
-		sessionFactory.getCurrentSession().createQuery(hql).setParameter("oldName", oldName).setParameter("newName", newName).executeUpdate();			
-			
-	}
-	
-	@Transactional
-	@Override
-	public List<Patient> selectAllPatient() {
-		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
-		query.from(Patient.class);
-		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList();
-	}
-
-	@Transactional
-	@Override
-	public List<Patient> selectPatientByName(String inputName) {
-		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
-		Root<Patient> root = query.from(Patient.class);
-		query.where(cb.equal(root.get(Patient_.name), inputName));
-		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList();
-	}
-
-	@Transactional
-	@Override
-	public List<Patient> selectPatientById(Long id) {
-		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
-		Root<Patient> root = query.from(Patient.class);
-		query.where(cb.equal(root.get(Patient_.id), id));
-		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList();
-	}
-
-	@Transactional
-	@Override
-	public void deletePatient(Long id) {
-		String hql = "delete from Patient where id= :id";
-		sessionFactory.getCurrentSession().createQuery(hql).setParameter("id", id).executeUpdate();		
-	}
-
-	@Transactional
-	@Override
-	public void clearPatient() {
-		CriteriaDelete<Patient> query = cb.createCriteriaDelete(Patient.class);
-		query.from(Patient.class);
+		CriteriaDelete<BookingDetails> query = cb.createCriteriaDelete(BookingDetails.class);
+		query.from(BookingDetails.class);
 		sessionFactory.getCurrentSession().createQuery(query).executeUpdate();
 	}
-*/
 }
-

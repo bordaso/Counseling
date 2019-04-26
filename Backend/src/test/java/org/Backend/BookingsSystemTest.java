@@ -5,7 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import java.time.LocalDateTime;
 
 import org.Backend.Config.Config;
+import org.Backend.DAOs.BookingDetailsDao;
+import org.Backend.DAOs.BookingsDao;
 import org.Backend.DAOs.EmployeeDao;
+import org.Backend.DAOs.NotificationSetupDao;
 import org.Backend.DAOs.PatientDao;
 import org.Backend.Entities.BookingDetails;
 import org.Backend.Entities.Bookings;
@@ -58,6 +61,15 @@ public class BookingsSystemTest {
 
 	@Autowired
 	private PatientDao patDao;
+	
+	@Autowired
+	private BookingsDao bkngsDao;
+	
+	@Autowired
+	private BookingDetailsDao bkngsDtlsDao;
+	
+	@Autowired
+	private NotificationSetupDao ntfsnStpDao;
 
 	@Autowired
 	private Employee emp;
@@ -184,9 +196,16 @@ public class BookingsSystemTest {
 	@After
 	public void clearTables() {
 		assertNotNull(empDao);
-		assertNotNull(patDao);
+		assertNotNull(patDao);		
+		assertNotNull(bkngsDao);
+		assertNotNull(bkngsDtlsDao);
+		assertNotNull(ntfsnStpDao);
+		
 		empDao.clearEmployee();
 		patDao.clearPatient();
+		bkngsDao.clearBookings();
+		bkngsDtlsDao.clearBookingDetails();
+		ntfsnStpDao.clearNotificationSetup();
 	}
 
 	@Test
@@ -202,6 +221,9 @@ public class BookingsSystemTest {
 		assertNotNull(bkngs2_ntfsnStp2);
 		assertNotNull(empDao);
 		assertNotNull(patDao);
+		assertNotNull(bkngsDao);
+		assertNotNull(bkngsDtlsDao);
+		assertNotNull(ntfsnStpDao);
 		assertNotNull(emp);
 		assertNotNull(empBoss);
 		assertNotNull(pat1);
