@@ -54,7 +54,7 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
             header.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
 
             // add image
-            Image logo = Image.getInstance(HeaderFooterPageEvent.class.getResource("/consuelingLogo.PNG"));
+            Image logo = Image.getInstance(HeaderFooterPageEvent.class.getResource("/META-INF/consuelingLogo.PNG"));
             header.addCell(logo);
 
             // add text

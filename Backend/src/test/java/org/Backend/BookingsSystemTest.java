@@ -155,7 +155,7 @@ public class BookingsSystemTest {
 
 	@Before
 	public void setupListOfBookingDetails() {
-	listOfBookingDetails= new ArrayList<>();
+	listOfBookingDetails= new ArrayList<BookingDetails>();
 	listOfBookingDetails.add(bkngs1_bkngsDtls1);
 	listOfBookingDetails.add(bkngs1_bkngsDtls2);
 	listOfBookingDetails.add(bkngs1_bkngsDtls3);
