@@ -34,7 +34,7 @@ public class Patient extends User implements Serializable {
 	private Employee counselor;	
 	
 	@Column
-	@OneToMany(mappedBy="patient")
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="patient")
 	private Set<BookingDetails> bookingDetails;
 	
 	@Version

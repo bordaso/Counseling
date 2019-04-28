@@ -41,7 +41,9 @@ public class PatientDaoImpl implements PatientDao {
 	@Transactional
 	@Override
 	public void savePatient(Patient input) {
+		System.err.println("START************PatientDaoImpl");
 		sessionFactory.getCurrentSession().save(input);
+		System.err.println("END************PatientDaoImpl");
 	}
 	
 	@Transactional

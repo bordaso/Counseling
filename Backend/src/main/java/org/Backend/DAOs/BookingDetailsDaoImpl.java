@@ -47,7 +47,6 @@ public class BookingDetailsDaoImpl implements BookingDetailsDao {
 	@Override
 	public void saveBookingDetails(BookingDetails input) {
 		sessionFactory.getCurrentSession().save(input);
-
 	}
 
 	@Transactional
@@ -82,8 +81,9 @@ public class BookingDetailsDaoImpl implements BookingDetailsDao {
 		Root<BookingDetails> root = query.from(BookingDetails.class);
 		query.where(cb.equal(root.get(BookingDetails_.id), id));
 		TypedQuery<BookingDetails> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList().get(0);
+		List<BookingDetails> resultList = queryExecuted.getResultList();
+		
+		return resultList.isEmpty()?null:resultList.get(0);
 	}
 
 	@Transactional

@@ -40,7 +40,7 @@ public class Employee extends User implements Serializable {
 	private List<Patient> patientList;
 	
 	@Column
-	@OneToMany(mappedBy="employee")
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="employee")
 	private Set<BookingDetails> bookingDetails;
 
 	@Version

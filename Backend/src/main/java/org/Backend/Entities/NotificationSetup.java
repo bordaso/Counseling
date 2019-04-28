@@ -2,19 +2,23 @@ package org.Backend.Entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Entity
 @Table
+@Scope("prototype")
 @Component
 public class NotificationSetup implements Serializable {
 
@@ -25,8 +29,8 @@ public class NotificationSetup implements Serializable {
 	private Long id;
 	
 	//@Column
-	@OneToOne(fetch = FetchType.EAGER)
 	@MapsId
+	@OneToOne(mappedBy = "notificationId", fetch = FetchType.EAGER)
 	private Bookings boookingNotifId;
 	
 	@Column

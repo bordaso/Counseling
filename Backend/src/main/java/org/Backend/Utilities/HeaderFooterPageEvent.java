@@ -90,7 +90,7 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
             footer.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
 
             // add copyright
-            footer.addCell(new Phrase("\u00A9 szaboconsueling.com", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+            footer.addCell(new Phrase("\u00A9 szabocounseling.com", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
 
             // add current page count
             footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);

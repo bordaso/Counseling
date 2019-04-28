@@ -77,8 +77,9 @@ public class NotificationSetupDaoImpl implements NotificationSetupDao {
 		Root<NotificationSetup> root = query.from(NotificationSetup.class);
 		query.where(cb.equal(root.get(NotificationSetup_.id), id));
 		TypedQuery<NotificationSetup> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList().get(0);
+		List<NotificationSetup> resultList = queryExecuted.getResultList();
+		
+		return resultList.isEmpty()?null:resultList.get(0);
 	}
 
 	@Transactional
@@ -88,8 +89,9 @@ public class NotificationSetupDaoImpl implements NotificationSetupDao {
 		Root<NotificationSetup> root = query.from(NotificationSetup.class);
 		query.where(cb.equal(root.get(NotificationSetup_.boookingNotifId), booking));
 		TypedQuery<NotificationSetup> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList().get(0);
+		List<NotificationSetup> resultList = queryExecuted.getResultList();
+		
+		return resultList.isEmpty()?null:resultList.get(0);
 	}
 
 	@Transactional

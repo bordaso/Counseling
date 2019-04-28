@@ -2,22 +2,27 @@ package org.Backend.Entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.Backend.Enums.BookingResponse;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Entity
 @Table
+@Scope("prototype")
 @Component
 public class BookingDetails implements Serializable {
 	
@@ -34,18 +39,18 @@ public class BookingDetails implements Serializable {
 	
 	//@MapsId("bookingId")
 	//@Column(updatable = false, nullable = false)
-	@ManyToOne 
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Bookings booking;
 	
 	//@MapsId("employeeId")
 	//@Column
-	@ManyToOne 
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Employee employee;
 	
 
 	//@MapsId("patientId")
 	//@Column
-	@ManyToOne 
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Patient patient;
 	
 	@Column

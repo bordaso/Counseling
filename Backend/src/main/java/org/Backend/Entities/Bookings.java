@@ -2,6 +2,9 @@ package org.Backend.Entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,16 +14,19 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Entity
 @Table
+@Scope("prototype")
 @Component
 public class Bookings implements Serializable {
 
@@ -39,7 +45,7 @@ public class Bookings implements Serializable {
 	private Set<BookingDetails> bookingDetails;
 
 	@Lob
-	@Column(columnDefinition = "BINARY(1000)")
+	@Column(columnDefinition = "BINARY(100000)")
 	private byte[] report;
 	 
 	@Column(columnDefinition = "SMALLDATETIME", updatable = false, nullable = false)
@@ -51,9 +57,9 @@ public class Bookings implements Serializable {
 	@Column(updatable = false, nullable = false)
 	private String room;
 
-	//@Column
-	@OneToOne(mappedBy = "boookingNotifId", cascade = CascadeType.ALL,
-    fetch = FetchType.EAGER, optional = false)
+	//@Column mappedBy = "boookingNotifId", mappedBy = "notificationId"
+	@OneToOne( fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name = "id")
 	private NotificationSetup notificationId;
 
 	@Column
@@ -62,6 +68,7 @@ public class Bookings implements Serializable {
 	@Version
 	@Column(name = "optlock", columnDefinition = "integer DEFAULT 0", nullable = false)
 	private long version = 0L;
+	
 	
 	public Bookings() {
 		super();
@@ -188,7 +195,7 @@ public class Bookings implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Bookings [title=" + title + ", start=" + start + ", end=" + end + ", room=" + room + "]";
+		return "Bookings [id=" + id + " title=" + title + ", start=" + start + ", end=" + end + ", room=" + room + "]";
 	}
 
 }

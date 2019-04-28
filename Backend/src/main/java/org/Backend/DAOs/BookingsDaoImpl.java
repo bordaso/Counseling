@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 
 import org.Backend.Entities.Bookings;
 import org.Backend.Entities.Bookings_;
+import org.Backend.Entities.Employee;
 import org.Backend.Entities.Patient;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,8 +77,9 @@ public class BookingsDaoImpl implements BookingsDao {
 		Root<Bookings> root = query.from(Bookings.class);
 		query.where(cb.equal(root.get(Bookings_.id), id));
 		TypedQuery<Bookings> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList().get(0);
+		List<Bookings> resultList = queryExecuted.getResultList();
+		
+		return resultList.isEmpty()?null:resultList.get(0);
 	}
 
 	@Transactional
@@ -87,7 +89,6 @@ public class BookingsDaoImpl implements BookingsDao {
 		Root<Bookings> root = query.from(Bookings.class);
 		query.where(cb.equal(root.get(Bookings_.title), inputTitle));
 		TypedQuery<Bookings> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
 		return queryExecuted.getResultList();
 	}
 
