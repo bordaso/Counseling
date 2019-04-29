@@ -2,11 +2,14 @@ package org.Backend.Entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -25,12 +28,9 @@ public class MessageDetails implements Serializable {
 	@Column
 	private Long id;
 	
-	//@Column(updatable = false, nullable = false)
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="msg_id")
 	private Message msgId;
-	
-	@Column(updatable = false, nullable = false)
-	private User sender;
 	
 	@Column(updatable = false, nullable = false)
 	private User receiver;	
@@ -59,14 +59,6 @@ public class MessageDetails implements Serializable {
 
 	public void setMsgId(Message msgId) {
 		this.msgId = msgId;
-	}
-
-	public User getSender() {
-		return sender;
-	}
-
-	public void setSender(User sender) {
-		this.sender = sender;
 	}
 
 	public User getReceiver() {
@@ -124,7 +116,7 @@ public class MessageDetails implements Serializable {
 
 	@Override
 	public String toString() {
-		return "MessageDetails [id=" + id + ", msgId=" + msgId + ", sender=" + sender + ", receiver=" + receiver
+		return "MessageDetails [id=" + id + ", msgId=" + msgId +", receiver=" + receiver
 				+ ", read=" + read + ", archived=" + archived + "]";
 	}	
 	

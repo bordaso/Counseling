@@ -3,10 +3,12 @@ package org.Backend.Entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +32,9 @@ public class Message implements Serializable {
 	@Column
 	private Long id;
 	
+	@Column(updatable = false, nullable = false)
+	private User sender;
+	
 	@Column(columnDefinition = "SMALLDATETIME", updatable = false, nullable = false)
 	private LocalDateTime sentAt;
 	
@@ -37,14 +42,14 @@ public class Message implements Serializable {
 	private String content;
 	
 	@Lob
-	@Column(columnDefinition = "BINARY(1000)")
+	@Column(columnDefinition = "BINARY(200000)")
 	private byte[] attachment;
 	
 	@Column
 	private Long replyToId;
 	
 	@Column
-	@OneToMany(mappedBy="msgId")
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="msgId")
 	private Set<MessageDetails> messageDetails;
 	
 	@Version
@@ -60,12 +65,20 @@ public class Message implements Serializable {
 		this.id = id;
 	}
 
+	public User getSender() {
+		return sender;
+	}
+
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
+	
 	public LocalDateTime getSentAt() {
 		return sentAt;
 	}
 
 	public void setSentAt(LocalDateTime sentAt) {
-		this.sentAt = sentAt;
+		this.sentAt = sentAt.truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	public String getContent() {
@@ -104,11 +117,14 @@ public class Message implements Serializable {
 		return serialVersionUID;
 	}
 
+	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result + ((sender == null) ? 0 : sender.hashCode());
 		result = prime * result + ((sentAt == null) ? 0 : sentAt.hashCode());
 		return result;
 	}
@@ -127,6 +143,11 @@ public class Message implements Serializable {
 				return false;
 		} else if (!content.equals(other.content))
 			return false;
+		if (sender == null) {
+			if (other.sender != null)
+				return false;
+		} else if (!sender.equals(other.sender))
+			return false;
 		if (sentAt == null) {
 			if (other.sentAt != null)
 				return false;
@@ -137,7 +158,7 @@ public class Message implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Message [id=" + id + ", sentAt=" + sentAt + ", content=" + content + ", replyToId=" + replyToId + "]";
+		return "Message [id=" + id + ", sender=" + sender +  ", sentAt=" + sentAt + ", content=" + content + ", replyToId=" + replyToId + "]";
 	}	
 	
 

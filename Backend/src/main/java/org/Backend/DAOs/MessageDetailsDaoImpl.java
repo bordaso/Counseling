@@ -11,22 +11,25 @@ import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
 import org.Backend.Entities.Employee;
+import org.Backend.Entities.Message;
+import org.Backend.Entities.MessageDetails;
 import org.Backend.Entities.Patient;
 import org.Backend.Entities.Patient_;
+import org.Backend.Entities.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class PatientDaoImpl implements PatientDao {
+public class MessageDetailsDaoImpl implements MessageDetailsDao {
 
 	@Autowired
 	protected SessionFactory sessionFactory;
 
 	protected CriteriaBuilder cb;
 
-	private PatientDao proxy;
+	private MessageDetailsDao proxy;
 
 	@PostConstruct
 	public void createCriteriaBuilder() {
@@ -34,14 +37,74 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public void setMyProxy(PatientDao proxy) {
+	public void setMyProxy(MessageDetailsDao proxy) {
 		this.proxy = proxy;
 	}
 
+	@Override
+	public void saveMessageDetails(MessageDetails input) {
+		 
+		
+	}
+
+	@Override
+	public void updateMessageDetails(MessageDetails toBeUpdated) {
+		 
+		
+	}
+
+	@Override
+	public void deleteMessageDetailsById(Long id) {
+		// ONLY UPDATE ARCHIVED
+		
+	}
+
+	@Override
+	public void deleteMessageDetailsByMsgId(Message msgId) {
+		// ONLY UPDATE ARCHIVED
+		
+	}
+
+	@Override
+	public List<MessageDetails> selectAllMessageDetails() {
+		 
+		return null;
+	}
+
+	@Override
+	public List<MessageDetails> selectMessageDetailsByMsgId(Message msgId) {
+		 
+		return null;
+	}
+
+	@Override
+	public List<MessageDetails> selectMessageeDetailsByReceiver(User receiver) {
+		 
+		return null;
+	}
+
+	@Override
+	public MessageDetails selectMessageDetailsById(Long id) {
+		 
+		return null;
+	}
+
+	@Override
+	public void clearMessageDetails() {
+		 
+		
+	}
+	
+	
+	
+	
+/*
 	@Transactional
 	@Override
 	public void savePatient(Patient input) {
+		System.err.println("START************PatientDaoImpl");
 		sessionFactory.getCurrentSession().save(input);
+		System.err.println("END************PatientDaoImpl");
 	}
 	
 	@Transactional
@@ -134,6 +197,6 @@ public class PatientDaoImpl implements PatientDao {
 		query.from(Patient.class);
 		sessionFactory.getCurrentSession().createQuery(query).executeUpdate();
 	}
-
+*/
 }
 

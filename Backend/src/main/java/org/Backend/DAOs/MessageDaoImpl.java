@@ -11,22 +11,24 @@ import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
 import org.Backend.Entities.Employee;
+import org.Backend.Entities.Message;
 import org.Backend.Entities.Patient;
 import org.Backend.Entities.Patient_;
+import org.Backend.Entities.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class PatientDaoImpl implements PatientDao {
+public class MessageDaoImpl implements MessageDao {
 
 	@Autowired
 	protected SessionFactory sessionFactory;
 
 	protected CriteriaBuilder cb;
 
-	private PatientDao proxy;
+	private MessageDao proxy;
 
 	@PostConstruct
 	public void createCriteriaBuilder() {
@@ -34,14 +36,67 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public void setMyProxy(PatientDao proxy) {
+	public void setMyProxy(MessageDao proxy) {
 		this.proxy = proxy;
 	}
 
+	@Override
+	public void saveMessage(Message input) {
+		 
+		
+	}
+
+	@Override
+	public void updateMessage(Message toBeUpdated) {
+		 
+		
+	}
+
+	@Override
+	public void deleteMessage(Long id) {
+		 
+		
+	}
+
+	@Override
+	public List<Message> selectAllMessage() {
+		 
+		return null;
+	}
+
+	@Override
+	public Message selectMessageById(Long id) {
+		 
+		return null;
+	}
+
+	@Override
+	public Message selectMessageByReplyToId(Long replyToId) {
+		 
+		return null;
+	}
+
+	@Override
+	public List<Message> selectMessageBySender(User Sender) {
+		 
+		return null;
+	}
+
+	@Override
+	public void clearMessage() {
+		 
+		
+	}
+	
+	
+	
+/*
 	@Transactional
 	@Override
 	public void savePatient(Patient input) {
+		System.err.println("START************PatientDaoImpl");
 		sessionFactory.getCurrentSession().save(input);
+		System.err.println("END************PatientDaoImpl");
 	}
 	
 	@Transactional
@@ -134,6 +189,6 @@ public class PatientDaoImpl implements PatientDao {
 		query.from(Patient.class);
 		sessionFactory.getCurrentSession().createQuery(query).executeUpdate();
 	}
-
+*/
 }
 

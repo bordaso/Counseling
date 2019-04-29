@@ -3,6 +3,8 @@ package org.Backend.Utilities;
 import org.Backend.DAOs.BookingDetailsDao;
 import org.Backend.DAOs.BookingsDao;
 import org.Backend.DAOs.EmployeeDao;
+import org.Backend.DAOs.MessageDao;
+import org.Backend.DAOs.MessageDetailsDao;
 import org.Backend.DAOs.NotificationSetupDao;
 import org.Backend.DAOs.PatientDao;
 import org.springframework.beans.BeansException;
@@ -33,6 +35,14 @@ public class ProxySetterBeanPostProcessor implements BeanPostProcessor {
         }else 
         	if (bean instanceof NotificationSetupDao) {
         	NotificationSetupDao proxyBean = (NotificationSetupDao) bean;
+			proxyBean.setMyProxy(proxyBean);
+        }else 
+        	if (bean instanceof MessageDao) {
+        		MessageDao proxyBean = (MessageDao) bean;
+			proxyBean.setMyProxy(proxyBean);
+        }else 
+        	if (bean instanceof MessageDetailsDao) {
+        		MessageDetailsDao proxyBean = (MessageDetailsDao) bean;
 			proxyBean.setMyProxy(proxyBean);
         }
 		
