@@ -2,9 +2,7 @@ package org.Backend.Entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -42,10 +40,10 @@ public class Bookings implements Serializable {
 	
 	@Column
 	@OneToMany(mappedBy="booking")
-	private Set<BookingDetails> bookingDetails;
+	private List<BookingDetails> bookingDetails;
 
 	@Lob
-	@Column(columnDefinition = "BINARY(100000)")
+	@Column(columnDefinition = "BINARY(200000)") /* 200k byte, a small pdf is around 80k */
 	private byte[] report;
 	 
 	@Column(columnDefinition = "SMALLDATETIME", updatable = false, nullable = false)
@@ -138,11 +136,11 @@ public class Bookings implements Serializable {
 		this.archived = archived;
 	}
 
-	public Set<BookingDetails> getBookingDetails() {
+	public List<BookingDetails> getBookingDetails() {
 		return bookingDetails;
 	}
 
-	public void setBookingDetails(Set<BookingDetails> bookingDetails) {
+	public void setBookingDetails(List<BookingDetails> bookingDetails) {
 		this.bookingDetails = bookingDetails;
 	}
 

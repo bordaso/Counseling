@@ -8,7 +8,9 @@ import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.Backend.Entities.BookingDetails;
 import org.Backend.Entities.Bookings;
@@ -49,13 +51,17 @@ public class ReportCreator {
 
 	public byte[] retrieveAsByte(List<BookingDetails> details, Employee creator, String description)
 			throws DocumentException {
+		
 		dataSetup(details, creator, description);
 		byteReport = byteoutputStream.toByteArray();
+		
+		
 		return byteReport;
 	}
 
 	public void generateFile(List<BookingDetails> details, Employee creator, String description)
 			throws DocumentException, URISyntaxException, IOException {
+
 		dataSetup(details, creator, description);
 		OutputStream outStream = new FileOutputStream(
 				new File(ReportCreator.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath()
@@ -65,15 +71,15 @@ public class ReportCreator {
 	}
 	
 	public boolean generateFileFromByte(byte[] inputByteReport) throws URISyntaxException, IOException
-			 {		
+			 {	
+		
 		OutputStream outStream = new FileOutputStream(
 				new File(ReportCreator.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath()
 						+ "/" + firstToGetGeneralAppointmentDetails.getId() + "_"
 						+ firstToGetGeneralAppointmentDetails.getTitle() + ".pdf");
 		
 		ByteArrayOutputStream byteStreamFromByteArray = new ByteArrayOutputStream();
-		byteStreamFromByteArray.write(inputByteReport);
-		
+		byteStreamFromByteArray.write(inputByteReport);		
 		byteoutputStream.writeTo(outStream);
 		
 		return true;		

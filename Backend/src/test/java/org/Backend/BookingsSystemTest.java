@@ -141,7 +141,9 @@ public class BookingsSystemTest {
 		bkngs1.setStart(LocalDateTime.now());
 		bkngs1.setEnd(LocalDateTime.now().plusHours(12));
 		bkngs1.setRoom("room1");
-		bkngs1.setArchived(false);			
+		bkngs1.setArchived(false);		
+		
+		bkngs1.setBookingDetails(listOfBookingDetails);
 	}
 
 	@Before
@@ -154,7 +156,7 @@ public class BookingsSystemTest {
 	}
 
 	@Before
-	public void setupListOfBookingDetails() {
+	public void setupSetOfBookingDetails() {
 	listOfBookingDetails= new ArrayList<BookingDetails>();
 	listOfBookingDetails.add(bkngs1_bkngsDtls1);
 	listOfBookingDetails.add(bkngs1_bkngsDtls2);
@@ -313,17 +315,10 @@ public class BookingsSystemTest {
 		 bkngsDao.saveBooking(bkngs1);
 		 bkngs1.setNotificationId(bkngs1_ntfsnStp1); 
 		 bkngs1_ntfsnStp1.setBoookingNotifId(bkngs1);
-		 bkngs1.setReport(reportCreator.retrieveAsByte(listOfBookingDetails, emp, "We had a great conversation, and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum."));		 
+		 bkngs1.setReport(reportCreator.retrieveAsByte(bkngs1.getBookingDetails(), emp, "We had a great conversation, and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum."));		 
 		 bkngsDao.updateBooking(bkngs1);
-		 final Long bkngsId1=bkngs1.getId();
-		 
+		 final Long bkngsId1=bkngs1.getId();		 
 		 assertEquals(true, reportCreator.generateFileFromByte(bkngsDao.selectBookingById(bkngsId1).getReport()));
-		 
-		 
-//		 final Long bkngsId1=bkngs1.getId();
-//		 assertTrue(bkngsDao.selectBookingByTitle("booking1").size()==1);
-//		 bkngsDao.updateBookingTitle(bkngsId1, "UPDATED_");
-//		 assertTrue(bkngsDao.selectBookingByTitle("UPDATED_").size()==1);
 	}
 
 	@Test
