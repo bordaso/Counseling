@@ -15,6 +15,7 @@ public abstract class Message_ {
 	public static volatile SetAttribute<Message, MessageDetails> messageDetails;
 	public static volatile SingularAttribute<Message, Long> replyToId;
 	public static volatile SingularAttribute<Message, Long> id;
+	public static volatile SingularAttribute<Message, User> sender;
 	public static volatile SingularAttribute<Message, LocalDateTime> sentAt;
 	public static volatile SingularAttribute<Message, Long> version;
 	public static volatile SingularAttribute<Message, String> content;
@@ -23,6 +24,7 @@ public abstract class Message_ {
 	public static final String MESSAGE_DETAILS = "messageDetails";
 	public static final String REPLY_TO_ID = "replyToId";
 	public static final String ID = "id";
+	public static final String SENDER = "sender";
 	public static final String SENT_AT = "sentAt";
 	public static final String VERSION = "version";
 	public static final String CONTENT = "content";

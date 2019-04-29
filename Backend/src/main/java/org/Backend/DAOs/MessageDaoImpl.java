@@ -7,18 +7,15 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
-import org.Backend.Entities.Employee;
 import org.Backend.Entities.Message;
-import org.Backend.Entities.Patient;
-import org.Backend.Entities.Patient_;
+import org.Backend.Entities.Message_;
 import org.Backend.Entities.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class MessageDaoImpl implements MessageDao {
@@ -40,155 +37,77 @@ public class MessageDaoImpl implements MessageDao {
 		this.proxy = proxy;
 	}
 
+	@Transactional
 	@Override
 	public void saveMessage(Message input) {
-		 
-		
+		sessionFactory.getCurrentSession().save(input);
 	}
 
+	@Transactional
 	@Override
 	public void updateMessage(Message toBeUpdated) {
-		 
-		
-	}
-
-	@Override
-	public void deleteMessage(Long id) {
-		 
-		
-	}
-
-	@Override
-	public List<Message> selectAllMessage() {
-		 
-		return null;
-	}
-
-	@Override
-	public Message selectMessageById(Long id) {
-		 
-		return null;
-	}
-
-	@Override
-	public Message selectMessageByReplyToId(Long replyToId) {
-		 
-		return null;
-	}
-
-	@Override
-	public List<Message> selectMessageBySender(User Sender) {
-		 
-		return null;
-	}
-
-	@Override
-	public void clearMessage() {
-		 
-		
-	}
-	
-	
-	
-/*
-	@Transactional
-	@Override
-	public void savePatient(Patient input) {
-		System.err.println("START************PatientDaoImpl");
-		sessionFactory.getCurrentSession().save(input);
-		System.err.println("END************PatientDaoImpl");
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatientCounselor(Long id, Employee counselor) {
-		CriteriaUpdate<Patient> update = cb.createCriteriaUpdate(Patient.class);
-		Root<Patient> root = update.from(Patient.class);
-		update.set(root.get(Patient_.counselor), counselor).where(cb.equal(root.get(Patient_.id), id));
-	
-		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
-	}
-
-	@Transactional
-	@Override
-	public void updatePatientPhone(Long id, Long newPhone) {
-		CriteriaUpdate<Patient> update = cb.createCriteriaUpdate(Patient.class);
-		Root<Patient> root = update.from(Patient.class);
-		update.set(root.get(Patient_.phoneNumber), newPhone).where(cb.equal(root.get(Patient_.id), id));
-		
-		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
-	}
-	
-	@Transactional
-	@Override
-	public void updatePatient(Patient toBeUpdated) {
 		sessionFactory.getCurrentSession().update(toBeUpdated);
 	}
-	
+
 	@Transactional
 	@Override
-	public void updatePatientName(String oldName, String newName) {
-		CriteriaUpdate<Patient> update = cb.createCriteriaUpdate(Patient.class);
-		Root<Patient> root = update.from(Patient.class);
-		update.set(root.get(Patient_.name), newName).where(cb.equal(root.get(Patient_.name), oldName));
+	public void deleteMessage(Long id) {
+		String hql = "delete from Message where id= :id";
+		sessionFactory.getCurrentSession().createQuery(hql).setParameter("id", id).executeUpdate();	
+	}
+
+	@Transactional
+	@Override
+	public List<Message> selectAllMessage() {
+		CriteriaQuery<Message> query = cb.createQuery(Message.class);
+		query.from(Message.class);
+		TypedQuery<Message> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList();
+	}
+
+	@Transactional
+	@Override
+	public Message selectMessageById(Long id) {
+		CriteriaQuery<Message> query = cb.createQuery(Message.class);
+		Root<Message> root = query.from(Message.class);
+		query.where(cb.equal(root.get(Message_.id), id));
+		TypedQuery<Message> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+		List<Message> resultList = queryExecuted.getResultList();
 		
-		sessionFactory.getCurrentSession().createQuery(update).executeUpdate();
+		return resultList.isEmpty()?null:resultList.get(0);
 	}
-	
+
 	@Transactional
 	@Override
-	public void updatePatientNameWithHQL(String oldName, String newName, Patient emp) {		
-		String hql = "update from Patient set name= :newName where name= :oldName";
-		sessionFactory.getCurrentSession().createQuery(hql).setParameter("oldName", oldName).setParameter("newName", newName).executeUpdate();			
-			
+	public Message selectMessageByReplyToId(Long replyToId) {
+		CriteriaQuery<Message> query = cb.createQuery(Message.class);
+		Root<Message> root = query.from(Message.class);
+		query.where(cb.equal(root.get(Message_.replyToId), replyToId));
+		TypedQuery<Message> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+		List<Message> resultList = queryExecuted.getResultList();
+		
+		return resultList.isEmpty()?null:resultList.get(0);
 	}
-	
+
 	@Transactional
 	@Override
-	public List<Patient> selectAllPatient() {
-		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
-		query.from(Patient.class);
-		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+	public List<Message> selectMessageBySender(User sender) {
+		CriteriaQuery<Message> query = cb.createQuery(Message.class);
+		Root<Message> root = query.from(Message.class);
+		query.where(cb.equal(root.get(Message_.sender), sender));
+		TypedQuery<Message> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
 
 		return queryExecuted.getResultList();
 	}
 
 	@Transactional
 	@Override
-	public List<Patient> selectPatientByName(String inputName) {
-		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
-		Root<Patient> root = query.from(Patient.class);
-		query.where(cb.equal(root.get(Patient_.name), inputName));
-		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList();
-	}
-
-	@Transactional
-	@Override
-	public List<Patient> selectPatientById(Long id) {
-		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
-		Root<Patient> root = query.from(Patient.class);
-		query.where(cb.equal(root.get(Patient_.id), id));
-		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-
-		return queryExecuted.getResultList();
-	}
-
-	@Transactional
-	@Override
-	public void deletePatient(Long id) {
-		String hql = "delete from Patient where id= :id";
-		sessionFactory.getCurrentSession().createQuery(hql).setParameter("id", id).executeUpdate();		
-	}
-
-	@Transactional
-	@Override
-	public void clearPatient() {
-		CriteriaDelete<Patient> query = cb.createCriteriaDelete(Patient.class);
-		query.from(Patient.class);
+	public void clearMessage() {
+		CriteriaDelete<Message> query = cb.createCriteriaDelete(Message.class);
+		query.from(Message.class);
 		sessionFactory.getCurrentSession().createQuery(query).executeUpdate();
 	}
-*/
+
 }
 
