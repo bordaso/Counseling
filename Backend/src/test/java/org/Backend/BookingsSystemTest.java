@@ -157,7 +157,7 @@ public class BookingsSystemTest {
 	}
 
 	@Before
-	public void setupSetOfBookingDetails() {
+	public void setupListOfBookingDetails() {
 	listOfBookingDetails= new ArrayList<BookingDetails>();
 	listOfBookingDetails.add(bkngs1_bkngsDtls1);
 	listOfBookingDetails.add(bkngs1_bkngsDtls2);
@@ -366,9 +366,6 @@ public class BookingsSystemTest {
 		 bkngs1 = bkngsDao.selectBookingById(bkngsId3);
 		 
 		 assertTrue(bkngs1.getBookingDetails().get(0).getEmployee().equals(bkngs1_bkngsDtls2.getEmployee()));
-		 
-		
-		
 	}
 	
 	@Test
