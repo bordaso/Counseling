@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +14,8 @@ import javax.persistence.Version;
 import org.Backend.Enums.UserType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table
@@ -37,6 +38,7 @@ public class Employee extends User implements Serializable {
 
 	@Column
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="counselor")
+	@JsonManagedReference
 	private List<Patient> patientList;
 	
 	@Column

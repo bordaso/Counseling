@@ -17,6 +17,8 @@ import org.Backend.Enums.UserType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table
 @Scope("prototype")
@@ -31,6 +33,7 @@ public class Patient extends User implements Serializable {
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="employee_id")
+	@JsonBackReference
 	private Employee counselor;	
 	
 	@Column
