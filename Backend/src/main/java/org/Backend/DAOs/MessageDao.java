@@ -17,7 +17,7 @@ public interface MessageDao {
 	
 	Message selectMessageById(Long id);
 	
-	Message selectMessageByReplyToId(Long replyToId);
+	List<Message> selectMessageByReplyToId(Long replyToId);
 	
 	List<Message> selectMessageBySender(User Sender);
 

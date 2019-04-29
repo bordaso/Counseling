@@ -102,7 +102,7 @@ public class MessageDetailsDaoImpl implements MessageDetailsDao {
 	public List<MessageDetails> selectMessageDetailsByMsgId(Message msgId) {
 		CriteriaQuery<MessageDetails> query = cb.createQuery(MessageDetails.class);
 		Root<MessageDetails> root = query.from(MessageDetails.class);
-		query.where(cb.equal(root.get(MessageDetails_.id), msgId));
+		query.where(cb.equal(root.get(MessageDetails_.msgId), msgId));
 		TypedQuery<MessageDetails> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
 		
 		return queryExecuted.getResultList();

@@ -34,7 +34,7 @@ public class MessageDetails implements Serializable {
 	@JoinColumn(name="msg_id")
 	private Message msgId;
 	
-	@Column(updatable = false, nullable = false)
+	@Column(columnDefinition = "BINARY(1000)", updatable = false, nullable = false)
 	private User receiver;	
 	
 	@Column

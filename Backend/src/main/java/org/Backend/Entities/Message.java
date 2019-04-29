@@ -34,7 +34,7 @@ public class Message implements Serializable {
 	@Column
 	private Long id;
 	
-	@Column(updatable = false, nullable = false)
+	@Column(columnDefinition = "BINARY(1000)", updatable = false, nullable = false)
 	private User sender;
 	
 	@Column(columnDefinition = "SMALLDATETIME", updatable = false, nullable = false)

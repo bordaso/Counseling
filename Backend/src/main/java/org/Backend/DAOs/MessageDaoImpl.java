@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotSupportedException;
 
 import org.Backend.Entities.Message;
 import org.Backend.Entities.Message_;
@@ -52,8 +53,11 @@ public class MessageDaoImpl implements MessageDao {
 	@Transactional
 	@Override
 	public void deleteMessage(Long id) {
-		String hql = "delete from Message where id= :id";
-		sessionFactory.getCurrentSession().createQuery(hql).setParameter("id", id).executeUpdate();	
+		
+		throw new NotSupportedException();
+		
+		//String hql = "delete from Message where id= :id";
+		//sessionFactory.getCurrentSession().createQuery(hql).setParameter("id", id).executeUpdate();	
 	}
 
 	@Transactional
@@ -80,14 +84,13 @@ public class MessageDaoImpl implements MessageDao {
 
 	@Transactional
 	@Override
-	public Message selectMessageByReplyToId(Long replyToId) {
+	public List<Message> selectMessageByReplyToId(Long replyToId) {
 		CriteriaQuery<Message> query = cb.createQuery(Message.class);
 		Root<Message> root = query.from(Message.class);
 		query.where(cb.equal(root.get(Message_.replyToId), replyToId));
 		TypedQuery<Message> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
-		List<Message> resultList = queryExecuted.getResultList();
 		
-		return resultList.isEmpty()?null:resultList.get(0);
+		return queryExecuted.getResultList();
 	}
 
 	@Transactional

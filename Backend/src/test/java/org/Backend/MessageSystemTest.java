@@ -12,6 +12,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.NotSupportedException;
+
 import org.Backend.Config.Config;
 import org.Backend.DAOs.BookingDetailsDao;
 import org.Backend.DAOs.BookingsDao;
@@ -60,7 +62,7 @@ public class MessageSystemTest {
 
 	@Autowired
 	private Message msg2SendingToMultiplePatient;
-	
+
 	@Autowired
 	private Message msg3ReplyToMsg1;
 
@@ -91,10 +93,6 @@ public class MessageSystemTest {
 	private List<MessageDetails> listOfMessageDetails;
 
 	private byte[] attachment;
-	
-	
-	
-	
 
 	private List<BookingDetails> listOfBookingDetails;
 	@Autowired
@@ -109,8 +107,9 @@ public class MessageSystemTest {
 	private NotificationSetup bkngs1_ntfsnStp1;
 	@Autowired
 	private ReportCreator reportCreator;
+
 	@Before
-	public void createBookingReport() throws DocumentException, URISyntaxException, IOException {
+	public void createAttachment() throws DocumentException, URISyntaxException, IOException {
 		bkngs1.setTitle("booking1");
 		bkngs1.setStart(LocalDateTime.of(2019, Month.APRIL, 11, 14, 00));
 		bkngs1.setEnd(LocalDateTime.of(2019, Month.APRIL, 11, 15, 00));
@@ -142,7 +141,7 @@ public class MessageSystemTest {
 
 		attachment = reportCreator.retrieveAsByte(listOfBookingDetails, emp,
 				"We had a great conversation, and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum.");
-}
+	}
 
 	@Before
 	public void setupMsg1() {
@@ -157,14 +156,13 @@ public class MessageSystemTest {
 		msg2SendingToMultiplePatient.setSentAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 		msg2SendingToMultiplePatient.setContent("Hello patients, thank you for comming to an appointment");
 	}
-	
+
 	@Before
 	public void setupMsg3ReplyToMsg1() {
 		msg3ReplyToMsg1.setSender(emp);
 		msg3ReplyToMsg1.setSentAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 		msg3ReplyToMsg1.setAttachment(attachment);
 		msg3ReplyToMsg1.setContent("thanks, latest appointment report is attached, now, payme more");
-		msg3ReplyToMsg1.setReplyToId(msg1.getId());
 	}
 
 	@Before
@@ -190,10 +188,10 @@ public class MessageSystemTest {
 		msgDtls4.setMsgId(msg3ReplyToMsg1);
 		msgDtls4.setReceiver(empBoss);
 	}
-	
+
 	@Before
 	public void setuplistOfMessageDetails() {
-		listOfMessageDetails= new ArrayList<MessageDetails>();
+		listOfMessageDetails = new ArrayList<MessageDetails>();
 		listOfMessageDetails.add(msgDtls1);
 		listOfMessageDetails.add(msgDtls2);
 		listOfMessageDetails.add(msgDtls3);
@@ -251,8 +249,8 @@ public class MessageSystemTest {
 		assertNotNull(msgDtls3);
 		assertNotNull(msgDtls4);
 
-		msgDao.clearMessage();
 		msgDtlsDao.clearMessageDetails();
+		msgDao.clearMessage();
 		empDao.clearEmployee();
 		patDao.clearPatient();
 
@@ -280,10 +278,192 @@ public class MessageSystemTest {
 
 	@Test
 	public void testDaoSaveMsg() {
+		assertNotNull(msgDao);
+		assertTrue(msgDao.selectAllMessage().isEmpty());
+		msgDao.saveMessage(msg1);
+		assertTrue(msgDao.selectAllMessage().size() == 1);
+	}
+
+	@Test
+	public void testDaoSaveMsgDtls() {
+		assertNotNull(msgDtlsDao);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().isEmpty());
+		msgDtlsDao.saveMessageDetails(msgDtls1);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().size() == 1);
+	}
+
+	@Test
+	public void testDaoUpdateMsg() {
+		assertNotNull(msgDao);
+		assertTrue(msgDao.selectAllMessage().isEmpty());
+		msgDao.saveMessage(msg1);
+		assertTrue(msgDao.selectAllMessage().size() == 1);
+
+		assertTrue(msgDao.selectAllMessage().get(0).getAttachment() == null);
+
+		msg1.setAttachment(attachment);
+		msgDao.updateMessage(msg1);
+
+		assertTrue(msgDao.selectAllMessage().get(0).getAttachment() != null);
+	}
+
+	@Test
+	public void testDaoUpdateMsgDtls() {
+		assertNotNull(msgDtlsDao);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().isEmpty());
+		msgDtlsDao.saveMessageDetails(msgDtls1);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().size() == 1);
+
+		assertTrue(msgDtlsDao.selectAllMessageDetails().get(0).getMsgId().equals(msg1) );
+
+		msgDtls1.setMsgId(msg2SendingToMultiplePatient);
+		msgDtlsDao.updateMessageDetails(msgDtls1);
+
+		assertTrue(msgDtlsDao.selectAllMessageDetails().get(0).getMsgId().equals(msg2SendingToMultiplePatient) );
+}
+	
+	@Test(expected = NotSupportedException.class)
+	public void testDaoDeleteMsgById() {
+		assertNotNull(msgDao);
+		assertTrue(msgDao.selectAllMessage().isEmpty());
+		msgDao.saveMessage(msg1);
+		assertTrue(msgDao.selectAllMessage().size() == 1);
+		
+		final long msg1Id = msg1.getId();
+		msgDao.deleteMessage(msg1Id);
+	}
+
+	@Test
+	public void testDaoDeleteMsgDtlsById() {
+		assertNotNull(msgDtlsDao);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().isEmpty());
+		msgDtlsDao.saveMessageDetails(msgDtls1);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().size() == 1);
+		
+		assertTrue(msgDtlsDao.selectAllMessageDetails().get(0).isArchived() == false);
+		
+		final long msgDtls1Id = msgDtls1.getId();
+		msgDtlsDao.deleteMessageDetailsById(msgDtls1Id);
+		
+		assertTrue(msgDtlsDao.selectAllMessageDetails().get(0).isArchived() == true);		
 	}
 	
 	@Test
-	public void testDaoSaveMsgDtls() {
+	public void testDaoDeleteMsgDtlsByMsgId() {
+		assertNotNull(msgDtlsDao);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().isEmpty());
+		msgDtlsDao.saveMessageDetails(msgDtls1);
+		msgDtlsDao.saveMessageDetails(msgDtls2);
+		msgDtlsDao.saveMessageDetails(msgDtls3);
+		msgDtlsDao.saveMessageDetails(msgDtls4);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().size() == 4);
+		
+		List<MessageDetails> listOfMsgDtls1 = msgDtlsDao.selectAllMessageDetails();		
+		for(MessageDetails msgDtls : listOfMsgDtls1) {
+			assertTrue(msgDtls.isArchived() == false);
+		}
+		
+		msgDtlsDao.deleteMessageDetailsByMsgId(msgDtls2.getMsgId());
+		
+		int i = 0;
+		
+		List<MessageDetails> listOfMsgDtls2 = msgDtlsDao.selectAllMessageDetails();		
+		for(MessageDetails msgDtls : listOfMsgDtls2) {
+			if(msgDtls.getMsgId().equals(msgDtls2.getMsgId())) {
+				assertTrue(msgDtls.isArchived() == true);
+				i++;
+				continue;
+			}	
+			assertTrue(msgDtls.isArchived() == false);
+		}
+		
+		assertTrue(i==2);		
+	}
+	
+	@Test
+	public void testDaoSelectMessageById() {
+		assertNotNull(msgDao);
+		assertTrue(msgDao.selectAllMessage().isEmpty());
+		msgDao.saveMessage(msg1);
+		msgDao.saveMessage(msg2SendingToMultiplePatient);
+		
+		final long msg1Id = msg1.getId();		
+		assertTrue(msg1.equals(msgDao.selectMessageById(msg1Id)));
+		
+		assertTrue(msgDao.selectAllMessage().size() == 2);
+	}
+
+	@Test
+	public void testDaoSelectMessageDetailsById() {
+		assertNotNull(msgDtlsDao);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().isEmpty());
+		msgDtlsDao.saveMessageDetails(msgDtls1);
+		msgDtlsDao.saveMessageDetails(msgDtls2);
+		
+		final long msgDtls1Id = msgDtls1.getId();		
+		assertTrue(msgDtls1.equals(msgDtlsDao.selectMessageDetailsById(msgDtls1Id)));
+		
+		assertTrue(msgDtlsDao.selectAllMessageDetails().size() == 2);
+	}
+	
+	@Test
+	public void testDaoSelectMessageByReplyToId() {
+		assertNotNull(msgDao);
+		assertTrue(msgDao.selectAllMessage().isEmpty());
+		
+		msgDao.saveMessage(msg1);
+		
+		msg2SendingToMultiplePatient.setReplyToId(msg1.getId());		
+		msgDao.saveMessage(msg2SendingToMultiplePatient);
+		
+		msg3ReplyToMsg1.setReplyToId(msg1.getId());
+		msgDao.saveMessage(msg3ReplyToMsg1);
+				
+		assertTrue(msgDao.selectAllMessage().size() == 3);
+		
+		assertTrue(msgDao.selectMessageByReplyToId(msg1.getId()).size()==2);
+		
+	}
+
+	@Test
+	public void testDaoSelectMessageDetailsByMsgId() {
+		assertNotNull(msgDtlsDao);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().isEmpty());
+		msgDtlsDao.saveMessageDetails(msgDtls1);
+		msgDtlsDao.saveMessageDetails(msgDtls2);
+		msgDtlsDao.saveMessageDetails(msgDtls3);
+		msgDtlsDao.saveMessageDetails(msgDtls4);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().size() == 4);
+		
+		assertTrue(msgDtlsDao.selectMessageDetailsByMsgId(msgDtls2.getMsgId()).size()==2);	
+	}
+	
+	@Test
+	public void testDaoSelectMessageBySender() {
+		assertNotNull(msgDao);
+		assertTrue(msgDao.selectAllMessage().isEmpty());
+		msgDao.saveMessage(msg1);
+		msgDao.saveMessage(msg2SendingToMultiplePatient);
+		msgDao.saveMessage(msg3ReplyToMsg1);
+		
+		assertTrue(msgDao.selectAllMessage().size() == 3);
+		
+		assertTrue(msgDao.selectMessageBySender(emp).size() == 2);
+	}
+
+	@Test
+	public void testDaoSelectMessageeDetailsByReceiver() {
+		assertNotNull(msgDtlsDao);
+		assertTrue(msgDtlsDao.selectAllMessageDetails().isEmpty());
+		msgDtlsDao.saveMessageDetails(msgDtls1);
+		msgDtlsDao.saveMessageDetails(msgDtls2);
+		msgDtls3.setReceiver(empBoss);
+		msgDtlsDao.saveMessageDetails(msgDtls3);
+		msgDtlsDao.saveMessageDetails(msgDtls4);
+		
+		assertTrue(msgDtlsDao.selectAllMessageDetails().size() == 4);
+		
+		assertTrue(msgDtlsDao.selectMessageeDetailsByReceiver(empBoss).size() == 2);
 	}
 
 }
