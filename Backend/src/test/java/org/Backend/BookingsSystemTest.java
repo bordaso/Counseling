@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,19 +139,19 @@ public class BookingsSystemTest {
 	@Before
 	public void setupBkngs1() {
 		bkngs1.setTitle("booking1");
-		bkngs1.setStart(LocalDateTime.now());
-		bkngs1.setEnd(LocalDateTime.now().plusHours(12));
+		bkngs1.setStart(LocalDateTime.of(2019,Month.APRIL, 11, 14, 00));
+		bkngs1.setEnd(LocalDateTime.of(2019,Month.APRIL, 11, 15, 00));
 		bkngs1.setRoom("room1");
 		bkngs1.setArchived(false);		
 		
-		bkngs1.setBookingDetails(listOfBookingDetails);
+		// nem állítunk be booking oldalról listát! bkngs1.setBookingDetails(listOfBookingDetails);
 	}
 
 	@Before
 	public void setupBkngs2() {
 		bkngs2.setTitle("booking2");
-		bkngs2.setStart(LocalDateTime.now().plusHours(12));
-		bkngs2.setEnd(LocalDateTime.now().plusHours(24));
+		bkngs2.setStart(LocalDateTime.of(2019,Month.APRIL, 16, 12, 00));
+		bkngs2.setEnd(LocalDateTime.of(2019,Month.APRIL, 16, 13, 00));
 		bkngs2.setRoom("room2");
 		bkngs2.setArchived(true);
 	}
@@ -174,7 +175,7 @@ public class BookingsSystemTest {
 	public void setupBkngs1_BkngsDtls2() {
 		bkngs1_bkngsDtls2.setBooking(bkngs1);
 		bkngs1_bkngsDtls2.setEmployee(emp);
-		bkngs1_bkngsDtls1.setPatient(null);
+		bkngs1_bkngsDtls2.setPatient(null);
 		bkngs1_bkngsDtls2.setResponse(BookingResponse.ACCEPTED);
 	}
 
@@ -259,7 +260,6 @@ public class BookingsSystemTest {
 	@Test
 	public void testDaoSaveBkngs() {
 		 assertNotNull(bkngsDao);
-		 assertTrue(bkngsDao.selectBookingById(1l)==null);
 		 bkngsDao.saveBooking(bkngs1);
 		 final Long bkngsId1=bkngs1.getId();
 		 assertNotNull(bkngsDao.selectBookingById(bkngsId1));
@@ -269,16 +269,18 @@ public class BookingsSystemTest {
 	@Test
 	public void testDaoSaveBkngsDtls() {
 		 assertNotNull(bkngsDtlsDao);
-		 assertTrue(bkngsDtlsDao.selectBookingDetailsById(1l)==null);
 		 assertTrue(bkngsDtlsDao.selectAllBookingDetails().isEmpty()); 
 		 bkngsDtlsDao.saveBookingDetails(bkngs1_bkngsDtls1);
 		 bkngsDtlsDao.saveBookingDetails(bkngs1_bkngsDtls2);
 		 assertTrue(bkngsDtlsDao.selectAllBookingDetails().size()==2); 
 		 
-		 assertNotNull(bkngsDtlsDao.selectBookingDetailsById(1l));
-		 assertNotNull(bkngsDtlsDao.selectBookingDetailsById(2l));
-		 assertTrue(bkngsDtlsDao.selectBookingDetailsById(1l).getEmployee().getName().equals("testEmpBoss"));
-		 assertTrue(bkngsDtlsDao.selectBookingDetailsById(2l).getEmployee().getName().equals("testEmp"));
+		 final Long bkngsDtlsId1=bkngs1_bkngsDtls1.getId();
+		 final Long bkngsDtlsId2=bkngs1_bkngsDtls2.getId();
+		 
+		 assertNotNull(bkngsDtlsDao.selectBookingDetailsById(bkngsDtlsId1));
+		 assertNotNull(bkngsDtlsDao.selectBookingDetailsById(bkngsDtlsId2));
+		 assertTrue(bkngsDtlsDao.selectBookingDetailsById(bkngsDtlsId1).getEmployee().getName().equals("testEmpBoss"));
+		 assertTrue(bkngsDtlsDao.selectBookingDetailsById(bkngsDtlsId2).getEmployee().getName().equals("testEmp"));
 	}
 	
 	@Test
@@ -311,48 +313,87 @@ public class BookingsSystemTest {
 	@Test
 	public void testDaoUpdateBookingReport() throws DocumentException, URISyntaxException, IOException {
 		 assertNotNull(bkngsDao);
-		 assertTrue(bkngsDao.selectAllBooking().size()==0);		 
+		 assertTrue(bkngsDao.selectAllBooking().size()==0);	
 		 bkngsDao.saveBooking(bkngs1);
+		 
 		 bkngs1.setNotificationId(bkngs1_ntfsnStp1); 
 		 bkngs1_ntfsnStp1.setBoookingNotifId(bkngs1);
+		 bkngs1_bkngsDtls1.setBooking(bkngs1);
+		 bkngs1_bkngsDtls2.setBooking(bkngs1);
+		 bkngs1_bkngsDtls3.setBooking(bkngs1);		 
+		 bkngsDtlsDao.saveBookingDetails(bkngs1_bkngsDtls1);
+		 bkngsDtlsDao.saveBookingDetails(bkngs1_bkngsDtls2);
+		 bkngsDtlsDao.saveBookingDetails(bkngs1_bkngsDtls3);
+		 bkngsDao.updateBooking(bkngs1);	
+		 
+		 final Long bkngsId2=bkngs1.getId();
+		 bkngs1 = bkngsDao.selectBookingById(bkngsId2);
+		 
 		 bkngs1.setReport(reportCreator.retrieveAsByte(bkngs1.getBookingDetails(), emp, "We had a great conversation, and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum."));		 
 		 bkngsDao.updateBooking(bkngs1);
-		 final Long bkngsId1=bkngs1.getId();		 
-		 assertEquals(true, reportCreator.generateFileFromByte(bkngsDao.selectBookingById(bkngsId1).getReport()));
+		 
+		 final Long bkngsId3=bkngs1.getId();		 
+		 assertEquals(true, reportCreator.generateFileFromByte(bkngsDao.selectBookingById(bkngsId3).getReport()));
 	}
 
 	@Test
 	public void testDaoUpdateBookingDetailsBookings() {
-		// assertNotNull(empDao);
-		// assertTrue(empDao.selectAllEmployee().size()==0);
-		// assertTrue(empDao.selectEmployeeByName("testEmp").isEmpty());
-		// assertTrue(empDao.selectEmployeeByName("NAME_UPDATED").isEmpty());
-		//
-		// empDao.saveEmployee(emp);
-		// empDao.updateEmployeeName("testEmp", "NAME_UPDATED");
-		//
-		//
-		//
-		// assertFalse(empDao.selectEmployeeByName("NAME_UPDATED").isEmpty());
-		// assertTrue(empDao.selectEmployeeByName("testEmp").isEmpty());
-		// assertTrue(empDao.selectEmployeeByName("NAME_UPDATED").get(0).getName().equals("NAME_UPDATED"));
+		assertNotNull(bkngsDao);
+		assertNotNull(bkngsDtlsDao);
+		
+		bkngsDao.saveBooking(bkngs1);
+		assertTrue(bkngsDtlsDao.selectAllBookingDetails().size()==0);
+		bkngsDtlsDao.saveBookingDetails(bkngs1_bkngsDtls1);
+		assertTrue(bkngsDtlsDao.selectAllBookingDetails().size()==1);
+		
+		 final Long bkngsId1=bkngs1.getId();		
+		 bkngs1 = bkngsDao.selectBookingById(bkngsId1);
+		 
+		 assertTrue(bkngs1.getBookingDetails().get(0).getEmployee().equals(bkngs1_bkngsDtls1.getEmployee()));
+		 
+		 bkngs1_bkngsDtls1.setBooking(null);
+		 bkngsDtlsDao.updateBookingDetails(bkngs1_bkngsDtls1);
+		 
+		 final Long bkngsId2=bkngs1.getId();		
+		 bkngs1 = bkngsDao.selectBookingById(bkngsId2);
+		 
+		 
+		 assertTrue(bkngs1.getBookingDetails().isEmpty());
+		 
+		 bkngsDtlsDao.saveBookingDetails(bkngs1_bkngsDtls2);
+		 
+		 final Long bkngsId3=bkngs1.getId();		
+		 bkngs1 = bkngsDao.selectBookingById(bkngsId3);
+		 
+		 assertTrue(bkngs1.getBookingDetails().get(0).getEmployee().equals(bkngs1_bkngsDtls2.getEmployee()));
+		 
+		
+		
 	}
 	
 	@Test
 	public void testDaoUpdateNotificationSetupBookings() {
-		// assertNotNull(empDao);
-		// assertTrue(empDao.selectAllEmployee().size()==0);
-		// assertTrue(empDao.selectEmployeeByName("testEmp").isEmpty());
-		// assertTrue(empDao.selectEmployeeByName("NAME_UPDATED").isEmpty());
-		//
-		// empDao.saveEmployee(emp);
-		// empDao.updateEmployeeName("testEmp", "NAME_UPDATED");
-		//
-		//
-		//
-		// assertFalse(empDao.selectEmployeeByName("NAME_UPDATED").isEmpty());
-		// assertTrue(empDao.selectEmployeeByName("testEmp").isEmpty());
-		// assertTrue(empDao.selectEmployeeByName("NAME_UPDATED").get(0).getName().equals("NAME_UPDATED"));
+		assertNotNull(bkngsDao);
+		 assertTrue(bkngsDao.selectAllBooking().size()==0);	
+		 bkngsDao.saveBooking(bkngs1);
+		 
+		 bkngs1.setNotificationId(bkngs1_ntfsnStp1); 
+		 bkngs1_ntfsnStp1.setBoookingNotifId(bkngs1);
+		 bkngsDao.updateBooking(bkngs1);
+		 
+		 final Long bkngsId1=bkngs1.getId();		
+		 bkngs1 = bkngsDao.selectBookingById(bkngsId1);
+		 
+		 assertTrue(bkngs1.getNotificationId().equals(bkngs1_ntfsnStp1));
+
+		 ntfsnStpDao.deleteNotificationSetup(bkngs1.getId());
+		 
+		 bkngs1.setNotificationId(bkngs2_ntfsnStp2); 
+		 bkngs2_ntfsnStp2.setBoookingNotifId(bkngs1);
+		 bkngsDao.updateBooking(bkngs1);
+		 
+		 assertTrue(bkngs1.getNotificationId().equals(bkngs2_ntfsnStp2));
+		 
 	}
 	
 	@Test
@@ -408,60 +449,6 @@ public class BookingsSystemTest {
 		 assertTrue(ntfsList.size()==1 && ntfsList.get(0).getId()==ntfsnStpId2);
 	}
 	
-	@Test
-	public void testDaoSelectByName() {
-		// assertNotNull(empDao);
-		// assertTrue(empDao.selectEmployeeByName("testEmp").isEmpty());
-		// assertTrue(empDao.selectEmployeeByName("testEmp2").isEmpty());
-		// empDao.saveEmployee(emp);
-		// empDao.saveEmployee(emp);
-		// emp.setName("testEmp2");
-		// empDao.saveEmployee(emp);
-		// assertTrue(empDao.selectEmployeeByName("testEmp").size()==2);
-		// assertTrue(empDao.selectEmployeeByName("testEmp2").size()==1);
-	}
 
-	@Test
-	public void testDaoSelectById() {
-		// assertNotNull(empDao);
-		// empDao.saveEmployee(emp);
-		// final Long id1=emp.getId();
-		// emp.setName("testEmp2");
-		// empDao.saveEmployee(emp);
-		// final Long id2=emp.getId();
-		// assertTrue(empDao.selectEmployeeById(id1).get(0).getName().equals("testEmp"));
-		// assertTrue(empDao.selectEmployeeById(id2).get(0).getName().equals("testEmp2"));
-	}
-
-	@Test
-	public void testDaoUpdateReportsTo() {
-		// assertNotNull(empDao);
-		// empDao.saveEmployee(emp);
-		// final Long id1=emp.getId();
-		// assertTrue(empDao.selectEmployeeById(id1).get(0).getReportsTo().equals(empBoss));
-		// empDao.updateEmployeeReportsTo(id1, null);
-		// assertTrue(empDao.selectEmployeeById(id1).get(0).getReportsTo()==null);
-	}
-
-	@Test
-	public void testDaoUpdatePhone() {
-		// assertNotNull(empDao);
-		// empDao.saveEmployee(emp);
-		// final Long id1=emp.getId();
-		// assertTrue(empDao.selectEmployeeById(id1).get(0).getPhoneNumber().equals(123l));
-		// empDao.updateEmployeePhone(id1, 321l);
-		// assertTrue(empDao.selectEmployeeById(id1).get(0).getPhoneNumber().equals(321l));
-	}
-
-	@Test
-	public void testDaoUpdateEmployee() {
-		// assertNotNull(empDao);
-		// empDao.saveEmployee(emp);
-		// final Long id1=emp.getId();
-		// assertTrue(empDao.selectEmployeeById(id1).get(0).getPhoneNumber().equals(123l));
-		// emp.setPhoneNumber(321l);
-		// empDao.updateEmployee(emp);
-		// assertTrue(empDao.selectEmployeeById(id1).get(0).getPhoneNumber().equals(321l));
-	}
 
 }

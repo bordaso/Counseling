@@ -146,7 +146,7 @@ public class ReportCreator {
 		PdfPTable notificationCellTable = new PdfPTable(1);
 		notificationCellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 		notificationCellTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-		notificationCellTable.addCell("@: " + inFirstToGetGeneralAppointmentDetails.getNotificationId().isEmail());
+		notificationCellTable.addCell("Email: " + inFirstToGetGeneralAppointmentDetails.getNotificationId().isEmail());
 		notificationCellTable.addCell("SMS: " + inFirstToGetGeneralAppointmentDetails.getNotificationId().isSms());		
 		return notificationCellTable;
 	}

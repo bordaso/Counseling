@@ -2,6 +2,7 @@ package org.Backend.Entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class Bookings implements Serializable {
 	private String title;
 	
 	@Column
-	@OneToMany(mappedBy="booking")
+	@OneToMany(mappedBy="booking", fetch = FetchType.EAGER)
 	private List<BookingDetails> bookingDetails;
 
 	@Lob
@@ -101,7 +102,7 @@ public class Bookings implements Serializable {
 	}
 
 	public void setStart(LocalDateTime start) {
-		this.start = start;
+		this.start = start.truncatedTo(ChronoUnit.MINUTES);
 	}
 
 	public LocalDateTime getEnd() {
@@ -109,7 +110,7 @@ public class Bookings implements Serializable {
 	}
 
 	public void setEnd(LocalDateTime end) {
-		this.end = end;
+		this.end = end.truncatedTo(ChronoUnit.MINUTES);
 	}
 
 	public String getRoom() {
@@ -140,9 +141,9 @@ public class Bookings implements Serializable {
 		return bookingDetails;
 	}
 
-	public void setBookingDetails(List<BookingDetails> bookingDetails) {
-		this.bookingDetails = bookingDetails;
-	}
+//	public void setBookingDetails(List<BookingDetails> bookingDetails) {
+//		this.bookingDetails = bookingDetails;
+//	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
