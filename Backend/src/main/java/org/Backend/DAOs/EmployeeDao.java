@@ -3,6 +3,7 @@ package org.Backend.DAOs;
 import java.util.List;
 
 import org.Backend.Entities.Employee;
+import org.Backend.Entities.Patient;
 
 public interface EmployeeDao {
 
@@ -15,6 +16,8 @@ public interface EmployeeDao {
 	void updateEmployeeNameWithHQL(String oldName, String newName, Employee emp);
 
 	List<Employee> selectEmployeeByName(String inputName);
+	
+	List<Employee> selectEmployeetByUsername(String inputUsername);
 
 	List<Employee> selectEmployeeById(Long id);
 	

@@ -16,6 +16,8 @@ public interface PatientDao {
 	void updatePatient(Patient toBeUpdated);
 
 	List<Patient> selectPatientByName(String inputName);
+	
+	List<Patient> selectPatientByUsername(String inputUsername);
 
 	List<Patient> selectPatientById(Long id);
 	

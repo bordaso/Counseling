@@ -111,6 +111,17 @@ public class PatientDaoImpl implements PatientDao {
 
 	@Transactional
 	@Override
+	public List<Patient> selectPatientByUsername(String inputUsername) {
+		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
+		Root<Patient> root = query.from(Patient.class);
+		query.where(cb.equal(root.get(Patient_.username), inputUsername));
+		TypedQuery<Patient> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList();
+	}
+	
+	@Transactional
+	@Override
 	public List<Patient> selectPatientById(Long id) {
 		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
 		Root<Patient> root = query.from(Patient.class);
@@ -134,6 +145,5 @@ public class PatientDaoImpl implements PatientDao {
 		query.from(Patient.class);
 		sessionFactory.getCurrentSession().createQuery(query).executeUpdate();
 	}
-
 }
 

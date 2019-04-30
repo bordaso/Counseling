@@ -107,6 +107,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 		return queryExecuted.getResultList();
 	}
+	
+	@Transactional
+	@Override
+	public List<Employee> selectEmployeetByUsername(String inputUsername) {
+		CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
+		Root<Employee> root = query.from(Employee.class);
+		query.where(cb.equal(root.get(Employee_.username), inputUsername));
+		TypedQuery<Employee> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
+
+		return queryExecuted.getResultList();
+	}
 
 	@Transactional
 	@Override
@@ -135,41 +146,3 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 }
-
-// public <T extends PostModerate> int flagSpam(
-// EntityManager entityManager,
-// Class<T> postModerateClass) {
-//
-// CriteriaBuilder builder = entityManager
-// .getCriteriaBuilder();
-//
-// CriteriaUpdate<T> update = builder
-// .createCriteriaUpdate(postModerateClass);
-//
-// Root<T> root = update.from(postModerateClass);
-//
-// Expression<Boolean> filterPredicate = builder
-// .like(
-// builder.lower(root.get("message")),
-// "%spam%"
-// );
-//
-// if(Post.class.isAssignableFrom(postModerateClass)) {
-// filterPredicate = builder.or(
-// filterPredicate, builder
-// .like(
-// builder.lower(root.get("title")),
-// "%spam%"
-// )
-// );
-// }
-//
-// update
-// .set(root.get("status"), PostStatus.SPAM)
-// .set(root.get("updatedOn"), new Date())
-// .where(filterPredicate);
-//
-// return entityManager
-// .createQuery(update)
-// .executeUpdate();
-// }

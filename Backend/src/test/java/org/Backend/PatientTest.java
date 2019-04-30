@@ -43,6 +43,9 @@ public class PatientTest {
 		@Autowired
 		private Patient pat2;
 		
+		@Autowired
+		private Patient pat3;
+		
 		@Before
 		public void setupEmp() {
 			emp.setName("testEmp");
@@ -83,7 +86,18 @@ public class PatientTest {
 			pat2.setPassword("abc1232");
 			pat2.setMedicalId(1232l);
 			pat2.setCounselor(empBoss);
-			pat.setPhoneNumber(123l);
+			pat2.setPhoneNumber(123l);
+		} 
+		
+		@Before
+		public void setupPat3() {
+			pat3.setName("testPat3");
+			pat3.setEmail("testPat3@testPat3.hu");
+			pat3.setUsername("testerPat");
+			pat3.setPassword("aaaaa");
+			pat3.setMedicalId(424l);
+			pat3.setCounselor(empBoss);
+			pat3.setPhoneNumber(333l);
 		} 
 		
 		
@@ -101,6 +115,8 @@ public class PatientTest {
 			assertNotNull(emp);
 			assertNotNull(empBoss);
 			assertNotNull(pat);
+			assertNotNull(pat2);
+			assertNotNull(pat3);
 		}
 		
 		@Test
@@ -197,6 +213,19 @@ public class PatientTest {
 			pat.setPhoneNumber(321l);
 			patDao.updatePatient(pat);
 			assertTrue(patDao.selectPatientById(patId1).get(0).getPhoneNumber().equals(321l));
+			}
+		
+		@Test
+		public void testDaoSelectByUsername() {
+			assertNotNull(patDao);
+			assertTrue(patDao.selectPatientByUsername("testerPat").isEmpty());
+			assertTrue(patDao.selectPatientByUsername("testerPat2").isEmpty());
+			patDao.savePatient(pat);
+			patDao.savePatient(pat2);
+			patDao.savePatient(pat3);
+			
+			assertTrue(patDao.selectPatientByUsername("testerPat").size()==2);
+			assertTrue(patDao.selectPatientByUsername("testerPat2").size()==1);
 			}
 		
 }

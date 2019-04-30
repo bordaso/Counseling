@@ -42,6 +42,9 @@ public class EmployeeTest {
 		private Employee emp;
 		
 		@Autowired
+		private Employee emp2;
+		
+		@Autowired
 		private Employee empBoss;
 		
 		@Autowired
@@ -74,6 +77,17 @@ public class EmployeeTest {
 		} 
 		
 		@Before
+		public void setupEmp2() {
+			emp2.setName("testEmp2");
+			emp2.setEmail("tes2t@test2.hu");
+			emp2.setUsername("tester");
+			emp2.setPassword("2222");
+			emp2.setPersonalId("emp012");		
+			emp2.setPhoneNumber(12323l);
+			emp2.setReportsTo(empBoss);
+		} 
+		
+		@Before
 		public void setupEmpBoss() {
 			empBoss.setName("testEmpBoss");
 			empBoss.setEmail("testBoss@testBoss.hu");
@@ -98,32 +112,13 @@ public class EmployeeTest {
 			bkngs.setEnd(LocalDateTime.now().plusHours(12));
 			bkngs.setRoom("room1");	
 		} 
-	/*
-		@Before
-		public void setupBkngsDtls() {
-			bkngsDtls.("testEmp");
-			bkngsDtls.("test@test.hu");
-			bkngsDtls.("tester");
-			bkngsDtls.("abc123");
-			bkngsDtls.(123l);			
-		} 
-		*/
 			
 		@Before
 		public void setupMsg() {
 			msg.setSentAt(LocalDateTime.now());
 			msg.setContent("message cntent");		
 		} 
-		/*
-		@Before
-		public void setupMsgDtls() {
-			pat.setName("testEmp");
-			pat.setEmail("test@test.hu");
-			pat.setUsername("tester");
-			pat.setPassword("abc123");
-			pat.setMedicalId(123l);			
-		} 
-		*/
+		
 		@Before
 		public void setupNtfsnStp() {
 			ntfsnStp.setRecurringTime(3000l);
@@ -143,6 +138,7 @@ public class EmployeeTest {
 			assertNotNull(testH2);
 			assertNotNull(empDao);
 			assertNotNull(emp);
+			assertNotNull(emp2);
 			assertNotNull(empBoss);
 			assertNotNull(pat);
 			assertNotNull(bkngs);
@@ -253,6 +249,19 @@ public class EmployeeTest {
 			emp.setPhoneNumber(321l);
 			empDao.updateEmployee(emp);
 			assertTrue(empDao.selectEmployeeById(id1).get(0).getPhoneNumber().equals(321l));
+			}
+		
+		@Test
+		public void testDaoSelectByUsername() {
+			assertNotNull(empDao);
+			assertTrue(empDao.selectEmployeetByUsername("tester").isEmpty());
+			assertTrue(empDao.selectEmployeetByUsername("testerBoss").isEmpty());
+			empDao.saveEmployee(emp);
+			empDao.saveEmployee(emp2);
+			empDao.saveEmployee(empBoss);
+			
+			assertTrue(empDao.selectEmployeetByUsername("tester").size()==2);
+			assertTrue(empDao.selectEmployeetByUsername("testerBoss").size()==1);
 			}
 	
 }

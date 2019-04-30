@@ -29,7 +29,7 @@ public class JettyStart {
 	// private Logger logger = LoggerFactory.getLogger(JettyTest.class);
 
 	@SuppressWarnings(value = { "unused" })
-	private static void loadTimeWeavingStartup(String[] args) throws URISyntaxException, IOException {
+	private static void loadTimeWeavingAtStartup(String[] args) throws URISyntaxException, IOException {
 		String currentPath = JettyStart.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()
 				.replace('/', File.separator.charAt(0)).substring(1);
 		if (args.length == 0 /* && Runtime.getRuntime().maxMemory()/1024/1024<980 */) {
@@ -42,7 +42,7 @@ public class JettyStart {
 
 	public static void main(String[] args) throws Exception {
 
-		// loadTimeWeavingStartup(args);
+		// loadTimeWeavingAtStartup(args);
 
 		int port = 54321;
 		JettyStart embeddedServer = new JettyStart(port);
