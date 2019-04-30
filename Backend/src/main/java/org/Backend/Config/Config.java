@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@EnableAspectJAutoProxy(proxyTargetClass=true)
 //@EnableLoadTimeWeaving(aspectjWeaving=AspectJWeaving.ENABLED)
 //@EnableSpringConfigured
-@ComponentScan({"org.Backend","org.Backend.Config","org.Backend.DAOs","org.Backend.Entities","org.Backend.Services","org.Backend.Utilities" })
+@ComponentScan({"org.Backend","org.Backend.Config","org.Backend.DAOs","org.Backend.Entities","org.Backend.Services","org.Backend.Utilities", "org.Backend.Converters" })
 public class Config {  
 	
 //	 org.apache.log4j.Logger logger = LogManager.getLogger(Config.class);

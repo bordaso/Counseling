@@ -38,11 +38,12 @@ public class Employee extends User implements Serializable {
 
 	@Column
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="counselor")
-	@JsonManagedReference
+	@JsonManagedReference(value="patient-list")
 	private List<Patient> patientList;
 	
 	@Column
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="employee")
+	@JsonManagedReference(value="employee-bookings")
 	private Set<BookingDetails> bookingDetails;
 
 	@Version

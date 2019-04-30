@@ -20,6 +20,8 @@ import org.Backend.Enums.BookingResponse;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table
 @Scope("prototype")
@@ -40,17 +42,20 @@ public class BookingDetails implements Serializable {
 	//@MapsId("bookingId")
 	//@Column(updatable = false, nullable = false)
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JsonBackReference(value="bookings")
 	private Bookings booking;
 	
 	//@MapsId("employeeId")
 	//@Column
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JsonBackReference(value="employee-bookings")
 	private Employee employee;
 	
 
 	//@MapsId("patientId")
 	//@Column
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JsonBackReference(value="patient-bookings")
 	private Patient patient;
 	
 	@Column

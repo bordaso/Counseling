@@ -20,6 +20,8 @@ import javax.persistence.Version;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table
@@ -52,6 +54,7 @@ public class Message implements Serializable {
 	
 	@Column
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="msgId")
+	@JsonManagedReference(value="message")
 	private Set<MessageDetails> messageDetails;
 	
 	@Version

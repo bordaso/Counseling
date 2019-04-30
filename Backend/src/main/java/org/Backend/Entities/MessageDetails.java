@@ -17,6 +17,8 @@ import javax.persistence.Version;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table
 @Scope("prototype")
@@ -32,6 +34,7 @@ public class MessageDetails implements Serializable {
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="msg_id")
+	@JsonBackReference(value="message")
 	private Message msgId;
 	
 	@Column(columnDefinition = "BINARY(1000)", updatable = false, nullable = false)

@@ -1,5 +1,7 @@
 package org.Backend;
 
+import static org.Backend.Converters.JacksonConverter.jsonToPojo;
+import static org.Backend.Converters.JacksonConverter.pojoToJson;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.Backend.Config.Config;
+import org.Backend.Converters.JacksonPatientConverter;
 import org.Backend.Entities.Employee;
 import org.Backend.Entities.Patient;
 import org.junit.Before;
@@ -18,10 +21,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Config.class)
-public class JacksonEmployeeConverterTest {
+public class JacksonPatientAndGenericConverterTest {
 	
 	@Autowired
-	private JacksonEmployeeConverter jec;
+	private JacksonPatientConverter jpc;
 	
 	@Autowired
 	private Employee emp;
@@ -92,16 +95,27 @@ public class JacksonEmployeeConverterTest {
 	
 	
 	@Test
-	public void testPojoToJson() throws IOException {
-		String empJson1 = jec.employeePojoToJson(emp);
-		String empJson2 = jec.employeePojoToJson(jec.jsonToEmployeePojo(jec.employeePojoToJson(emp)));
-		assertEquals(empJson1, empJson2);
+	public void testPojoToJsonWithGeneric() throws IOException {
+		String patJson1 = jpc.patientPojoToJson(pat);
+		String patJson2 = jpc.patientPojoToJson(jpc.jsonToPatientPojo(jpc.patientPojoToJson(pat)));
+		assertEquals(patJson1, patJson2);
+		
+		String patJsonWithGeneric1 = pojoToJson(pat);
+		String patJsonWithGeneric2 = pojoToJson(jsonToPojo(pojoToJson(pat), pat.getClass()));
+		
+		assertEquals(patJsonWithGeneric1, patJsonWithGeneric2);
+		
+		assertEquals(patJson1, patJsonWithGeneric1);
+		assertEquals(patJson2, patJsonWithGeneric2);	
 		}
 	
 	@Test
-	public void testJsonToPojo() throws IOException {
-		Employee emp2 = jec.jsonToEmployeePojo(jec.employeePojoToJson(emp));
-		assertEquals(emp, emp2);
+	public void testJsonToPojoWithGeneric() throws IOException {
+		Patient patConverted = jpc.jsonToPatientPojo(jpc.patientPojoToJson(pat2));
+		assertEquals(pat2, patConverted);
+		
+		Patient patConvertedGeneric2 = jsonToPojo(pojoToJson(pat), pat.getClass());
+		assertEquals(pat, patConvertedGeneric2);	
 		}
 	
 	

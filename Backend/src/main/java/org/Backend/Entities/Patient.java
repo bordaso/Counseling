@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table
@@ -33,11 +34,12 @@ public class Patient extends User implements Serializable {
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="employee_id")
-	@JsonBackReference
+	@JsonBackReference(value="patient-list")
 	private Employee counselor;	
 	
 	@Column
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="patient")
+	@JsonManagedReference(value="patient-bookings")
 	private Set<BookingDetails> bookingDetails;
 	
 	@Version

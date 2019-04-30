@@ -23,6 +23,8 @@ import javax.persistence.Version;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table
 @Scope("prototype")
@@ -41,6 +43,7 @@ public class Bookings implements Serializable {
 	
 	@Column
 	@OneToMany(mappedBy="booking", fetch = FetchType.EAGER)
+	@JsonManagedReference(value="bookings")
 	private List<BookingDetails> bookingDetails;
 
 	@Lob

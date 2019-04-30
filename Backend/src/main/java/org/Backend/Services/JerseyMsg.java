@@ -1,8 +1,5 @@
 package org.Backend.Services;
 
-import java.io.File;
-import java.io.IOException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,8 +8,6 @@ import javax.ws.rs.core.Response;
 
 import org.Backend.Entities.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Path("msg")
 public class JerseyMsg {
