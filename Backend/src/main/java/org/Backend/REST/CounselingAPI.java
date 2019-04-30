@@ -1,28 +1,48 @@
 package org.Backend.REST;
 
+import static org.Backend.Converters.JacksonConverter.jsonToPojo;
+import static org.Backend.Converters.JacksonConverter.pojoToJson;
+
+import java.io.IOException;
+
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.Backend.Converters.JacksonConverter;
 import org.Backend.Entities.Employee;
+import org.Backend.Services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-@Path("rest/service")
+@Path("service")
 public class CounselingAPI {
 	
 	@Autowired
-	private Employee emp;
+	private EmployeeService empService;
 	  
 	  @GET
-	  @Path("/json")
+	  @Path("/employee/{username}")
 	  @Produces(MediaType.APPLICATION_JSON)
-	  public Response getMessageAJ() throws JsonProcessingException {
+	  public Response getEmployee(@PathParam("username") String usrnm) throws JsonProcessingException {
+		  	
+	        return Response.ok(pojoToJson(empService.employeeFinderByUsername(usrnm))).build();
+	    }
+	  
+	  
+	  @POST
+	  @Path("/employee/save")
+	  @Produces(MediaType.APPLICATION_JSON)
+	  public Response postSendBackEmployeeCompare(@HeaderParam("empJson") String empJson) throws IOException {
 	        
-	        return Response.ok(JacksonConverter.pojoToJson(emp)).build();
+		  Employee empGotBack = jsonToPojo(empJson, Employee.class);
+		  Employee original = empService.employeeFinderByUsername(empGotBack.getUsername());		 
+		  
+		  return Response.ok(original.equals(empGotBack)).build();
 	    }
 }
