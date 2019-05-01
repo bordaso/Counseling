@@ -5,20 +5,25 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.EnumSet;
 
 import javax.faces.webapp.FacesServlet;
+import javax.servlet.DispatcherType;
 
 import org.Backend.Config.Config;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 import com.sun.faces.config.ConfigureListener;
 
@@ -78,8 +83,15 @@ public class JettyStart {
 
 			initializeJSF(webappContext);
 			initializeJersey(webappContext);
+			
+			webappContext.addFilter(new FilterHolder(new DelegatingFilterProxy("springSecurityFilterChain")), "/*", EnumSet.allOf(DispatcherType.class));
 
 			webappContext.addServlet(DefaultServlet.class, "/").setInitOrder(2);
+			
+			ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
+		    errorHandler.addErrorPage(401, "/p401.html");
+		    errorHandler.addErrorPage(404, "/p404.html");
+		    webappContext.setErrorHandler(errorHandler);
 
 			server.setHandler(webappContext);
 			server.start();
