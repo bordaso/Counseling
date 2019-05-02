@@ -18,9 +18,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -82,6 +83,39 @@ public class Config extends WebSecurityConfigurerAdapter {
 //				.password("{noop}password").roles("USER", "ADMIN");
 //	}
 //	
+	
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		
+//		http
+//		.authorizeRequests()
+//			.anyRequest().authenticated()
+//			.and()
+//		.formLogin().and()
+//		.httpBasic();
+		
+//	http.formLogin().and()
+//	.authorizeRequests()
+//	.antMatchers("/login").authenticated()
+//	.antMatchers(HttpMethod.POST, "/postMethodPlace").authenticated()
+//	.anyRequest().permitAll().and()
+//	.requiresChannel()
+//	.antMatchers("/login").requiresSecure();
+		
+		
+		http
+		.formLogin()
+		.and()
+		.authorizeRequests()
+		.antMatchers("/login.html").authenticated()
+		.anyRequest().permitAll();
+//		.and().requiresChannel()
+//		.antMatchers("/login.html").requiresSecure().and()
+//        .portMapper()               
+//        .http(8080).mapsTo(8443);;
+	}
+	
+	
     @Bean
     public UserDetailsService userDetailsService() {
     	// withDefaultPasswordEncoder() is allowed for testing/demo purposes

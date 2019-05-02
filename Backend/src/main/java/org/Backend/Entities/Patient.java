@@ -42,9 +42,6 @@ public class Patient extends User implements Serializable {
 	@JsonManagedReference(value="patient-bookings")
 	private Set<BookingDetails> bookingDetails;
 	
-	@Version
-    @Column(name = "optlock", columnDefinition = "integer DEFAULT 0", nullable = false)
-    private long version = 0L;
 	
 	public Patient() {
 		super();

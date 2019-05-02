@@ -46,9 +46,6 @@ public class Employee extends User implements Serializable {
 	@JsonManagedReference(value="employee-bookings")
 	private Set<BookingDetails> bookingDetails;
 
-	@Version
-    @Column(name = "optlock", columnDefinition = "integer DEFAULT 0", nullable = false)
-    private long version = 0L;	
 
 	public Employee() {
 		super();
