@@ -26,15 +26,57 @@
 	<script src="assets/js/smoothscroll.js"></script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/custom.js"></script>
-  
 
+<style type="text/css">
+
+@keyframes flickerAnimation {
+  0%   { opacity:0; }
+  50%  { opacity:1; }
+  100% { opacity:0; }
+}
+@-o-keyframes flickerAnimation{
+  0%   { opacity:0; }
+  50%  { opacity:1; }
+  100% { opacity:0; }
+}
+@-moz-keyframes flickerAnimation{
+  0%   { opacity:0; }
+  50%  { opacity:1; }
+  100% { opacity:0; }
+}
+@-webkit-keyframes flickerAnimation{
+  0%   { opacity:0; }
+  50%  { opacity:1; }
+  100% { opacity:0; }
+}
+.animate-flicker {
+   -webkit-animation: flickerAnimation 3s infinite;
+   -moz-animation: flickerAnimation 3s infinite;
+   -o-animation: flickerAnimation 3s infinite;
+    animation: flickerAnimation 3s infinite;
+    
+    
+   display: inline-block;
+    position: fixed;
+    top: -25%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 200px;
+    height: 100px;
+    margin: auto;
+}
+
+</style>
 
 </head>
 
 <body>
 
 
-  <app-root>Loading...</app-root> 
+  <app-root>
+<div class="animate-flicker"><img class="front"  src='assets/img/MYlogoPureT.png' alt='Loading...'></img></div>
+      </app-root> 
 
 </body>
 </html>
