@@ -1,5 +1,3 @@
-
-
 jQuery(document).ready(function () {
 
 
@@ -63,11 +61,11 @@ jQuery(document).ready(function () {
                 "background": "#B193DD",
             });
             jQuery(".top-header img.logo").css({
-//                "margin-top": "-40px",
-//                "margin-bottom": "0"
+                "margin-top": "-40px",
+                "margin-bottom": "0"
             });
             jQuery(".navbar-default").css({
-//                "margin-top": "-15px",
+                "margin-top": "-15px",
             });
         } else {
             jQuery(".header").css({
