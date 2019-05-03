@@ -586,7 +586,112 @@ li a.active {
     margin-top: 120px;
 }
 
+/* img */
+
+.users-img {
+    height:64px;
+    width: 64px;
+}
+
+/* .contact-custom{ */
+/* 	padding-left:263px; */
+/* 	position:relative;  */
+/* 	height: 700px; */
+/* 	width: 1300px; */
+	
+/* 	 overflow-y: scroll;  */
+/* 	  overflow-x	: scroll;  */
+/* } */
+
+
+.login-custom{
+	
+	margin-top: 100px;
+	margin-bottom: -182px;
+	
+}
+
+/* Switch start */
+
+.onoffswitch {
+    position: relative; width: 125px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    margin-left: 165px;
+  
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 20px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "Employee";
+/*     padding-left: 10px; */
+	padding-right: 5px;
+    background-color: #34A7C1; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "Client";
+    padding-right: 42px;
+    background-color: #09D91A; color: #FFFFFF;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 19px; margin: 5.5px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 95px;
+    border: 2px solid #999999; border-radius: 20px;
+    transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+
+/* Switch end */
+
+
+
 /*footer*/
+
+.aboutFooter{
+	margin-top: 27px
+}
+
+.contactFooter{
+	margin-top: 98px
+}
+
+.homeFooter{
+	margin-top: 68px
+}
+
+.loginFooter{
+	margin-top: 446px
+}
+
+.servicesFooter{
+	margin-top: 189px
+}
+
+.teamFooter{
+	margin-top: 107px
+}
+
 
 .footer-para {
     margin: 0;
@@ -736,11 +841,11 @@ responsive area
         height: 1050px;
     }
     .contact {
-        margin-top: -1050px;
-        height: 1050px;
+/*         margin-top: -1050px; */
+/*         height: 1050px; */
     }
     .contact-caption {
-        margin-top: 110px;
+/*         margin-top: 110px; */
     }
 }
 
