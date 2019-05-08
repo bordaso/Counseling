@@ -18,11 +18,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Config.class)
+@WebAppConfiguration
 public class PatientTest {	
 			
 		@Autowired
@@ -80,7 +82,7 @@ public class PatientTest {
 		
 		@Before
 		public void setupPat2() {
-			pat2.setName("testPat2");
+			pat2.setName("testPat");
 			pat2.setEmail("testPat2@testPat2.hu");
 			pat2.setUsername("testerPat2");
 			pat2.setPassword("abc1232");
@@ -93,14 +95,14 @@ public class PatientTest {
 		public void setupPat3() {
 			pat3.setName("testPat3");
 			pat3.setEmail("testPat3@testPat3.hu");
-			pat3.setUsername("testerPat");
+			pat3.setUsername("testerPat3");
 			pat3.setPassword("aaaaa");
 			pat3.setMedicalId(424l);
 			pat3.setCounselor(empBoss);
 			pat3.setPhoneNumber(333l);
 		} 
 		
-		
+		@Before
 		@After
 		public void clearTables() {
 			assertNotNull(patDao);
@@ -135,8 +137,8 @@ public class PatientTest {
 			assertTrue(patDao.selectPatientByName("testPat").isEmpty());
 			patDao.savePatient(pat);	
 			final Long patId1=pat.getId();
-			patDao.savePatient(pat);	
-			final Long patId2=pat.getId();
+			patDao.savePatient(pat2);	
+			final Long patId2=pat2.getId();
 			assertTrue(patDao.selectPatientByName("testPat").size()==2);
 			patDao.deletePatient(patId1);
 			List<Patient> empList = patDao.selectPatientByName("testPat");
@@ -166,9 +168,9 @@ public class PatientTest {
 			assertTrue(patDao.selectPatientByName("testPat").isEmpty());
 			assertTrue(patDao.selectPatientByName("testPat2").isEmpty());
 			patDao.savePatient(pat);
-			patDao.savePatient(pat);
-			pat.setName("testPat2");
-			patDao.savePatient(pat);			
+			patDao.savePatient(pat2);
+			pat3.setName("testPat2");
+			patDao.savePatient(pat3);			
 			assertTrue(patDao.selectPatientByName("testPat").size()==2);
 			assertTrue(patDao.selectPatientByName("testPat2").size()==1);
 			}
@@ -178,9 +180,9 @@ public class PatientTest {
 			assertNotNull(patDao);
 			patDao.savePatient(pat);
 			final Long patId1=pat.getId();
-			pat.setName("testPat2");
-			patDao.savePatient(pat);
-			final Long patId2=pat.getId();
+			pat2.setName("testPat2");
+			patDao.savePatient(pat2);
+			final Long patId2=pat2.getId();
 			assertTrue(patDao.selectPatientById(patId1).get(0).getName().equals("testPat"));
 			assertTrue(patDao.selectPatientById(patId2).get(0).getName().equals("testPat2"));
 			}
@@ -220,12 +222,14 @@ public class PatientTest {
 			assertNotNull(patDao);
 			assertTrue(patDao.selectPatientByUsername("testerPat").isEmpty());
 			assertTrue(patDao.selectPatientByUsername("testerPat2").isEmpty());
+			assertTrue(patDao.selectPatientByUsername("testerPat3").isEmpty());
 			patDao.savePatient(pat);
 			patDao.savePatient(pat2);
 			patDao.savePatient(pat3);
 			
-			assertTrue(patDao.selectPatientByUsername("testerPat").size()==2);
+			assertTrue(patDao.selectPatientByUsername("testerPat").size()==1);
 			assertTrue(patDao.selectPatientByUsername("testerPat2").size()==1);
+			assertTrue(patDao.selectPatientByUsername("testerPat3").size()==1);
 			}
 		
 }

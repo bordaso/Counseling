@@ -43,7 +43,7 @@ public class User implements Serializable {
 	@Column(updatable = false, nullable = false, unique=true)
 	protected String username;
 	
-	@Column(columnDefinition = "VARCHAR(255)", updatable = false, nullable = false)
+	@Column(columnDefinition = "VARCHAR(100)", updatable = false, nullable = false)
 	protected String password;
 	
 	@Column

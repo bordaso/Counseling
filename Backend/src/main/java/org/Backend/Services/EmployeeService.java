@@ -26,7 +26,7 @@ public class EmployeeService {
 	private void setupEmp() {
 		emp.setName("testEmp");
 		emp.setEmail("test@test.hu");
-		emp.setUsername("tester");
+		emp.setUsername("testerEmpService");
 		emp.setPassword("abc123");
 		emp.setPersonalId("emp01");		
 		emp.setPhoneNumber(123l);

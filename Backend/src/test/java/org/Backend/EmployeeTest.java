@@ -25,11 +25,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Config.class)
+@WebAppConfiguration
 public class EmployeeTest {	
 	
 		@Autowired
@@ -80,7 +82,7 @@ public class EmployeeTest {
 		public void setupEmp2() {
 			emp2.setName("testEmp2");
 			emp2.setEmail("tes2t@test2.hu");
-			emp2.setUsername("tester");
+			emp2.setUsername("tester2");
 			emp2.setPassword("2222");
 			emp2.setPersonalId("emp012");		
 			emp2.setPhoneNumber(12323l);
@@ -126,7 +128,7 @@ public class EmployeeTest {
 			ntfsnStp.setEmail(true);		
 		} 
 		
-		
+		@Before
 		@After
 		public void clearTables() {
 			assertNotNull(empDao);
@@ -170,8 +172,9 @@ public class EmployeeTest {
 			assertTrue(empDao.selectEmployeeByName("testEmp").isEmpty());
 			empDao.saveEmployee(emp);	
 			final Long id1=emp.getId();
-			empDao.saveEmployee(emp);	
-			final Long id2=emp.getId();
+			emp2.setName("testEmp");
+			empDao.saveEmployee(emp2);	
+			final Long id2=emp2.getId();
 			assertTrue(empDao.selectEmployeeByName("testEmp").size()==2);
 			empDao.deleteEmployee(id1);
 			List<Employee> empList = empDao.selectEmployeeByName("testEmp");
@@ -201,9 +204,9 @@ public class EmployeeTest {
 			assertTrue(empDao.selectEmployeeByName("testEmp").isEmpty());
 			assertTrue(empDao.selectEmployeeByName("testEmp2").isEmpty());
 			empDao.saveEmployee(emp);
-			empDao.saveEmployee(emp);
-			emp.setName("testEmp2");
-			empDao.saveEmployee(emp);			
+			empDao.saveEmployee(emp2);
+			empBoss.setName("testEmp");
+			empDao.saveEmployee(empBoss);			
 			assertTrue(empDao.selectEmployeeByName("testEmp").size()==2);
 			assertTrue(empDao.selectEmployeeByName("testEmp2").size()==1);
 			}
@@ -213,9 +216,9 @@ public class EmployeeTest {
 			assertNotNull(empDao);
 			empDao.saveEmployee(emp);
 			final Long id1=emp.getId();
-			emp.setName("testEmp2");
-			empDao.saveEmployee(emp);
-			final Long id2=emp.getId();
+			emp2.setName("testEmp2");
+			empDao.saveEmployee(emp2);
+			final Long id2=emp2.getId();
 			assertTrue(empDao.selectEmployeeById(id1).get(0).getName().equals("testEmp"));
 			assertTrue(empDao.selectEmployeeById(id2).get(0).getName().equals("testEmp2"));
 			}
@@ -257,10 +260,9 @@ public class EmployeeTest {
 			assertTrue(empDao.selectEmployeetByUsername("tester").isEmpty());
 			assertTrue(empDao.selectEmployeetByUsername("testerBoss").isEmpty());
 			empDao.saveEmployee(emp);
-			empDao.saveEmployee(emp2);
 			empDao.saveEmployee(empBoss);
 			
-			assertTrue(empDao.selectEmployeetByUsername("tester").size()==2);
+			assertTrue(empDao.selectEmployeetByUsername("tester").size()==1);
 			assertTrue(empDao.selectEmployeetByUsername("testerBoss").size()==1);
 			}
 	
