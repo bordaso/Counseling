@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.Backend.DAOs.PatientDao;
 import org.Backend.Entities.Employee;
 import org.Backend.Services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class CounselingAPI {
 	
 	@Autowired
 	private EmployeeService empService;
+	
+	//temprarily for testing
+	@Autowired
+	private PatientDao patDao;
 	  
 	  @GET
 	  @Path("/employee/{username}")
@@ -33,6 +38,14 @@ public class CounselingAPI {
 	  public Response getEmployee(@PathParam("username") String usrnm) throws JsonProcessingException {
 		  	
 	        return Response.ok(pojoToJson(empService.employeeFinderByUsername(usrnm))).build();
+	    }
+	  
+	  @GET
+	  @Path("/user/{username}")
+	  @Produces(MediaType.APPLICATION_JSON)
+	  public Response getPatient(@PathParam("username") String usrnm) throws JsonProcessingException {
+		  	
+	        return Response.ok(pojoToJson(patDao.selectPatientByUsername(usrnm).get(0))).build();
 	    }
 	  
 	  
