@@ -18,15 +18,17 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -35,13 +37,28 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 // @EnableAspectJAutoProxy(proxyTargetClass=true)
 // @EnableLoadTimeWeaving(aspectjWeaving=AspectJWeaving.ENABLED)
 // @EnableSpringConfigured
-@EnableWebSecurity
+@EnableWebSecurity 
 @ComponentScan({ "org.Backend", "org.Backend.Config", "org.Backend.DAOs", "org.Backend.Entities",
 		"org.Backend.Services", "org.Backend.Utilities", "org.Backend.Converters" })
-public class Config extends WebSecurityConfigurerAdapter {
+public class Config  extends WebSecurityConfigurerAdapter{
 
 	// org.apache.log4j.Logger logger = LogManager.getLogger(Config.class);
 	// logger.debug("test");
+	
+	@Autowired
+    CustomSuccessHandler customSuccessHandler;
+	
+	@Autowired
+	CustomAccessDeniedHandler customAccessDeniedHandler;	
+	
+	@Autowired
+	UserDetailsService userDetailsService;
+	
+	
+	public Config() {
+		System.out.println("hello from config");
+		
+	}
 
 	@Autowired
 	private Environment env;
@@ -77,54 +94,49 @@ public class Config extends WebSecurityConfigurerAdapter {
 		return transactionManager;
 	}
 
-//	@Override
-//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//		auth.inMemoryAuthentication().withUser("user").password("{noop}password").roles("USER").and().withUser("admin")
-//				.password("{noop}password").roles("USER", "ADMIN");
-//	}
-//	
+	 @Override
+	    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	        auth.authenticationProvider(authProvider());
+	    }
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-//		http
-//		.authorizeRequests()
-//			.anyRequest().authenticated()
-//			.and()
-//		.formLogin().and()
-//		.httpBasic();
 		
-//	http.formLogin().and()
-//	.authorizeRequests()
-//	.antMatchers("/login").authenticated()
-//	.antMatchers(HttpMethod.POST, "/postMethodPlace").authenticated()
-//	.anyRequest().permitAll().and()
-//	.requiresChannel()
-//	.antMatchers("/login").requiresSecure();
+		 http.authorizeRequests()
+		 	.antMatchers("/").permitAll() 
+		 	.antMatchers("/rest/**").authenticated()
+		 	.antMatchers("/login.component.html").access("hasRole('ROLE_ANONYMOUS')")
+		 	.antMatchers("/rest/service/admin/**").access("hasRole('ROLE_EMPLOYEE') and hasRole('ROLE_ADMIN')")
+	        .antMatchers("/dashboard/usr.html").access("hasRole('ROLE_PATIENT')")
+	        .antMatchers("/dashboard/emp.html").access("hasRole('ROLE_EMPLOYEE')")
+	        .and().userDetailsService(userDetailsService).formLogin().loginPage("/login.component.html").loginProcessingUrl("/dashboard/login").successHandler(customSuccessHandler)	        
+	        .usernameParameter("id").passwordParameter("pw")
+	     //   .and().csrf()
+	        .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").invalidateHttpSession(true).deleteCookies("JSESSIONID")	        
+	        .and().csrf().disable()
+	     //   .and()
+	        .exceptionHandling().accessDeniedPage("/p401.html").accessDeniedHandler(customAccessDeniedHandler);
 		
-		
-		http
-		.formLogin()
-		.and()
-		.authorizeRequests()
-		.antMatchers("/login.html").authenticated()
-		.anyRequest().permitAll();
-//		.and().requiresChannel()
-//		.antMatchers("/login.html").requiresSecure().and()
-//        .portMapper()               
-//        .http(8080).mapsTo(8443);;
+
 	}
 	
+	@Bean
+	public DaoAuthenticationProvider authProvider() {
+	    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+	    authProvider.setUserDetailsService(userDetailsService);
+	    authProvider.setPasswordEncoder(passwordEncoder());
+	    return authProvider;
+	}
 	
-    @Bean
-    public UserDetailsService userDetailsService() {
-    	// withDefaultPasswordEncoder() is allowed for testing/demo purposes
-        User.UserBuilder users = User.withDefaultPasswordEncoder();
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(users.username("user").password("password").roles("USER").build());
-        manager.createUser(users.username("admin").password("password").roles("USER", "ADMIN").build());
-        return manager;
-
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+	    return new BCryptPasswordEncoder();
+	}
+	
+//	@Bean
+//	public RequestContextListener getRequestContextListener() {
+//	    return new RequestContextListener();
+//	}
 
 }

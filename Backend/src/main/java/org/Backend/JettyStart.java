@@ -11,6 +11,9 @@ import javax.faces.webapp.FacesServlet;
 import javax.servlet.DispatcherType;
 
 import org.Backend.Config.Config;
+import org.Backend.Config.DatabaseSetter;
+import org.Backend.Entities.Employee;
+import org.Backend.Utilities.BeanUtil;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -21,16 +24,24 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 import com.sun.faces.config.ConfigureListener;
 
+
 public class JettyStart {
 
 	private final Server server;
-
+	
+	private final int port = 54321;
+	
+	private DatabaseSetter dbs;
+	
+	
 	// private Logger logger = LoggerFactory.getLogger(JettyTest.class);
 
 	@SuppressWarnings(value = { "unused" })
@@ -48,13 +59,20 @@ public class JettyStart {
 	public static void main(String[] args) throws Exception {
 
 		// loadTimeWeavingAtStartup(args);
-
-		int port = 54321;
-		JettyStart embeddedServer = new JettyStart(port);
+		
+		JettyStart embeddedServer = new JettyStart();	
+		embeddedServer.databaseSetterBeanSetup();
+		embeddedServer.dbs.setupStarterData();
 		embeddedServer.listen();
 	}
+	
+	public void databaseSetterBeanSetup() {
+		dbs=BeanUtil.getBean(DatabaseSetter.class);
+	}	
 
-	public JettyStart(int port) {
+	public JettyStart() {
+		
+		
 
 		this.server = new Server();
 
@@ -67,7 +85,7 @@ public class JettyStart {
 			server.addConnector(httpConnector);
 
 			ServletContextHandler webappContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
-
+// "/webapp/NgUserFrontend/index.html"
 			URL webRootLocation = this.getClass().getResource("/webapp/index.html");
 
 			URI webRootUri = URI.create(webRootLocation.toURI().toASCIIString().replaceFirst("/index.html$", "/"));
@@ -79,13 +97,18 @@ public class JettyStart {
 			webappContext.getMimeTypes().addMimeMapping("txt", "text/plain;charset=utf-8");
 
 			webappContext.setDisplayName(
-					"Angular 6 and Primefaces 6 on Jetty Embedded 9 with Spring 5 and Hibernate and Jersey with Jackson Example");
+					"Angular 6 and JSF Mojarra + Primefaces 6 on Jetty Embedded 9 with Spring 5 and Hibernate and Jersey with Jackson Example");
 
 			initializeJSF(webappContext);
 			initializeJersey(webappContext);
 			
 			webappContext.addFilter(new FilterHolder(new DelegatingFilterProxy("springSecurityFilterChain")), "/*", EnumSet.allOf(DispatcherType.class));
 
+			//needed to get  HttpServletRequest in CustomUserDetailsService class
+			webappContext.addEventListener(new RequestContextListener());
+			
+			webappContext.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
+			
 			webappContext.addServlet(DefaultServlet.class, "/").setInitOrder(2);
 			
 			ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
@@ -150,6 +173,7 @@ public class JettyStart {
 	}
 
 	public void shutdown() {
+	//	dbs.clearDB();
 		new Thread() {
 			@Override
 			public void run() {

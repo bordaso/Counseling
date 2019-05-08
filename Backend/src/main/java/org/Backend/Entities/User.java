@@ -40,14 +40,14 @@ public class User implements Serializable {
 	@Email
 	protected String email;
 	
-	@Column(updatable = false, nullable = false)
+	@Column(updatable = false, nullable = false, unique=true)
 	protected String username;
 	
-	@Column(updatable = false, nullable = false)
+	@Column(columnDefinition = "VARCHAR(255)", updatable = false, nullable = false)
 	protected String password;
 	
 	@Column
-	protected Boolean archivedUser;
+	protected Boolean archivedUser = false;
 	
 	@Version
     @Column(name = "optlock", columnDefinition = "integer DEFAULT 0", nullable = false)

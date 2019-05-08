@@ -12,15 +12,16 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/NgUserFrontend",
+          "options": { 
+			"outputPath": "../../../../resources/webapp/NgUserFrontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/dashboard"
             ],
             "styles": [
               "src/styles.css"

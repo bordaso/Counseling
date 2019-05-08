@@ -5,6 +5,7 @@ import static org.Backend.Converters.JacksonConverter.pojoToJson;
 
 import java.io.IOException;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -45,4 +46,16 @@ public class CounselingAPI {
 		  
 		  return Response.ok(original.equals(empGotBack)).build();
 	    }
+	  
+	  @POST
+	  @Path("/employee/login")
+	  @Produces(MediaType.APPLICATION_JSON)
+	  public Response postLoginDemo(@FormParam("id")String id, @FormParam("pw")String pw, @FormParam("onoffswitch")String onoffswitch ) throws IOException {
+ 
+		  
+		  return Response.ok(id+" "+pw+" "+onoffswitch).build();
+	    }
+	  
+	  
+	  
 }

@@ -17,6 +17,7 @@ import { LocationStrategy } from "@angular/common";
 import { HashLocationStrategy } from "@angular/common";
 
 
+/*             "outputPath": "dist/NgUserFrontend", */
 
 const routes: Routes = [
                         // basic routes
