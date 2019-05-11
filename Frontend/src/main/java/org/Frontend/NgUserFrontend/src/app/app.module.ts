@@ -64,6 +64,7 @@ const routes: Routes = [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
+        FormsModule,
         RouterModule.forRoot(routes) // <-- routes
         
          // added this for our child module

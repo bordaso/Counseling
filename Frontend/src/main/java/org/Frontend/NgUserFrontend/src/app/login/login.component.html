@@ -9,20 +9,21 @@
 
 		<!-- Login Form -->
 <!-- 		<form method="post" action="http://localhost:54321/rest/service/employee/login"> -->
-		<form method="post" action="http://localhost:54321/dashboard/login">
-			<input type="text" id="login" class="fadeIn second" name="id" placeholder="login"> 
+<!-- 		<form method="post" action="http://localhost:54321/dashboard/login"> -->
+		<form>
+			<input type="text" id="login" [(ngModel)]="inId" class="fadeIn second" name="id" placeholder="login" autocomplete="username"> 
 				
-			<input type="text" id="password" class="fadeIn third" name="pw" placeholder="password">
+			<input type="password" id="password" [(ngModel)]="inPw" class="fadeIn third" name="pw" placeholder="password" autocomplete="current-password">
 
 			<div class="onoffswitch fadeIn fourth">
-				<input type="checkbox" name="empswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked> 
+				<input type="checkbox" name="empswitch" [(ngModel)]="isChecked" class="onoffswitch-checkbox" id="myonoffswitch" checked> 
 					<label class="onoffswitch-label" for="myonoffswitch"> 
 					<span class="onoffswitch-inner"></span> 
 					<span class="onoffswitch-switch"></span>
 				</label>
 			</div>
 
-			<input type="submit" class="fadeIn fifth" value="Log In">
+			<input (click)="submit()" type="submit" class="fadeIn fifth" value="Log In">
 		</form>
 
 		<!-- Remind Passowrd -->

@@ -23,7 +23,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
-	//private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
@@ -35,8 +35,8 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 		data.put("exception", exception.getMessage());
 
 		response.getOutputStream().println(objectMapper.writeValueAsString(data));
-		response.setHeader("errorH", "logError");
+		response.setHeader("errorH", "logError2");
 		
-	//	redirectStrategy.sendRedirect(request, response, "/login.component.html");
+		redirectStrategy.sendRedirect(request, response, "http://localhost:4200/#/login");
 	}
 }

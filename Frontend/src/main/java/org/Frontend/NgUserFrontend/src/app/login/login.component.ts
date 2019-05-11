@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RequestOptions } from "@angular/http";
+import { Input } from "@angular/core";
 
 
 @Component({
@@ -9,14 +10,24 @@ import { RequestOptions } from "@angular/http";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+    
+    @Input() inId = ""; 
+    @Input() inPw = ""; 
+    @Input() isChecked = false; 
 
   constructor(private http: HttpClient) { }
+  
+  
 
   ngOnInit() {
       console.log("init");
       this.checkLogin();
   }
   
+  submit(): void {
+      console.log(this.inId+" "+this.inPw+" "+this.isChecked );
+      
+  }
   
   
   checkLogin() {
@@ -28,6 +39,8 @@ export class LoginComponent implements OnInit {
                      (response: Response) => {
                          
                          console.log('resp: ' + response);
+                         
+                         
                  }, (err) => {
                      console.log('Error: ' + err);
                  });
