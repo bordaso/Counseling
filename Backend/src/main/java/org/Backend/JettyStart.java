@@ -12,7 +12,6 @@ import javax.servlet.DispatcherType;
 
 import org.Backend.Config.Config;
 import org.Backend.Config.DatabaseSetter;
-import org.Backend.Entities.Employee;
 import org.Backend.Utilities.BeanUtil;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -22,9 +21,9 @@ import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.util.resource.Resource;
 import org.glassfish.jersey.servlet.ServletContainer;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -85,7 +84,11 @@ public class JettyStart {
 			server.addConnector(httpConnector);
 
 			ServletContextHandler webappContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
-// "/webapp/NgUserFrontend/index.html"
+
+			// for full test
+		//	URL webRootLocation = this.getClass().getResource("/webapp/NgUserFrontend/index.html");
+			
+			//for backend test
 			URL webRootLocation = this.getClass().getResource("/webapp/index.html");
 
 			URI webRootUri = URI.create(webRootLocation.toURI().toASCIIString().replaceFirst("/index.html$", "/"));
@@ -111,10 +114,23 @@ public class JettyStart {
 			
 			webappContext.addServlet(DefaultServlet.class, "/").setInitOrder(2);
 			
+			//session timeout in seconds
+			webappContext.getSessionHandler().setMaxInactiveInterval(60*15);
+			
 			ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
 		    errorHandler.addErrorPage(401, "/p401.html");
 		    errorHandler.addErrorPage(404, "/p404.html");
 		    webappContext.setErrorHandler(errorHandler);
+		    
+		    // cross origin support setup
+		    FilterHolder cors = webappContext.addFilter(CrossOriginFilter.class,"/*",EnumSet.of(DispatcherType.REQUEST));
+		    cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*"); 
+		    //cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "http://localhost:4200/*"); 
+		    cors.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
+		    cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,POST,HEAD");
+		    cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin");
+
+		    
 
 			server.setHandler(webappContext);
 			server.start();

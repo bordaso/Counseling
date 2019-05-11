@@ -29,6 +29,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -50,6 +51,9 @@ public class Config  extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	CustomAccessDeniedHandler customAccessDeniedHandler;	
+	
+	@Autowired
+	CustomAuthenticationFailureHandler  customAuthenticationFailureHandler;
 	
 	@Autowired
 	UserDetailsService userDetailsService;
@@ -106,13 +110,18 @@ public class Config  extends WebSecurityConfigurerAdapter{
 		 http.authorizeRequests()
 		 	.antMatchers("/").permitAll() 
 		 	//.antMatchers("/rest/**").authenticated()
+		 	.antMatchers("/rest/service/logincheck").permitAll()
 		 	.antMatchers("/rest/service/employee/**").access("hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_ADMIN')")
 		 	.antMatchers("/rest/service/user/**").access("hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_ADMIN')")
 		 	.antMatchers("/login.component.html").access("hasRole('ROLE_ANONYMOUS')")
 		 	.antMatchers("/rest/service/admin/**").access("hasRole('ROLE_EMPLOYEE') and hasRole('ROLE_ADMIN')")
 	        .antMatchers("/dashboard/usr.html").access("hasRole('ROLE_PATIENT')")
 	        .antMatchers("/dashboard/emp.html").access("hasRole('ROLE_EMPLOYEE')")
-	        .and().userDetailsService(userDetailsService).formLogin().loginPage("/login.component.html").loginProcessingUrl("/dashboard/login").successHandler(customSuccessHandler)	        
+	        .and().userDetailsService(userDetailsService).formLogin()
+	        .loginPage("/login.component.html")
+	        .loginProcessingUrl("/dashboard/login")
+	        .successHandler(customSuccessHandler)	
+	        .failureHandler(customAuthenticationFailureHandler)
 	        .usernameParameter("id").passwordParameter("pw")
 	     //   .and().csrf()
 	        .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").invalidateHttpSession(true).deleteCookies("JSESSIONID")	        
