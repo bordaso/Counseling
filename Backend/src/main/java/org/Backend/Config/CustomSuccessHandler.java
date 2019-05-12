@@ -1,6 +1,7 @@
 package org.Backend.Config;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,10 +20,13 @@ import org.springframework.stereotype.Component;
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private HttpServletResponse responseOuter;
 
     @Override
     protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
+    	
+    	 responseOuter=response;
     	
         String targetUrl = determineTargetUrl(authentication);
 
@@ -30,15 +34,17 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             System.out.println("Can't redirect");
             return;
         }
+       
+        
 
-        redirectStrategy.sendRedirect(request, response, targetUrl);
+        redirectStrategy.sendRedirect(request, responseOuter, targetUrl);
     }
 
     /*
      * This method extracts the roles of currently logged-in user and returns
      * appropriate URL according to his/her role.
      */
-    protected String determineTargetUrl(Authentication authentication) {
+    protected String determineTargetUrl(Authentication authentication) throws IOException {
         String url = "";
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -49,10 +55,20 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             roles.add(a.getAuthority());
         }
         
-        if (isEmployee(roles)) {
-            url = "/dashboard/emp.html";
+        if (isEmployee(roles)) {        	
+        	url = "/dashboard/emp.html";
+        	responseOuter.setHeader("code", "2");
+        	
+        	PrintWriter out = responseOuter.getWriter();
+        	//out.print("{\"code\":2}");
+        	out.print("\"code 2\"");
+        	responseOuter.setContentType("application/json");
+        	responseOuter.setCharacterEncoding("UTF-8");
+        	out.flush();
+        	
         } else if (isPatient(roles)) {
             url = "/dashboard/usr.html";
+            responseOuter.setHeader("code", "1");
         } else {
             url = "/p401.html";
         }

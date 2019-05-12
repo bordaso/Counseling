@@ -35,8 +35,8 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 		data.put("exception", exception.getMessage());
 
 		response.getOutputStream().println(objectMapper.writeValueAsString(data));
-		response.setHeader("errorH", "logError2");
+		response.setHeader("code", "logError");
 		
-		redirectStrategy.sendRedirect(request, response, "http://localhost:4200/#/login");
+		//redirectStrategy.sendRedirect(request, response, "http://localhost:4200/#/login");
 	}
 }
