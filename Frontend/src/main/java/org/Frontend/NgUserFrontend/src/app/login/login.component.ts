@@ -47,15 +47,15 @@ export class LoginComponent implements OnInit {
     let body2 = `id=${this.inId}&pw=${this.inPw}&empswitch=${this.isChecked}`;
 
       this.http
-      .post('http://localhost:54321/dashboard/login',body2, {headers : { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'json' , withCredentials: true})
+      .post<string>('http://localhost:54321/dashboard/login',body2, {headers : { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'json' , withCredentials: true})
     //  .map(response => response.json())
       .pipe(
             map(responce=> responce )
         )
       .subscribe(
-          (response: Response) => {
+          (response: string) => {
               
-              console.log('resp: ' + response );
+              console.log('resp: ' + response[0] );
               
               let ab : any;
               
