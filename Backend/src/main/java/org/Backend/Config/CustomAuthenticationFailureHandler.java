@@ -30,7 +30,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 			AuthenticationException exception) throws IOException, ServletException {
 
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
-		Map<String, Object> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("timestamp", Calendar.getInstance().getTime());
 		data.put("exception", exception.getMessage());
 

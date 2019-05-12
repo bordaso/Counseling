@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.Backend.JettyStart;
 import org.Backend.DAOs.PatientDao;
 import org.Backend.Entities.Employee;
 import org.Backend.Services.EmployeeService;
@@ -35,6 +36,14 @@ public class CounselingAPI {
 	// temprarily for testing
 	@Autowired
 	private PatientDao patDao;
+	
+	
+	@GET
+	@Path("/shutdown")
+	public void getShutDown() {	
+		JettyStart.getServerInstance().shutdown();
+	}
+
 
 	@GET
 	@Path("/logincheck")
@@ -47,7 +56,7 @@ public class CounselingAPI {
 		
 		int direction = logincheck(auth);
 		
-		String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString("Code is" + direction);
+		String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString("L" + direction);
 
 		return Response.ok(jsonInString).build();
 	}

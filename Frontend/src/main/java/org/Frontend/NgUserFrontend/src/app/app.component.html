@@ -1,13 +1,12 @@
 <!-- ====================================================
 	header section -->
-	<header class="">
-		<div class="">
-			<div class="row">
+	<header class="" >
+	
+			<div class="row" *ngIf="varvar">
 				<div class="col-xs-5 header-logo">
 					<br>
 					<a href="index.html"><img src="assets/img/MYlogo3T.png" alt="" class="img-responsive logo"></a>
 				</div>
-
 				<div class="col-md-7">
 					<nav class="navbar navbar-default">
 					
@@ -33,21 +32,21 @@
 					        <li> <a class="menu" [routerLink]="['/team']">our team</a> </li>
 					        <li> <a class="menu" [routerLink]="['/contact']"> contact us</a> </li>
 					        <li> <a class="menu active" [routerLink]="['/login']"> Login</a> </li>
-					        <li> <a class="menu" href="#"> Shutdown</a> </li>
+					        <li> <a class="menu" href="http://localhost:54321/rest/service/shutdown" > Shutdown</a> </li>
 					     </ul>
 					    </div><!-- /navbar-collapse -->
 					    
 					  </div><!-- / .container-fluid -->
 					  
 					</nav>
-				</div>
+				</div>				
 			</div>
-		</div>
+			
 	</header> <!-- end of header area -->  
 	
 <div id="content">
   <div class="">
-    <router-outlet></router-outlet>
+    <router-outlet (activate)="onActivate($event)"></router-outlet>
   </div>
 </div>
 

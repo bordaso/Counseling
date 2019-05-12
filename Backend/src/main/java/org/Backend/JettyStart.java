@@ -40,6 +40,16 @@ public class JettyStart {
 	
 	private DatabaseSetter dbs;
 	
+	private static JettyStart serverInstance;
+	
+	/* {
+        @Override
+        protected SimpleDateFormat initialValue()
+        {
+            return new SimpleDateFormat("yyyyMMdd HHmm");
+        }
+    };
+*/	
 	
 	// private Logger logger = LoggerFactory.getLogger(JettyTest.class);
 
@@ -60,9 +70,13 @@ public class JettyStart {
 		// loadTimeWeavingAtStartup(args);
 		
 		JettyStart embeddedServer = new JettyStart();	
+		
+		serverInstance = embeddedServer;
+		
 		embeddedServer.databaseSetterBeanSetup();
 		embeddedServer.dbs.setupStarterData();
 		embeddedServer.listen();
+		
 	}
 	
 	public void databaseSetterBeanSetup() {
@@ -158,6 +172,7 @@ public class JettyStart {
 	private void listen() {
 		try {
 			server.join();
+			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -187,14 +202,22 @@ public class JettyStart {
 		// Add to web context ...
 		context.addServlet(jsfServlet, "*.xhtml");
 	}
+	
+	
+
+	public static JettyStart getServerInstance() {
+		return serverInstance;
+	}
 
 	public void shutdown() {
+		System.out.println("SHUTDOWN STARTED");
 	//	dbs.clearDB();
 		new Thread() {
 			@Override
 			public void run() {
 				try {
-					Thread.sleep(3000);
+					//Thread.sleep(3000);
+					Thread.sleep(10);
 					for (Handler handler : server.getHandlers()) {
 						handler.stop();
 					}

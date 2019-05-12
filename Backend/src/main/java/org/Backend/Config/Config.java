@@ -114,6 +114,7 @@ public class Config  extends WebSecurityConfigurerAdapter{
 		 	.antMatchers("/").permitAll() 
 		 	//.antMatchers("/rest/**").authenticated()
 		 	.antMatchers("/rest/service/logincheck").permitAll()
+		 	.antMatchers("/rest/service/shutdown").permitAll()
 		 	.antMatchers("/rest/service/employee/**").access("hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_ADMIN')")
 		 	.antMatchers("/rest/service/user/**").access("hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_ADMIN')")
 		 	.antMatchers("/login.component.html").access("hasRole('ROLE_ANONYMOUS')")

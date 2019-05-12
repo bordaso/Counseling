@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RequestOptions } from "@angular/http";
 import { Input } from "@angular/core";
 import { map, filter, catchError, mergeMap } from 'rxjs/operators';
+import { Output } from "@angular/core";
+import { EventEmitter } from "@angular/core";
 
 
 @Component({
@@ -15,34 +17,29 @@ export class LoginComponent implements OnInit {
     @Input() inId = ""; 
     @Input() inPw = ""; 
     @Input() isChecked = false; 
+    
 
   constructor(private http: HttpClient) { }
   
-
   ngOnInit() {
       console.log("init");
       this.checkLogin();
+      this.hide();
   }
+
+  
+  hide():boolean {
+    return true;
+    }
+  
+
+  
   
   submit(): void {
-      console.log(this.inId+" "+this.inPw+" "+this.isChecked );
+   //   console.log(this.inId+" "+this.inPw+" "+this.isChecked );
+      this.hide();
       
-    let data = {
-              "id": this.inId,
-              "pw": this.inPw
-          }; 
-      
-    const formData = new FormData();
-    formData.append('id', this.inId);
-    formData.append('pw', this.inPw);
-    formData.append('empswitch', this.isChecked+"");
-    
-    let body = new URLSearchParams();
-    body.set('id', this.inId);
-    body.set('pw', this.inPw);
-    body.set('empswitch', this.isChecked+"");
-    
-    console.log(body+" here")
+
     
     let body2 = `id=${this.inId}&pw=${this.inPw}&empswitch=${this.isChecked}`;
 
@@ -74,44 +71,28 @@ export class LoginComponent implements OnInit {
       }, (err) => {
           console.log('Error: ' + err);
       });
-      
+    
   }
+  
+  
+  
   
   
   checkLogin() {
       
           //
       return this.http
-                 .get('http://localhost:54321/rest/service/logincheck', {withCredentials: true})
+                 .get<string>('http://localhost:54321/rest/service/logincheck', {withCredentials: true})
                  .subscribe(
-                     (response: Response) => {
+                     (response: string) => {
                          
                          console.log('resp: ' + response);
-                         
+                         return response;
                          
                  }, (err) => {
                      console.log('Error: ' + err);
                  });
   }
 
-  
-  
-//  authenticate(username: string, password: string) {
-//      var body = `{"username":"${username}","password":"${password}"}`;
-//      var headers = new Headers();
-//      headers.append('Content-Type', 'application/json');
-//      let options = new RequestOptions({ headers: headers, withCredentials: true });
-//
-//      return this._http
-//                 .post('http://demo...', body, options)
-//                 .subscribe(
-//                     (response: Response) => {
-//                     this.doSomething(response);
-//                 }, (err) => {
-//                     console.log('Error: ' + err);
-//                 });
-//  }
-//  
-  
   
 }
