@@ -5,94 +5,74 @@ import { Input } from "@angular/core";
 import { map, filter, catchError, mergeMap } from 'rxjs/operators';
 import { Output } from "@angular/core";
 import { EventEmitter } from "@angular/core";
+import { CounselingAPIService } from "src/app/CounselingAPIService";
+import { Router } from "@angular/router";
 
 
-@Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
-})
+
+@Component( {
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
+} )
 export class LoginComponent implements OnInit {
-    
-    @Input() inId = ""; 
-    @Input() inPw = ""; 
-    @Input() isChecked = false; 
-    
 
-  constructor(private http: HttpClient) { }
-  
-  ngOnInit() {
-      console.log("init");
-      this.checkLogin();
-      this.hide();
-  }
+    @Input() inId = "";
+    @Input() inPw = "";
+    @Input() isChecked = false;
 
-  
-  hide():boolean {
-    return true;
+    incorrectCredentials = false;
+
+    constructor( private http: HttpClient, private cas: CounselingAPIService, private router: Router ) { }
+
+    ngOnInit() {
+        this.cas.loginCheck().subscribe(
+            ( response: string ) => {
+                if ( response === "LC1" ) {
+                    this.router.navigate( ['dashboard/user'] );
+                } else if ( response === "LC2" ) {
+                    window.location.href = "http://localhost:54321/dashboard/emp.html"
+                }
+            }, ( err ) => {
+                console.log( 'Error: ' + err );
+            } );
+        //     let returnVal = this.loginCheck();
+
     }
-  
 
-  
-  
-  submit(): void {
-   //   console.log(this.inId+" "+this.inPw+" "+this.isChecked );
-      this.hide();
-      
 
-    
-    let body2 = `id=${this.inId}&pw=${this.inPw}&empswitch=${this.isChecked}`;
 
-      this.http
-      .post<string>('http://localhost:54321/dashboard/login',body2, {headers : { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'json' , withCredentials: true})
-    //  .map(response => response.json())
-      .pipe(
-            map(responce=> responce )
-        )
-      .subscribe(
-          (response: string) => {
-              
-              console.log('resp: ' + response[0] );
-              
-              let ab : any;
-              
-              ab = response;
-              
-              let bc : string;
-              
-              bc = <string>ab;
-              
-           //  let response2 = response.clone;
+
+    submit(){
+        
+        this.cas.loginService( this.inId, this.inPw, this.isChecked ).subscribe(
+                ( response: string ) => {
+                    
+                    if ( response === "C1" ) {
+
+                        this.incorrectCredentials = false;
+                        this.router.navigate( ['dashboard/user'] );
+                        return;
+                    } else if ( response === "C2" ) {
+                        this.incorrectCredentials = false;
+                        window.location.href = "http://localhost:54321/dashboard/emp.html"
+                        return;
+                    }
+
+                   
              
-             console.log('resp: ' + bc[0]);
-              
-              
-              
-      }, (err) => {
-          console.log('Error: ' + err);
-      });
-    
-  }
-  
-  
-  
-  
-  
-  checkLogin() {
-      
-          //
-      return this.http
-                 .get<string>('http://localhost:54321/rest/service/logincheck', {withCredentials: true})
-                 .subscribe(
-                     (response: string) => {
-                         
-                         console.log('resp: ' + response);
-                         return response;
-                         
-                 }, (err) => {
-                     console.log('Error: ' + err);
-                 });
-  }
+                }, ( err ) => {
+                    console.log( 'Error: ' + err );
+                    this.incorrectCredentials = true;
+                    this.router.navigate( ['/login'] );
+                } );
 
-  
+    
+    }
+
+    //  loginCheck():string {      
+    //      return this.cas.loginCheck();
+    //  }
+
+
 }

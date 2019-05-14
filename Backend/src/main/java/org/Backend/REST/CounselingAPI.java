@@ -56,7 +56,7 @@ public class CounselingAPI {
 		
 		int direction = logincheck(auth);
 		
-		String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString("L" + direction);
+		String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString("LC" + direction);
 
 		return Response.ok(jsonInString).build();
 	}

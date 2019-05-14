@@ -46,6 +46,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
      */
     protected String determineTargetUrl(Authentication authentication) throws IOException {
         String url = "";
+        PrintWriter out = responseOuter.getWriter();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -57,18 +58,13 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         
         if (isEmployee(roles)) {        	
         	url = "/dashboard/emp.html";
-        	responseOuter.setHeader("code", "2");
-        	
-        	PrintWriter out = responseOuter.getWriter();
-        	//out.print("{\"code\":2}");
-        	out.print("\"code 2\"");
-        	responseOuter.setContentType("application/json");
-        	responseOuter.setCharacterEncoding("UTF-8");
+        	out.print("\"C2\"");
         	out.flush();
         	
         } else if (isPatient(roles)) {
             url = "/dashboard/usr.html";
-            responseOuter.setHeader("code", "1");
+            out.print("\"C1\"");
+        	out.flush();
         } else {
             url = "/p401.html";
         }

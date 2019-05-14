@@ -36,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		User user;
 
-		if (request.getParameter("empswitch") == null) {
+		if ((request.getParameter("empswitch") == null) || (request.getParameter("empswitch").equals("false"))) {
 			user = setupPatientUser(username);
 			return user;
 		}

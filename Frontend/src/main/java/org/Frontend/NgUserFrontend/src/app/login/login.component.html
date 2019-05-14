@@ -11,6 +11,7 @@
 <!-- 		<form method="post" action="http://localhost:54321/rest/service/employee/login"> -->
 <!-- 		<form method="post" action="http://localhost:54321/dashboard/login"> -->
 		<form>
+		<div *ngIf="incorrectCredentials"><p style="color: red">Incorrect credentials!</p></div>
 			<input type="text" id="login" [(ngModel)]="inId" class="fadeIn second" name="id" placeholder="login" autocomplete="username"> 
 				
 			<input type="password" id="password" [(ngModel)]="inPw" class="fadeIn third" name="pw" placeholder="password" autocomplete="current-password">

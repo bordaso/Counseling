@@ -16,8 +16,11 @@ import { LoginComponent } from './login/login.component';
 import { LocationStrategy } from "@angular/common";
 import { HashLocationStrategy } from "@angular/common";
 import { CookieService } from 'ngx-cookie-service';
-import { MyAuthService } from "src/MyAuthService";
+import { CounselingAPIService } from "src/app/CounselingAPIService";
 import { HttpClientModule } from '@angular/common/http';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { AuthGuard } from "src/app/AuthGuard";
+//import { AlertsModule } from 'angular-alert-module';
 
 
 /*             "outputPath": "dist/NgUserFrontend", */
@@ -34,11 +37,7 @@ const routes: Routes = [
 
                         // authentication demo
                         { path: 'login', component: LoginComponent },
-//                        {
-//                        path: 'protected',
-//                        component: ProtectedComponent,
-//                        canActivate: [ LoggedInGuard ]
-//                        },
+                        { path: 'dashboard/user', component: UserDashboardComponent, canActivate: [ AuthGuard ]},
 //
 //                        // nested
 //                        {
@@ -58,7 +57,8 @@ const routes: Routes = [
         ContactComponent,
         ServicesComponent,
         TeamComponent,
-        LoginComponent
+        LoginComponent,
+        UserDashboardComponent
     ],
     imports: [
         BrowserModule,
@@ -66,11 +66,12 @@ const routes: Routes = [
         HttpClientModule,
         FormsModule,
         RouterModule.forRoot(routes) // <-- routes
+      //  AlertsModule.forRoot()
         
          // added this for our child module
 //         ,ProductsModule
     ],
-    providers: [CookieService, MyAuthService,
+    providers: [CookieService, CounselingAPIService,AuthGuard,
 { provide: LocationStrategy, useClass: HashLocationStrategy }
 ],
     bootstrap: [AppComponent]
