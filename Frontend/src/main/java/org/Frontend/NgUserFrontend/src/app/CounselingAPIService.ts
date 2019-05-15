@@ -13,8 +13,6 @@ import { Promise } from "q";
 @Injectable()
 export class CounselingAPIService {
 
-    returnValLC ="";
-    returnValL ="";
 
     constructor( private http: HttpClient ) { }
 

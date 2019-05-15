@@ -49,7 +49,6 @@ export class LoginComponent implements OnInit {
                 ( response: string ) => {
                     
                     if ( response === "C1" ) {
-
                         this.incorrectCredentials = false;
                         this.router.navigate( ['dashboard/user'] );
                         return;

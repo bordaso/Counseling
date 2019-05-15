@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { RouterModule, Routes } from '@angular/router';
+//import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -25,27 +25,27 @@ import { AuthGuard } from "src/app/AuthGuard";
 
 /*             "outputPath": "dist/NgUserFrontend", */
 
-const routes: Routes = [
-                        // basic routes
-                        { path: '', redirectTo: 'home', pathMatch: 'full' },
-                        { path: 'home', component: HomeComponent },
-                        { path: 'about', component: AboutComponent },
-                        { path: 'services', component: ServicesComponent },
-                        { path: 'team', component: TeamComponent },
-                        { path: 'contact', component: ContactComponent },
-                        { path: 'contactus', redirectTo: 'contact' },
-
-                        // authentication demo
-                        { path: 'login', component: LoginComponent },
-                        { path: 'dashboard/user', component: UserDashboardComponent, canActivate: [ AuthGuard ]},
+//const routes: Routes = [
+//                        // basic routes
+//                        { path: '', redirectTo: 'home', pathMatch: 'full' },
+//                        { path: 'home', component: HomeComponent },
+//                        { path: 'about', component: AboutComponent },
+//                        { path: 'services', component: ServicesComponent },
+//                        { path: 'team', component: TeamComponent },
+//                        { path: 'contact', component: ContactComponent },
+//                        { path: 'contactus', redirectTo: 'contact' },
 //
-//                        // nested
-//                        {
-//                        path: 'products',
-//                        component: ProductsComponent,
-//                        children: childRoutes
-//                        }
-                        ];
+//                        // authentication demo
+//                        { path: 'login', component: LoginComponent },
+//                        { path: 'dashboard/user', component: UserDashboardComponent, canActivate: [ AuthGuard ]},
+////
+////                        // nested
+////                        {
+////                        path: 'products',
+////                        component: ProductsComponent,
+////                        children: childRoutes
+////                        }
+//                        ];
 
 
 
@@ -62,10 +62,10 @@ const routes: Routes = [
     ],
     imports: [
         BrowserModule,
-        AppRoutingModule,
         HttpClientModule,
         FormsModule,
-        RouterModule.forRoot(routes) // <-- routes
+        AppRoutingModule
+        //RouterModule.forRoot(routes) // <-- routes
       //  AlertsModule.forRoot()
         
          // added this for our child module
