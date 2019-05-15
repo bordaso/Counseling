@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from "@angular/router";
-import { Input } from "@angular/core";
-import { LoginComponent } from "src/app/login/login.component";
-import { UserDashboardComponent } from "src/app/user-dashboard/user-dashboard.component";
+import { UserDashboardComponent } from "src/app/userBoard/user-dashboard/user-dashboard.component";
 
 @Component({
   selector: 'app-root',

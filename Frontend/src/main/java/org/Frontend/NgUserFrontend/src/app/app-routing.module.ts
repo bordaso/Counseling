@@ -1,13 +1,17 @@
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from "src/app/home/home.component";
+import { RouterModule, Routes } from '@angular/router';
 import { AboutComponent } from "src/app/about/about.component";
+import { ContactComponent } from "src/app/contact/contact.component";
+import { HomeComponent } from "src/app/home/home.component";
+import { LoginComponent } from "src/app/login/login.component";
 import { ServicesComponent } from "src/app/services/services.component";
 import { TeamComponent } from "src/app/team/team.component";
-import { ContactComponent } from "src/app/contact/contact.component";
-import { LoginComponent } from "src/app/login/login.component";
-import { UserDashboardComponent } from "src/app/user-dashboard/user-dashboard.component";
-import { AuthGuard } from "src/app/AuthGuard";
+import { CounselingAPIService } from './CounselingAPIService';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
                         // basic routes
@@ -20,8 +24,7 @@ const routes: Routes = [
                         { path: 'contactus', redirectTo: 'contact' },
 
                         // authentication demo
-                        { path: 'login', component: LoginComponent },
-                        { path: 'dashboard/user', component: UserDashboardComponent, canActivate: [ AuthGuard ]},
+                        { path: 'login', component: LoginComponent }
 //
 //                        // nested
 //                        {
@@ -33,7 +36,22 @@ const routes: Routes = [
 
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  declarations: [
+    HomeComponent,
+    AboutComponent,
+    ContactComponent,
+    ServicesComponent,
+    TeamComponent,
+    LoginComponent
+],
+  imports: [RouterModule.forRoot(routes),       
+    BrowserModule,
+    CommonModule,
+    HttpClientModule,
+    FormsModule,],
+  exports: [RouterModule],
+  providers: [CounselingAPIService,
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
+    ],
 })
 export class AppRoutingModule { }
