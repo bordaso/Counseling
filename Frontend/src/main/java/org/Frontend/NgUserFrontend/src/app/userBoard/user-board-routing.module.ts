@@ -10,6 +10,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CustomMaterialModule } from '../custom-material/custom-material.module';
 
 
 const routes: Routes = [
@@ -44,6 +46,8 @@ const routes: Routes = [
     ProfileComponent
   ],
   imports: [RouterModule.forChild(routes), 
+    BrowserAnimationsModule,
+    CustomMaterialModule,
     BrowserModule,
     CommonModule,
     HttpClientModule,

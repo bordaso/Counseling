@@ -6,6 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserBoardModule } from './userBoard/user-board.module';
 import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CustomMaterialModule } from './custom-material/custom-material.module';
 
 
 
@@ -15,7 +17,6 @@ import { CommonModule } from '@angular/common';
         AppComponent
     ],
     imports: [
-        BrowserModule,
         CommonModule,
         HttpClientModule,
         FormsModule,

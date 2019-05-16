@@ -1,3 +1,14 @@
-<p>
-  bookings works!
-</p>
+<!-- <p>
+  <button mat-button>Hello</button>
+</p> -->
+<!-- <div class="calendar-wrapper">
+  <mat-calendar #calendar [(selected)]="selectedDate" (monthSelected)="monthSelected($event)"></mat-calendar>
+</div> -->
+
+<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+  <div fxFlex="20%" *ngFor="let i of [1]">
+    <mat-card>
+      <mat-calendar [selected]="selectedDate" (selectedChange)="onSelect($event)"></mat-calendar>
+    </mat-card>
+  </div>
+</div>
