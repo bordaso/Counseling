@@ -61,5 +61,10 @@ export class CounselingAPIService {
 */
     }
 
+    logout(){
+        return this.http
+            .get<string>( 'http://localhost:54321/logout', { withCredentials: true } );
+    }
+
 
 }

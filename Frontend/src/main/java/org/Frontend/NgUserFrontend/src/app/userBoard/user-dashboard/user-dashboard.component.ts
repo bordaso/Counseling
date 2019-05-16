@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CounselingAPIService } from 'src/app/CounselingAPIService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserDashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private cas:CounselingAPIService,  private router: Router) { }
 
   ngOnInit() {
   }
@@ -15,6 +17,16 @@ export class UserDashboardComponent implements OnInit {
   
   hide():boolean {
       return false;
+      }
+
+      logout(){
+        return this.cas.logout().subscribe(
+          ( response: string ) => {
+              this.router.navigate( ['home'] );
+          }, ( err ) => {
+              console.log( 'Error: ' + err );
+              this.router.navigate( ['/home'] );
+          } );
       }
 
 }
