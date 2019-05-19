@@ -5,8 +5,8 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
 
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
-import {
-    MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule,
+import {MatTableModule,
+    MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatCheckboxModule, MatPaginatorModule,
     MatListModule, MatSelectModule, MatRadioModule, MatGridListModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,MatCardModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -15,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [],
   imports: [
+    MatTableModule,
     MatButtonModule,
     MatDatepickerModule,
     MatMomentDateModule,
@@ -32,10 +33,14 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MatNativeDateModule,
     MatCardModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
+    
     
     FlexLayoutModule
   ],
   exports: [
+    MatTableModule,
     MatButtonModule,
     MatDatepickerModule,
     MatMomentDateModule,
@@ -53,6 +58,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MatNativeDateModule,
     MatCardModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
 
     FlexLayoutModule
   ]

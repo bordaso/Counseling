@@ -1,2 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+ @import '~@angular/material/prebuilt-themes/deeppurple-amber.css'; 
+
+
+.special-date {
+    background-color: green;
+  }
+
+  .special-date-later {
+    background-color: blue;
+  }
+
+
+ 

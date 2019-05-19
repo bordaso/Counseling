@@ -13,6 +13,13 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CustomMaterialModule } from '../custom-material/custom-material.module';
 
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
+import {FullCalendarModule} from 'primeng/fullcalendar';
+
+
+
 
 const routes: Routes = [
   { path: 'dashboard/user', component: UserDashboardComponent, canActivate: [AuthGuard], 
@@ -46,6 +53,15 @@ const routes: Routes = [
     ProfileComponent
   ],
   imports: [RouterModule.forChild(routes), 
+
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
+
+    FullCalendarModule,
+
+
     BrowserAnimationsModule,
     CustomMaterialModule,
     BrowserModule,

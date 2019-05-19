@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "program": "${workspaceFolder}/src/app/userBoard/bookings/bookings.component.ts",
+         // "program":  "C:/Users/Oliver/consultancy_poc_workspace_v2/Main/Frontend/src/main/java/org/Frontend/NgUserFrontend/dist/out-tsc/src/app/userBoard/bookings/bookings.component.js",
+            "outFiles": [
+                "${workspaceFolder}/dist/out-tsc/**/*.js"
+            ]
+        }
+    ]
+}
