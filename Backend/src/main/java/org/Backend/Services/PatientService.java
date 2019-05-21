@@ -6,42 +6,47 @@ import java.util.Map;
 
 import org.Backend.DAOs.BookingDetailsDao;
 import org.Backend.DAOs.BookingsDao;
-import org.Backend.DAOs.EmployeeDao;
+import org.Backend.DAOs.PatientDao;
 import org.Backend.Entities.BookingDetails;
 import org.Backend.Entities.Bookings;
 import org.Backend.Entities.Employee;
+import org.Backend.Entities.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmployeeService {
-	
-	@Autowired
-	private EmployeeDao empDao;
+public class PatientService {
 
+	@Autowired
+	private PatientDao patDao;
+	
 	@Autowired
 	private BookingDetailsDao bookdDao;
 	
 	@Autowired
 	private BookingsDao bookDao;
 
-	public Employee employeeFinderByUsername(String username) {
-
-		return empDao.selectEmployeetByUsername(username).get(0);
+	public Patient patientFinderByUsername(String username) {
+		
+		return patDao.selectPatientByUsername(username).get(0);		
 	}
 	
-	public Map<Bookings, BookingDetails> employeeFindAllUpcomingBookings(String username) {
+	public Map<Bookings, BookingDetails> patientFindAllUpcomingBookings(String username) {		
 		
 		Map<Bookings, BookingDetails> returnMap = new HashMap<>();
 		
-		Employee emp = empDao.selectEmployeetByUsername(username).get(0);
+		Patient pat = patDao.selectPatientByUsername(username).get(0);
 		
-		List<BookingDetails> bookdList = bookdDao.selectBookingDetailsByEmployee(emp);
+		List<BookingDetails> bookdList = bookdDao.selectBookingDetailsByPatient(pat);
 		
 		for(BookingDetails bd : bookdList) {
 			returnMap.put(bd.getBooking(), bd);
 		}
 		
-		return returnMap;			
+		return returnMap;		
 	}
+	
+	
+	
+	
 }

@@ -16,6 +16,8 @@ import javax.persistence.Version;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table
 @Scope("prototype")
@@ -31,6 +33,7 @@ public class NotificationSetup implements Serializable {
 	//@Column
 	@MapsId
 	@OneToOne(mappedBy = "notificationId", fetch = FetchType.EAGER)
+	@JsonBackReference(value="boookingNotifId")	
 	private Bookings boookingNotifId;
 	
 	@Column

@@ -11,6 +11,7 @@ import {MatTableModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CounselingAPIService } from '../CounselingAPIService';
 
 @NgModule({
   declarations: [],

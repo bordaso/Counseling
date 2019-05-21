@@ -23,7 +23,12 @@ import javax.persistence.Version;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Entity
 @Table
@@ -43,7 +48,7 @@ public class Bookings implements Serializable {
 	
 	@Column
 	@OneToMany(mappedBy="booking", fetch = FetchType.EAGER)
-	@JsonManagedReference(value="bookings")
+	@JsonManagedReference(value="bookings")	
 	private List<BookingDetails> bookingDetails;
 
 	@Lob
@@ -62,6 +67,7 @@ public class Bookings implements Serializable {
 	//@Column mappedBy = "boookingNotifId", mappedBy = "notificationId"
 	@OneToOne( fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name = "id")
+	@JsonManagedReference(value="boookingNotifId")	
 	private NotificationSetup notificationId;
 
 	@Column
@@ -197,7 +203,34 @@ public class Bookings implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Bookings [id=" + id + " title=" + title + ", start=" + start + ", end=" + end + ", room=" + room + "]";
+		return "Bookings [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", room=" + room + "]";
+	}
+	
+
+	public String toJson(){
+		
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode rootNode = mapper.createObjectNode();
+
+		JsonNode childNode1 = mapper.createObjectNode();
+		((ObjectNode) childNode1).put("id", id);
+		((ObjectNode) childNode1).put("title", title);
+		((ObjectNode) childNode1).put("start", start.toString());
+		((ObjectNode) childNode1).put("end", end.toString());
+		((ObjectNode) childNode1).put("room", room);
+
+		((ObjectNode) rootNode).set("Booking", childNode1);
+
+
+
+		String jsonString="";
+		try {
+			jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNode);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		return jsonString;
 	}
 
 }

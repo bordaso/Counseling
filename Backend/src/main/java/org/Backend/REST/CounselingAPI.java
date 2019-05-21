@@ -4,6 +4,9 @@ import static org.Backend.Converters.JacksonConverter.jsonToPojo;
 import static org.Backend.Converters.JacksonConverter.pojoToJson;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -17,12 +20,16 @@ import javax.ws.rs.core.Response;
 
 import org.Backend.JettyStart;
 import org.Backend.DAOs.PatientDao;
+import org.Backend.Entities.BookingDetails;
+import org.Backend.Entities.Bookings;
 import org.Backend.Entities.Employee;
 import org.Backend.Services.EmployeeService;
+import org.Backend.Services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +39,9 @@ public class CounselingAPI {
 
 	@Autowired
 	private EmployeeService empService;
+	
+	@Autowired
+	private PatientService patService;
 
 	// temprarily for testing
 	@Autowired
@@ -80,6 +90,49 @@ public class CounselingAPI {
 		throw new NullPointerException();
 	}
 
+	@POST
+	@Path("/all/bookings")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response postSendBackBookings() throws IOException {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String pudUser="";
+		Object princ = auth.getPrincipal();
+		UserDetails	princUD;
+		StringBuilder returnVal=new StringBuilder();
+
+		if(princ instanceof UserDetails) {
+			princUD = (UserDetails)princ;			
+		    pudUser = princUD.getUsername();	
+		    
+		    if(auth.getAuthorities().iterator().next().getAuthority().equals("ROLE_EMPLOYEE")
+					|| auth.getAuthorities().iterator().next().getAuthority().equals("ROLE_ADMIN")) {
+		    	
+		    	 Map<Bookings, BookingDetails> empbdMap = empService.employeeFindAllUpcomingBookings(pudUser);
+		    	 
+		    	   for(Entry<Bookings, BookingDetails> entry : empbdMap.entrySet()) {
+				    	returnVal.append(entry.getKey().toJson()+"#"+entry.getValue().toJson()+"##");		    	 
+				    }
+		    	   
+		    	   System.err.println(returnVal);
+		    	
+		    	return Response.ok(returnVal).build(); 
+			}		    
+		    
+		    Map<Bookings, BookingDetails> patbdMap =  patService.patientFindAllUpcomingBookings(pudUser);
+
+		    for(Entry<Bookings, BookingDetails> entry : patbdMap.entrySet()) {
+		    	returnVal.append(entry.getKey().toJson()+"#"+entry.getValue().toJson()+"##");		    	 
+		    }
+		    
+		    System.err.println(returnVal);
+
+		    return Response.ok(returnVal).build(); 
+		}
+
+		return Response.ok("{\"Custom_#_Error\"}").build();
+	}
+	
 	@GET
 	@Path("/employee/{username}")
 	@Produces(MediaType.APPLICATION_JSON)

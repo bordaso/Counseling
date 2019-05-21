@@ -1,8 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatCalendar, MatCalendarCellCssClasses, MatTableDataSource, MatPaginator } from '@angular/material';
 import { Moment } from 'moment';
+import { Subscription, timer, pipe, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators'
 
 import { SelectionModel } from '@angular/cdk/collections';
+import { HttpClient } from '@angular/common/http';
+import { CounselingAPIService } from 'src/app/CounselingAPIService';
 
 
 export interface PeriodicElement {
@@ -10,6 +14,21 @@ export interface PeriodicElement {
   position: number;
   weight: number;
   symbol: string;
+}
+
+
+export interface Booking {
+  id: number;
+  title: string;
+  start: string;
+  end: string;
+  room: string;
+}
+
+export interface BookingDetails {
+  id: number;
+  bookingID: number;
+  response: string;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
@@ -31,15 +50,64 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './bookings.component.html',
   styleUrls: ['./bookings.component.css']
 })
-export class BookingsComponent implements OnInit {
+export class BookingsComponent implements OnInit, AfterViewInit {
  // displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol', 'actions' ];
- displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'actions' ];
+ displayedColumns: string[] = ['title', 'start', 'end', 'response', 'actions' ];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
 
+  subscription: Subscription;
+statusText: string;
+
+ngOnInit() {
+  this.dataSource.paginator = this.paginator;
+
+  this.subscription = timer(0, 10000).pipe(
+    switchMap(() => this.http
+    .post<string>( 'http://localhost:54321/rest/service/all/bookings', `` ,{ headers: { 'Content-Type': 'application/json' }, responseType: 'json', withCredentials: true } ))
+  ).subscribe(result =>{
+    
+ 
+var index = result.indexOf( "#" );  
+var indexEnd = result.indexOf( "##" );  
+
+var slicedBooking = result.slice(0, index); 
+var slicedBookingDetails = result.slice(index+1, indexEnd); 
+
+/* var bookingJsonString = JSON.stringify(eval("(" + slicedBooking + ")"));
+var bookingDetailsJsonString = JSON.stringify(eval("(" + slicedBookingDetails + ")"));
+console.log(JSON.parse(bookingJsonString));
+console.log(JSON.parse(bookingDetailsJsonString)); */
+
+
+let booking: Booking = JSON.parse(slicedBooking).Booking;
+let bookingDetails: BookingDetails = JSON.parse(slicedBookingDetails).BookingDetails;
+    
+    console.log(booking.start);
+    console.log(bookingDetails.response);
+
+
+let bookingMapping = new Map<Booking, BookingDetails>();
+
+bookingMapping.set(booking, bookingDetails);
+
+console.log(bookingMapping);
+    
+     });
+
+
+
+
+
+}
+
+ngOnDestroy() {
+  this.subscription.unsubscribe();
+}
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor() { }
+  constructor(private http: HttpClient, private cas: CounselingAPIService) {}
 
   selectedDate: any;
   name = 'Angular 6';
@@ -48,10 +116,6 @@ export class BookingsComponent implements OnInit {
     console.log(event);
     this.selectedDate= event;
   }
-
-  ngOnInit() {
-    this.dataSource.paginator = this.paginator;
-}
 
 acceptAppointment(row: PeriodicElement){
   console.log("Accept: ");
@@ -102,27 +166,6 @@ rejectAppointment(row: PeriodicElement){
     };
   }
 
-    /** Whether the number of selected elements matches the total number of rows. */
-    isAllSelected() {
-      const numSelected = this.selection.selected.length;
-      const numRows = this.dataSource.data.length;
-      return numSelected === numRows;
-    }
-  
-    /** Selects all rows if they are not all selected; otherwise clear selection. */
-    masterToggle() {
-      this.isAllSelected() ?
-          this.selection.clear() :
-          this.dataSource.data.forEach(row => this.selection.select(row));
-    }
-  
-    /** The label for the checkbox on the passed row */
-    checkboxLabel(row?: PeriodicElement): string {
-      if (!row) {
-        return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-      }
-      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-    }
 
     proposedAppointment(row: PeriodicElement):boolean{
 
@@ -136,7 +179,89 @@ rejectAppointment(row: PeriodicElement){
 
 
 
-}
+
+    exampleDatabase: ExampleHttpDao | null;
+    dataSourcee = new MatTableDataSource();
+  
+    resultsLength = 0;
+    isLoadingResults = false;
+    isRateLimitReached = false;
+  
+
+  
+    ngAfterViewInit() {
+  /*     this.exampleDatabase = new ExampleHttpDao(this.http);
+  
+      merge(this.sort.sortChange, this.paginator.page)
+        .pipe(
+          startWith({}),
+          switchMap(() => {
+            this.isLoadingResults = true;
+            return this.exampleDatabase!.getRepoIssues(
+              this.sort.active, this.sort.direction, this.paginator.pageIndex);
+          }),
+          map(data => {
+            // Flip flag to show that loading has finished.
+            this.isLoadingResults = false;
+            this.isRateLimitReached = false;
+            this.resultsLength = data.total_count;
+  
+            return data.items;
+          }),
+          catchError(() => {
+            this.isLoadingResults = false;
+            // Catch if the GitHub API has reached its rate limit. Return empty data.
+            this.isRateLimitReached = true;
+            return observableOf([]);
+          })
+        ).subscribe(data => this.dataSource.data = data); */
+    }
+  }
+  
+  export interface GithubApi {
+    items: GithubIssue[];
+    total_count: number;
+  }
+  
+  export interface GithubIssue {
+    created_at: string;
+    number: string;
+    state: string;
+    title: string;
+  }
+  
+  /** An example database that the data source uses to retrieve data for the table. */
+  export class ExampleHttpDao {
+    constructor(private http: HttpClient) {}
+  
+    getRepoIssues(sort: string, order: string, page: number): Observable<GithubApi> {
+      const href = 'https://api.github.com/search/issues';
+      const requestUrl =
+          `${href}?q=repo:angular/material2&sort=${sort}&order=${order}&page=${page + 1}`;
+  
+      return this.http.get<GithubApi>(requestUrl);
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

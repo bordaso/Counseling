@@ -61,6 +61,13 @@ export class CounselingAPIService {
 */
     }
 
+
+    bookingsService(){
+        return this.http
+        .post<string>( 'http://localhost:54321/rest/service/all/bookings', { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'json', withCredentials: true } )
+
+    }
+
     logout(){
         return this.http
             .get<string>( 'http://localhost:54321/logout', { withCredentials: true } );
