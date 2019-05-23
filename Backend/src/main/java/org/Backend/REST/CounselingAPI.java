@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -15,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -23,6 +25,8 @@ import org.Backend.DAOs.PatientDao;
 import org.Backend.Entities.BookingDetails;
 import org.Backend.Entities.Bookings;
 import org.Backend.Entities.Employee;
+import org.Backend.Enums.BookingResponse;
+import org.Backend.Services.CommonService;
 import org.Backend.Services.EmployeeService;
 import org.Backend.Services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,9 @@ public class CounselingAPI {
 	
 	@Autowired
 	private PatientService patService;
+	
+	@Autowired
+	private CommonService comService;
 
 	// temprarily for testing
 	@Autowired
@@ -133,6 +140,20 @@ public class CounselingAPI {
 		return Response.ok("{\"Custom_#_Error\"}").build();
 	}
 	
+	@POST
+	@Path("/all/bookingresponse")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response postUpdateBookingResponse(@HeaderParam("bdid") String bdid, @HeaderParam("bdresponse") String bdresponse, @Context HttpServletRequest httpRequest) throws IOException {
+		
+		System.out.println(httpRequest);
+		
+		BookingResponse bdr=bdresponse.equals("1")?BookingResponse.ACCEPTED:BookingResponse.REJECTED;	
+
+		boolean success = comService.updateBookingResponse(Long.parseLong(bdid), bdr);
+				
+		return Response.ok(pojoToJson(success)).build();
+	}
+	
 	@GET
 	@Path("/employee/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -168,5 +189,6 @@ public class CounselingAPI {
 
 		return Response.ok(id + " " + pw + " " + onoffswitch).build();
 	}
-
+		
+	
 }

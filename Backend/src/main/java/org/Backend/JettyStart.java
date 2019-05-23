@@ -136,13 +136,13 @@ public class JettyStart {
 		    errorHandler.addErrorPage(404, "/p404.html");
 		    webappContext.setErrorHandler(errorHandler);
 		    
-		    // cross origin support setup
-		    FilterHolder cors = webappContext.addFilter(CrossOriginFilter.class,"/*",EnumSet.of(DispatcherType.REQUEST));
-		    cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*"); 
-		    //cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "http://localhost:4200/*"); 
-		    cors.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
-		    cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,POST,HEAD");
-		    cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin");
+//		    // cross origin support setup
+//		    FilterHolder cors = webappContext.addFilter(CrossOriginFilter.class,"/*",EnumSet.of(DispatcherType.REQUEST));
+//		    cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*"); 
+//		    //cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "http://localhost:4200/*"); 
+//		    cors.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
+//		    cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,POST,HEAD");
+//		    cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin");
 
 		    
 

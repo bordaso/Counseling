@@ -115,6 +115,7 @@ public class Config  extends WebSecurityConfigurerAdapter{
 		 	//.antMatchers("/rest/**").authenticated()
 		 	.antMatchers("/rest/service/logincheck").permitAll()
 		 	.antMatchers("/rest/service/shutdown").permitAll()
+		 	.antMatchers("/rest/service/all/**").access("hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PATIENT')")
 		 	.antMatchers("/rest/service/employee/**").access("hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_ADMIN')")
 		 	.antMatchers("/rest/service/user/**").access("hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_ADMIN')")
 		 	.antMatchers("/login.component.html").access("hasRole('ROLE_ANONYMOUS')")
@@ -160,7 +161,7 @@ public class Config  extends WebSecurityConfigurerAdapter{
 	        configuration.setAllowCredentials(true);
 	        // setAllowedHeaders is important! Without it, OPTIONS preflight request
 	        // will fail with 403 Invalid CORS request
-	        configuration.setAllowedHeaders(new ArrayList<String>() {{add("Authorization");add("Cache-Control");add("Content-Type");}});
+	        configuration.setAllowedHeaders(new ArrayList<String>() {{add("Authorization");add("Cache-Control");add("Content-Type");add("bdid");add("bdresponse");}});
 	        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	        source.registerCorsConfiguration("/**", configuration);
 	        return source;

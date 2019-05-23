@@ -54,6 +54,9 @@ public class DatabaseSetter {
 
 	@Autowired
 	private Bookings bkngs2;
+	
+	@Autowired
+	private Bookings bkngs3;
 
 	@Autowired
 	private ReportCreator reportCreator;
@@ -72,6 +75,12 @@ public class DatabaseSetter {
 
 	@Autowired
 	private BookingDetails bkngs2_bkngsDtls5;
+	
+	@Autowired
+	private BookingDetails bkngs2_bkngsDtls6;
+	
+	@Autowired
+	private BookingDetails bkngs3_bkngsDtls7;
 
 	@Autowired
 	private NotificationSetup bkngs1_ntfsnStp1;
@@ -109,6 +118,14 @@ public class DatabaseSetter {
 		bkngs2.setArchived(true);
 	}
 
+	private void setupBkngs3() {
+		bkngs3.setTitle("booking33");
+		bkngs3.setStart(LocalDateTime.of(2019, Month.APRIL, 16, 12, 00));
+		bkngs3.setEnd(LocalDateTime.of(2019, Month.APRIL, 16, 13, 00));
+		bkngs3.setRoom("room33");
+		bkngs3.setArchived(false);
+	}
+	
 	private void setupListOfBookingDetails() {
 		listOfBookingDetails = new ArrayList<BookingDetails>();
 		listOfBookingDetails.add(bkngs1_bkngsDtls1);
@@ -148,6 +165,19 @@ public class DatabaseSetter {
 		bkngs2_bkngsDtls5.setPatient(pat2);
 		bkngs2_bkngsDtls5.setResponse(BookingResponse.REJECTED);
 	}
+	
+	
+	private void setupBkngs2_bkngsDtls6() {
+		bkngs2_bkngsDtls6.setBooking(bkngs2);
+		bkngs2_bkngsDtls6.setPatient(pat1);
+		bkngs2_bkngsDtls6.setResponse(BookingResponse.NO_RESPONSE);
+	}	
+	
+	private void setupBkngs3_bkngsDtls7() {
+		bkngs3_bkngsDtls7.setBooking(bkngs3);
+		bkngs3_bkngsDtls7.setPatient(pat1);
+		bkngs3_bkngsDtls7.setResponse(BookingResponse.NO_RESPONSE);
+	}	
 
 	private void setupBkngs1_NtfsnStp1() {
 		bkngs1_ntfsnStp1.setRecurringTime(3000l);
@@ -222,6 +252,7 @@ public class DatabaseSetter {
 		setupPat3();
 		setupBkngs1();
 		setupBkngs2();
+		setupBkngs3();
 		
 		setupListOfBookingDetails();
 		
@@ -230,8 +261,11 @@ public class DatabaseSetter {
 		setupBkngs1_BkngsDtls3();
 		setupBkngs2_BkngsDtls4();
 		setupBkngs2_BkngsDtls5();
+		setupBkngs2_bkngsDtls6();
+		setupBkngs3_bkngsDtls7();
+		
 		setupBkngs1_NtfsnStp1();
-		setupBkngs2_NtfsnStp2();		
+		setupBkngs2_NtfsnStp2();	
 
 		empDao.saveEmployee(emp);
 		empDao.saveEmployee(empBoss);
@@ -242,6 +276,7 @@ public class DatabaseSetter {
 
 		bkngsDao.saveBooking(bkngs1);
 		bkngsDao.saveBooking(bkngs2);
+		bkngsDao.saveBooking(bkngs3);
 		
 		bkngs1.setNotificationId(bkngs1_ntfsnStp1);
 		bkngs1_ntfsnStp1.setBoookingNotifId(bkngs1);
@@ -257,6 +292,8 @@ public class DatabaseSetter {
 		bkngsDtlsDao.saveBookingDetails(bkngs1_bkngsDtls3);
 		bkngsDtlsDao.saveBookingDetails(bkngs2_bkngsDtls4);
 		bkngsDtlsDao.saveBookingDetails(bkngs2_bkngsDtls5);
+		bkngsDtlsDao.saveBookingDetails(bkngs2_bkngsDtls6);
+		bkngsDtlsDao.saveBookingDetails(bkngs3_bkngsDtls7);
 
 	}
 
