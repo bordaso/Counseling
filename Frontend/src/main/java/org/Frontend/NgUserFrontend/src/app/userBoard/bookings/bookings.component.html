@@ -2,7 +2,7 @@
 
  <div fxFlex="30%" > 
 <mat-card>
-  <mat-calendar [dateClass]="dateClass()" [selected]="selectedDate2" (selectedChange)="onSelect2($event)"></mat-calendar>
+  <mat-calendar [dateClass]="dateClass()" [selected]="selectedDateVal" (selectedChange)="onSelectDate($event)"></mat-calendar>
 </mat-card>
 </div> 
   
@@ -57,9 +57,9 @@
               </ng-container>
         
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-              (click)="selectionBooking.toggle(row)">
-          </tr>         
+       <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+              (click)="onSelectRow(row)">
+          </tr>      
         </table>
       </div>      
         <div>

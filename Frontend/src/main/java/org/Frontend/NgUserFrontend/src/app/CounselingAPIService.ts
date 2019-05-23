@@ -136,8 +136,6 @@ export class CounselingAPIService {
  var bdidS:string=<string><any>bdid;
  var bdresponseS:string=<string><any>bdresponse;
 
- console.log(bdidS+" xx "+bdresponseS);
-
         return this.http
         .post<string>( 'http://localhost:54321/rest/service/all/bookingresponse', ``,{ headers: { 'bdid': bdidS+"",'bdresponse': bdresponseS+"", 'Content-Type': 'application/x-www-form-urlencoded'}, responseType: 'json', withCredentials: true } )
         .subscribe(result => console.log(result));
