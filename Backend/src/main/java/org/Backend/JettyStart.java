@@ -100,10 +100,10 @@ public class JettyStart {
 			ServletContextHandler webappContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
 			// for full test
-		//	URL webRootLocation = this.getClass().getResource("/webapp/NgUserFrontend/index.html");
+			//URL webRootLocation = this.getClass().getResource("/webapp/NgUserFrontend/index.html");
 			
 			//for backend test
-			URL webRootLocation = this.getClass().getResource("/webapp/index.html");
+			URL webRootLocation = this.getClass().getResource("/webapp/NgUserFrontendxxxxxxxxxx/index.html");
 
 			URI webRootUri = URI.create(webRootLocation.toURI().toASCIIString().replaceFirst("/index.html$", "/"));
 			System.err.printf("//////////////////////////////////////////////////Web Root URI: %s%n", webRootUri);

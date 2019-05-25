@@ -32,7 +32,7 @@ public class EmployeeService {
 	
 	public Map<Bookings, BookingDetails> employeeFindAllUpcomingBookings(String username) {
 		
-		Map<Bookings, BookingDetails> returnMap = new HashMap<>();
+		Map<Bookings, BookingDetails> returnMap = new HashMap<Bookings, BookingDetails>();
 		
 		Employee emp = empDao.selectEmployeetByUsername(username).get(0);
 		

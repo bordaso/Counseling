@@ -34,7 +34,7 @@ public class PatientService {
 	
 	public Map<Bookings, BookingDetails> patientFindAllUpcomingBookings(String username) {		
 		
-		Map<Bookings, BookingDetails> returnMap = new HashMap<>();
+		Map<Bookings, BookingDetails> returnMap = new HashMap<Bookings, BookingDetails>();
 		
 		Patient pat = patDao.selectPatientByUsername(username).get(0);
 		
