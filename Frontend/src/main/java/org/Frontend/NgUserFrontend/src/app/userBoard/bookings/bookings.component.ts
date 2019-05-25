@@ -31,14 +31,13 @@ export class BookingsComponent implements OnInit {
   dataSourceBooking = new MatTableDataSource<Booking>();
   selectionBooking = new SelectionModel<Booking>(true, [], true);
 
-  datesToHighlight = ["2019-05-14T18:30:00.000Z", "2019-05-15T18:30:00.000Z", "2019-05-16T18:30:00.000Z", "2019-05-20T18:30:00.000Z", "2019-05-28T18:30:00.000Z"];
-
+ // bookingDatesToHighlight = ["2019-05-14T18:30:00.000Z", "2019-05-15T18:30:00.000Z", "2019-05-16T18:30:00.000Z", "2019-05-20T18:30:00.000Z", "2019-05-28T18:30"];
+ bookingDatesToHighlight = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   subscription: Subscription;
-  dateTimeNOW = new Date()
-
+  dateTimeNOW = new Date();
   selectedDateVal: any;
 
   onSelectDate(event) {
@@ -66,8 +65,10 @@ export class BookingsComponent implements OnInit {
 
   acceptAppointment(row: Booking) {    
     this.cas.bookingsResponseService(row.details.id, 1);  
+
     this.cas.bookingsServiceDirectCall(this.dataSourceBooking);   
     this.proposedAppointment(row, true);
+    this.bookingDatesToHighlight.push(row.start);
     console.log("Accepted appointment "+row);
   }
 
@@ -82,26 +83,22 @@ export class BookingsComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
 
-      const highlightDate = this.datesToHighlight
+      const highlightBookingDate = this.bookingDatesToHighlight
         .map(strDate => new Date(strDate))
         .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
 
-      this.datesToHighlight.push("2019-05-30T18:30:00.000Z");
 
-      if(highlightDate){
+     if(highlightBookingDate && (this.dateTimeNOW.getDate() > date.getDate() && this.dateTimeNOW.getMonth() >= date.getMonth() && this.dateTimeNOW.getFullYear() >= date.getFullYear() ) ){
+      return 'special-date-past';
+    }
+
+      if(highlightBookingDate){
         return 'special-date';
       }
 
       //this.datesToHighlight.push("2019-05-31T18:30:00.000Z");
 
-
-      var dNew:Date=new Date("2019-05-31T18:30:00.000Z");
-
-      if(dNew.getDate() === date.getDate() && dNew.getMonth() === date.getMonth() && dNew.getFullYear() === date.getFullYear()){
-        return 'special-date-later';
-      }
-
-      // return highlightDate ? 'special-date' : '';
+      
       return '';
     };
   }

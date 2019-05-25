@@ -88,7 +88,9 @@ export class CounselingAPIService {
            )
           ).subscribe(result => {
       
-      
+            //console.log(this.utilBookingsSlicer(result)[0].start);
+            // 2019-04-16T12:00
+
             var resultBookings = this.utilBookingsSlicer(result);
       
             /* let booking2: Booking =  {
@@ -134,7 +136,7 @@ export class CounselingAPIService {
  */
 
  var bdidS:string=<string><any>bdid;
- var bdresponseS:string=<string><any>bdresponse;
+ var bdresponseS:string=<string><any>bdresponse; // 0= Rejected, 1= Accepted
 
         return this.http
         .post<string>( 'http://localhost:54321/rest/service/all/bookingresponse', ``,{ headers: { 'bdid': bdidS+"",'bdresponse': bdresponseS+"", 'Content-Type': 'application/x-www-form-urlencoded'}, responseType: 'json', withCredentials: true } )
