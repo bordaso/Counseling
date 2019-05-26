@@ -7,22 +7,34 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<meta charset="UTF-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<base href="/"/>
-
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<base href="/" />
+	<link
+		href="assets/vendorForUserDashboard/bootstrap/css/bootstrap.min.css"
+		rel="stylesheet" />
+	<link href="assets/CustomCSS/customCss.css" rel="stylesheet" />
 
 </h:head>
 
 <h:body>
-	
-	
- <div>	
- 	<h:form>
- 		<p:inputText rendered="true" />
-	   <p:editor value="#{editor.value}" />
-	</h:form>
-</div>  
+
+
+	<ui:composition template="template/layoutTemplate.xhtml">
+
+		<ui:define name="content">
+
+
+		<div class="container" >
+			<h:form>
+				<p:inputText rendered="true" value="#{editor.value}" />
+				<p:editor  rendered="true" value="#{editor.value}" />
+			</h:form>
+		</div>
+
+		</ui:define>
+
+	</ui:composition>
 
 </h:body>
 </html>
