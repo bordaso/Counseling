@@ -12,6 +12,18 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 
-	
+	<managed-bean>
+		<managed-bean-name>dataListView</managed-bean-name>
+		<managed-bean-class>org.Backend.DataListView
+		</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>carService</managed-bean-name>
+		<managed-bean-class>org.Backend.CarService
+		</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

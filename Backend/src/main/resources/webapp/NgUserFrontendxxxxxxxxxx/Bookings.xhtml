@@ -7,26 +7,107 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<meta charset="UTF-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<base href="/"/>
-  <link href="assets/vendorForUserDashboard/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="assets/CustomCSS/customCss.css" rel="stylesheet"/>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<base href="/" />
+	<link
+		href="assets/vendorForUserDashboard/bootstrap/css/bootstrap.min.css"
+		rel="stylesheet" />
+	<link href="assets/CustomCSS/customCss.css" rel="stylesheet" />
 
 </h:head>
 
 <h:body>
-	
-	
-	   	<ui:composition template="template/layoutTemplate.xhtml">
-    	
-    		<ui:define name="content">
-    			<h1>This is Bookings</h1>
-    		</ui:define>
-			
-    	</ui:composition>
 
-	
- 
+
+	<ui:composition template="template/layoutTemplate.xhtml">
+		<ui:define name="content">
+
+
+
+
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-8">
+						<div class="card">
+							<div class="card-header">Booking</div>
+							<div class="card-body">
+								<h:form id="form" class="form-horizontal">
+
+									<div class="form-group">
+
+
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:datePicker id="dateTemplate" value="#{editor.date1}"
+												dateTemplate="highlightDays" inline="true" />
+										</h:panelGrid>
+
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:calendar id="inline" value="#{editor.date1}" mode="inline"
+												pattern="yyyy-MMM-dd" beforeShowDate="highlightDays" />
+												
+											<p:calendar id="inlinwe" value="#{editor.date1}"
+												mode="inline" pattern="yyyy-MMM-dd"
+												beforeShowDate="highlightDays" />
+										</h:panelGrid>
+
+										<p:outputLabel for="popup" value="Popup:" />
+										<p:calendar id="popup" value="#{editor.date2}" />
+
+
+										<h:outputText value="#{editor.date2}">
+											<f:convertDateTime pattern="MM/dd/yyyy" />
+										</h:outputText>
+
+										<p:dataTable var="car" value="#{dataListView.cars3}"
+											paginator="true" rows="10" styleClass="paginated">
+											<p:column headerText="Id">
+												<h:outputText value="#{car.id}" />
+											</p:column>
+
+											<p:column headerText="Year">
+												<h:outputText value="#{car.year}" />
+											</p:column>
+
+											<p:column headerText="Brand">
+												<h:outputText value="#{car.brand}" />
+											</p:column>
+
+											<p:column headerText="Color">
+												<h:outputText value="#{car.color}" />
+											</p:column>
+
+											<p:column>
+												<p:commandButton value="Accept"
+													actionListener="#{dataListView.carInTheRow(car)}">
+												</p:commandButton>
+												<p:commandButton value="Reject" style="width: 96px"
+													actionListener="#{dataListView.carInTheRow(car)}">
+												</p:commandButton>
+											</p:column>
+
+										</p:dataTable>
+
+
+
+									</div>
+
+
+								</h:form>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+		</ui:define>
+	</ui:composition>
+
+
+
 </h:body>
 </html>

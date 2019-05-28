@@ -73,10 +73,31 @@
   <script src="../assets/vendorForUserDashboard/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
+<script>
+$('#userswitcher').bind('change', function () {
+
+	   if ($(this).is(':checked')){
+		   $('#patient').hide();
+	       $('#employee').show();
+	   }else{
+		   $('#employee').hide();
+	   	   $('#patient').show();
+	   }
+
+	});
+</script>
+
+<script>
+$( document ).ready(function() {
+    console.log( "ready!" );
+    $('#patient').hide();
+});
+</script>
+
   	  <script>
   	//<![CDATA[ 
     function highlightDays(date) {
-    	console.log("--------------------------------");
+    	console.log("------------- "+date +" -------------------");
     	
     	
     	var myAppointments = "#{editor.finalex}";
