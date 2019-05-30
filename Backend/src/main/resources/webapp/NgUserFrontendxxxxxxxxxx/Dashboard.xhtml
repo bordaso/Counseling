@@ -21,7 +21,69 @@
     	<ui:composition template="template/layoutTemplate.xhtml">
     	
     		<ui:define name="content">
-    			<h2>This is dashboard content</h2>
+    			
+
+<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-8">
+						<div class="card">
+							<div class="card-header">Archived bookings</div>
+							<div class="card-body">
+								<h:form id="form" class="form-horizontal">
+									<div class="form-group">
+
+
+
+					<p:dataTable var="car" value="#{dataListView.cars3}"
+											style="padding-bottom: 50px" paginator="true" rows="5"
+											styleClass="paginated">
+											<p:column headerText="Title" filterBy="#{car.id}"
+											 filterMatchMode="contains">
+												<h:outputText value="#{car.id}" />
+											</p:column>
+
+											<p:column headerText="Start">
+												<h:outputText value="#{car.year}" />
+											</p:column>
+
+											<p:column headerText="End">
+												<h:outputText value="#{car.brand}" />
+											</p:column>
+
+											<p:column headerText="Room">
+												<h:outputText value="#{car.color}" />
+											</p:column>
+
+											<p:column headerText="Report">
+												<h:outputText value="#{car.color}" />
+											</p:column>
+
+											<p:column headerText="Response">
+												<p:commandButton value="Submit report"
+													actionListener="#{dataListView.carInTheRow(car)}">
+												</p:commandButton>
+												<p:commandButton value="View report" style="width: 96px"
+													actionListener="#{dataListView.carInTheRow(car)}">
+												</p:commandButton>
+											</p:column>
+
+										</p:dataTable>
+
+
+
+									</div>
+								</h:form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
     		</ui:define>
 			
     	</ui:composition>
