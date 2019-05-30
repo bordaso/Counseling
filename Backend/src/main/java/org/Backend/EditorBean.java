@@ -190,10 +190,12 @@ public class EditorBean extends SpringBeanAutowiringSupport  {
 	    }
 	 
 	    public Date getDate1() {
+	    	System.out.println("GETDATE1");
 	        return date1;
 	    }
 	 
 	    public void setDate1(Date date1) {
+	    	System.out.println("SETDATE1");
 	        this.date1 = date1;
 	    }
 	 

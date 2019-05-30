@@ -10,10 +10,6 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<base href="/" />
-	<link
-		href="assets/vendorForUserDashboard/bootstrap/css/bootstrap.min.css"
-		rel="stylesheet" />
-	<link href="assets/CustomCSS/customCss.css" rel="stylesheet" />
 
 </h:head>
 
@@ -22,7 +18,6 @@
 
 	<ui:composition template="template/layoutTemplate.xhtml">
 		<ui:define name="content">
-
 
 
 
@@ -37,47 +32,223 @@
 									<div class="form-group">
 
 
-										<h:panelGrid columns="2" cellpadding="5">
-											<p:datePicker id="dateTemplate" value="#{editor.date1}"
-												dateTemplate="highlightDays" inline="true" />
-										</h:panelGrid>
 
-										<h:panelGrid columns="2" cellpadding="5">
-											<p:calendar id="inline" value="#{editor.date1}" mode="inline"
-												pattern="yyyy-MMM-dd" beforeShowDate="highlightDays" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+								<h:panelGrid columns="2" cellpadding="5">
+												<p:schedule id="schedule" value="#{scheduleView.eventModel}"
+													widgetVar="myschedule" timeZone="GMT+2">
+													<p:ajax event="dateSelect"
+														listener="#{scheduleView.onDateSelect}"
+														update="eventDetails"
+														oncomplete="PF('eventDialog').show();" />
+													<p:ajax event="eventSelect"
+														listener="#{scheduleView.onEventSelect}"
+														update="eventDetails"
+														oncomplete="PF('eventDialog').show();" />
+													<p:ajax event="eventMove"
+														listener="#{scheduleView.onEventMove}" />
+													<p:ajax event="eventResize"
+														listener="#{scheduleView.onEventResize}" />
+												</p:schedule>
+											</h:panelGrid>
+
+
+											<p:dialog widgetVar="eventDialog" header="Event Details"
+												showEffect="clip" hideEffect="clip">
 												
-											<p:calendar id="inlinwe" value="#{editor.date1}"
-												mode="inline" pattern="yyyy-MMM-dd"
-												beforeShowDate="highlightDays" />
-										</h:panelGrid>
+<div class="container">
+<div class="row justify-content-center">
+<div class="col-md-8">
+<div class="card">
+<div class="card-body">
+												
+												
+												<h:panelGrid id="eventDetails" columns="1">
+												
+<p:dataTable id="multipleDT" var="car" value="#{dataListView.cars3}" selectionMode="multiple" selection="#{dataListView.cars2}" rowKey="#{car.id}" paginator="true" rows="5" 
+											styleClass="paginated" style="margin-bottom: 50px">
+        <f:facet name="header">
+           My users
+        </f:facet>
+        <p:column headerText="Name"  filterBy="#{car.id}" filterMatchMode="contains">
+            <h:outputText value="#{car.id}" />
+        </p:column>
+        <p:column headerText="Birth year">
+            <h:outputText value="#{car.year}" />
+        </p:column>
+         <p:column filterBy="#{car.brand}" headerText="Type" filterMatchMode="exact">
+            <f:facet name="filter">
+                <p:selectOneMenu onchange="PF('carsTable').filter()" styleClass="custom-filter">
+                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{dtFilterView.brands}" />
+                </p:selectOneMenu>
+            </f:facet>
+            <h:outputText value="#{car.brand}" />
+        </p:column>
+        <p:column headerText="Id">
+            <h:outputText value="#{car.color}" />
+        </p:column>
+        <f:facet name="footer">
+            <p:commandButton process="multipleDT" update=":form:multiCarDetail" icon="pi pi-search" value="View bookings" oncomplete="PF('multiCarDialog').show()" />
+        </f:facet>
+    </p:dataTable>
+    
+    
+    
+    <p:dataList value="#{dataListView.cars2}" var="car" type="ordered" paginator="true" rows="5" style="width: 100%"
+											styleClass="paginated">
+        <f:facet name="header">
+            Basic
+        </f:facet>
+         <h:outputText value="#{car.id}" />
+            <h:outputText value="#{car.brand}" />
+            <h:outputText value="#{car.year}" />
+            <h:outputText value="#{car.color}" />
+    </p:dataList>
+    
+    
+    
+    
+    
+    
+    
+    <p:dialog header="Car Info" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="carDetail" style="text-align:center;">
+            <p:panelGrid  columns="2" rendered="#{not empty dataListView.selectedCar}" columnClasses="label,value">
+      
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{dataListView.selectedCar.id}" />
+ 
+                <h:outputText value="Year" />
+                <h:outputText value="#{dataListView.selectedCar.year}" />
+ 
+                <h:outputText value="Color:" />	
+                <h:outputText value="#{dataListView.selectedCar.color}" style="color:#{dataListView.selectedCar.color}"/>
+             
+                <h:outputText value="Price" />
+                <h:outputText value="$#{dataListView.selectedCar.price}" />
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+     
+    <p:dialog header="Selected Cars" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
+        <p:outputPanel id="multiCarDetail" style="text-align:center;">
+            <ui:repeat value="#{dataListView.cars2}" var="car">
+                <h:outputText value="#{car.id} - #{car.brand}" style="display:block"/>
+            </ui:repeat>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    
+    
+    
+    
+												
+													<p:outputLabel for="title" value="Title:" />
+													<p:inputText id="title" value="#{scheduleView.event.title}"
+														required="true" />
 
-										<p:outputLabel for="popup" value="Popup:" />
-										<p:calendar id="popup" value="#{editor.date2}" />
+													<p:outputLabel for="from" value="From:" />
+													<p:calendar id="from"
+														value="#{scheduleView.event.startDate}" timeZone="GMT+2"
+														pattern="dd/MM/yyyy HH:mm" />
+
+													<p:outputLabel for="to" value="To:" />
+													<p:calendar id="to" value="#{scheduleView.event.endDate}"
+														timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
+
+													<p:outputLabel for="allDay" value="All Day:" />
+													<h:selectBooleanCheckbox id="allDay"
+														value="#{scheduleView.event.allDay}" />
+
+													<p:commandButton type="reset" value="Reset" />
+													<p:commandButton id="addButton" value="Save"
+														action="#{scheduleView.addEvent}"
+														oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+												</h:panelGrid>
+												
+												
+												
+												
+												
+</div>
+</div>
+</div>
+</div>
+</div>
+												
+											</p:dialog>
 
 
-										<h:outputText value="#{editor.date2}">
-											<f:convertDateTime pattern="MM/dd/yyyy" />
-										</h:outputText>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+									
 
 										<p:dataTable var="car" value="#{dataListView.cars3}"
-											paginator="true" rows="10" styleClass="paginated">
-											<p:column headerText="Id">
+											style="padding-bottom: 50px" paginator="true" rows="5"
+											styleClass="paginated">
+											<p:column headerText="Title">
 												<h:outputText value="#{car.id}" />
 											</p:column>
 
-											<p:column headerText="Year">
+											<p:column headerText="Start">
 												<h:outputText value="#{car.year}" />
 											</p:column>
 
-											<p:column headerText="Brand">
+											<p:column headerText="End">
 												<h:outputText value="#{car.brand}" />
 											</p:column>
 
-											<p:column headerText="Color">
+											<p:column headerText="Room">
 												<h:outputText value="#{car.color}" />
 											</p:column>
 
-											<p:column>
+											<p:column headerText="Report">
+												<h:outputText value="#{car.color}" />
+											</p:column>
+
+											<p:column headerText="Response">
 												<p:commandButton value="Accept"
 													actionListener="#{dataListView.carInTheRow(car)}">
 												</p:commandButton>
@@ -87,13 +258,30 @@
 											</p:column>
 
 										</p:dataTable>
-
-
-
+										
+										
+										
+<!-- 										<p:commandButton value="Make an appointment" id="maap" -->
+<!-- 											action="#" update="" style="margin-left: 33%;"> -->
+<!-- 										</p:commandButton> -->
+<!-- 										<p:overlayPanel for="maap" global="true" showEffect="fade" -->
+<!-- 											hideEffect="fade"> -->
+<!-- 												<h:panelGrid columns="1" cellpadding="5" -->
+<!-- 											style="margin-left: 27%;"> -->
+<!-- 											<p:datePicker id="dateTemplate" value="#{editor.date1}" -->
+<!-- 												dateTemplate="highlightDays" inline="true" /> -->
+<!-- 										</h:panelGrid> -->
+<!-- 										</p:overlayPanel> -->
+										
+										
+										
 									</div>
-
-
 								</h:form>
+
+
+
+
+
 							</div>
 
 						</div>

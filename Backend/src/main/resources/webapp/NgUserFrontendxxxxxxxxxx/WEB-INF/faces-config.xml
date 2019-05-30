@@ -17,7 +17,24 @@
 		<managed-bean-class>org.Backend.DataListView
 		</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean> 
+	
+	<managed-bean>
+		<managed-bean-name>dtFilterView</managed-bean-name>
+		<managed-bean-class>org.Backend.FilterView
+		</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean> 
+
+
+	<managed-bean>
+		<managed-bean-name>scheduleView</managed-bean-name>
+		<managed-bean-class>org.Backend.ScheduleView
+		</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
+
+
 
 	<managed-bean>
 		<managed-bean-name>carService</managed-bean-name>
