@@ -81,7 +81,7 @@ public class ScheduleView extends SpringBeanAutowiringSupport implements Seriali
     
     public void addEvent() {
 
-       eventModel.addEvent(event);
+      // eventModel.addEvent(event);
 
        FacesContext context = FacesContext.getCurrentInstance();
        DataListView dBean = context.getApplication().evaluateExpressionGet(context, "#{dataListView}", DataListView.class);       
@@ -98,6 +98,8 @@ public class ScheduleView extends SpringBeanAutowiringSupport implements Seriali
        
        event = new DefaultScheduleEvent();
        room ="";
+       eventModel = new DefaultScheduleModel();
+       bookingsMap =   es.createHighlightEventsReturnBookings(eventModel);
         
     }
      

@@ -164,6 +164,7 @@
 
 																	<p:commandButton type="reset" value="Reset" />
 																	<p:commandButton id="addButton" value="Save"
+																		update="bkngs" 
 																		action="#{scheduleView.addEvent}"
 																		oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
 																		

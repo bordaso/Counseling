@@ -4,13 +4,16 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -34,6 +37,10 @@ public class DataListView extends SpringBeanAutowiringSupport implements Seriali
    private List<Bookings> myUsersBookings = new ArrayList<Bookings>();
    
    private Map<User, Bookings> myUsersBookingsMap = new HashMap<User, Bookings>();
+   
+   private Map.Entry<User, Bookings> bookingEntries;
+   
+   private Set<Map.Entry<User, Bookings>> bookingsSetAdditional = new HashSet<Map.Entry<User, Bookings>>();
    
    private List<UserType> types = new ArrayList<UserType>();
    
@@ -130,25 +137,7 @@ public List<User> getMyUsers() {
 
 public void setMyUsers(List<User> myUsers) {
 	this.myUsers = myUsers;
-}
-
-public void setCars2(List<Car> cars2) {
-	this.cars2 = cars2;
-}
-
-public void setService(CarService service) {
-       this.service = service;
-   }
-
-   public Car getSelectedCar() {
-	   System.out.println(selectedCar+" get selected car");
-       return selectedCar;
-   }
-
-   public void setSelectedCar(Car selectedCar) {
-	   System.out.println(selectedCar+" set selected car");
-       this.selectedCar = selectedCar;
-   }    
+}   
    
    //public List<Bookings> getMyUsersBookings() {
 
@@ -156,7 +145,11 @@ public void setService(CarService service) {
 
 		    Set<Map.Entry<User, Bookings>> bookingsSet = myUsersBookingsMap.entrySet();
 		    
-		    return new ArrayList<Map.Entry<User, Bookings>>(bookingsSet);
+		   // bookingsSetAdditional.stream().forEach(e -> bookingsSet.add(e));
+		    
+		    bookingsSet.forEach(e-> bookingsSetAdditional.add(e));
+		    
+		    return new ArrayList<Map.Entry<User, Bookings>>(bookingsSetAdditional);
 
 	
 	   
@@ -218,13 +211,24 @@ private void bookingSorter(Map<Bookings, BookingDetails> bookingMap, User u) {
 				   bks.getStart().toLocalDate().isEqual(selectedEndLocalDateTime) || bks.getEnd().toLocalDate().isEqual(selectedEndLocalDateTime) ||
 			      ( bks.getStart().toLocalDate().isBefore(selectedEndLocalDateTime) &&  bks.getEnd().toLocalDate().isAfter(selectedEndLocalDateTime) )
 			)
-			&&
-			!myUsersBookingsMap.keySet().contains(u)
+//			&&
+//			!myUsersBookingsMap.keySet().contains(u)
 			  ) 
 		   {
 			   
 			   myUsersBookings.add(bks);
+			   
+			   if(myUsersBookingsMap.containsKey(u) && !bks.equals(myUsersBookingsMap.get(u)) ) {
+				   bookingEntries= new AbstractMap.SimpleEntry<User, Bookings>(u, bks);
+				   bookingsSetAdditional.add(bookingEntries);
+				   continue;
+			   }
+			   
 			   myUsersBookingsMap.put(u, bks);
+			   
+
+			   
+			   
 			   
 		   }
 	   }
@@ -238,7 +242,13 @@ public void onUserUnselect(UnselectEvent event) {
        
        myUsersSelected.remove(selUser);
        myUsersBookingsMap.remove(selUser);
+       
+       Set<Map.Entry<User, Bookings>> filtered = bookingsSetAdditional
+    		   .stream()
+    		   .filter(p-> p.getKey().equals(selUser))
+    		   .collect(Collectors.toCollection(HashSet::new));
 
+       bookingsSetAdditional.removeAll(filtered);
        
 //       Map<Bookings, BookingDetails> bookingMap =  selUser.getType() == UserType.PATIENT? ps.patientFindAllUpcomingBookings(selUser.getUsername()) : es.employeeFindAllUpcomingBookings(selUser.getUsername());
 //       
@@ -257,6 +267,7 @@ public void emptyBookings() {
     myUsersBookings.clear();
     myUsersBookingsMap.clear();
     myUsersSelected.clear();
+    bookingsSetAdditional.clear();
 
 
 }

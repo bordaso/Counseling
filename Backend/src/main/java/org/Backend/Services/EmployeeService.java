@@ -105,11 +105,13 @@ public void createBooking(List<User> invitees, Bookings newBooking) {
 	    newBookingDetails.setBooking(newBooking);
 		
 		if(u.getType().equals(UserType.EMPLOYEE) || u.getType().equals(UserType.ADMIN)) {
-			newBookingDetails.setEmployee((Employee)u);
+			Employee emp = empDao.selectEmployeetByUsername(u.getUsername()).get(0);
+			newBookingDetails.setEmployee(emp);
 			bookdDao.saveBookingDetails(newBookingDetails);
 			continue;
 		}
-		newBookingDetails.setPatient((Patient)u);
+		Patient pat = patDao.selectPatientByUsername(u.getUsername()).get(0);
+		newBookingDetails.setPatient(pat);
 		bookdDao.saveBookingDetails(newBookingDetails);
 	}
 	
