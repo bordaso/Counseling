@@ -35,19 +35,19 @@
 
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:schedule id="schedule" value="#{scheduleView.eventModel}"
-												widgetVar="myschedule" timeZone="GMT+2">
+												widgetVar="myschedule" timeZone="GMT+1" draggable="false" resizable="false" >
 												<p:ajax event="dateSelect"
 													listener="#{scheduleView.onDateSelect}"
 													update="eventDetails"
-													oncomplete="PF('eventDialog').show();" />
-												<p:ajax event="eventSelect"
-													listener="#{scheduleView.onEventSelect}"
-													update="eventDetails"
-													oncomplete="PF('eventDialog').show();" />
-												<p:ajax event="eventMove"
-													listener="#{scheduleView.onEventMove}" />
-												<p:ajax event="eventResize"
-													listener="#{scheduleView.onEventResize}" />
+													oncomplete="PF('eventDialog').show(); PF('usersTable').unselectAllRows();" />
+<!-- 												<p:ajax event="eventSelect" -->
+<!-- 													listener="#{scheduleView.onEventSelect}" -->
+<!-- 													update="eventDetails" -->
+<!-- 													oncomplete="PF('eventDialog').show();" /> -->
+<!-- 												<p:ajax event="eventMove" -->
+<!-- 													listener="#{scheduleView.onEventMove}" /> -->
+<!-- 												<p:ajax event="eventResize" -->
+<!-- 													listener="#{scheduleView.onEventResize}" /> -->
 											</p:schedule>
 										</h:panelGrid>
 
@@ -56,7 +56,8 @@
 
 										<p:dialog widgetVar="eventDialog" header="Event Details"
 											showEffect="clip" hideEffect="clip">
-
+											<p:ajax event="close" update="" listener="#{dataListView.emptyBookings()}" />
+											
 											<div class="container">
 												<div class="row justify-content-center">
 													<div class="col-md-8">
@@ -67,77 +68,74 @@
 																
  <!-- ***************************************  EVENT DIALOG - MY USERS START ***************************************    -->
  
-																	<p:dataTable id="multipleDT" var="car"
-																		value="#{dataListView.cars3}" selectionMode="multiple"
-																		selection="#{dataListView.cars2}" rowKey="#{car.id}"
+																	<p:dataTable id="multipleDT" var="user"
+																		value="#{dataListView.myUsers}" selectionMode="add"
+																		selection="#{dataListView.myUsersSelected}" rowKey="#{user.id}"
 																		paginator="true" rows="5" styleClass="paginated"
-																		style="margin-bottom: 50px">
+																		style="margin-bottom: 50px"
+																		widgetVar="usersTable"
+																		>
+																		
+																		<p:ajax event="rowSelect" listener="#{dataListView.onUserSelect}"  update=":form:cbl" />
+       																	
+       																	<p:ajax event="rowUnselect" listener="#{dataListView.onUserUnselect}" update=":form:cbl"/>
+       																	 
+																		
 																		<f:facet name="header">
 																           My users
 																        </f:facet>
-																		<p:column headerText="Name" filterBy="#{car.id}"
+																		<p:column headerText="Name" filterBy="#{user.name}"
 																			filterMatchMode="contains">
-																			<h:outputText value="#{car.id}" />
+																			<h:outputText value="#{user.name}" />
 																		</p:column>
-																		<p:column headerText="Birth year">
-																			<h:outputText value="#{car.year}" />
+																		<p:column headerText="User name">
+																			<h:outputText value="#{user.username}" />
 																		</p:column>
-																		<p:column filterBy="#{car.brand}" headerText="Type"
+																		<p:column filterBy="#{user.type}" headerText="Type"
 																			filterMatchMode="exact">
 																			<f:facet name="filter">
-																				<p:selectOneMenu onchange="PF('carsTable').filter()"
+																				<p:selectOneMenu onchange="PF('usersTable').filter()"
 																					styleClass="custom-filter">
 																					<f:selectItem itemLabel="Select One"
 																						itemValue="#{null}" noSelectionOption="true" />
-																					<f:selectItems value="#{dtFilterView.brands}" />
+																					<f:selectItems value="#{dataListView.types}" />
 																				</p:selectOneMenu>
 																			</f:facet>
-																			<h:outputText value="#{car.brand}" />
+																			<h:outputText value="#{user.type}" />
 																		</p:column>
-																		<p:column headerText="Id">
-																			<h:outputText value="#{car.color}" />
-																		</p:column>
-																		<f:facet name="footer">
-																			<p:commandButton process="multipleDT"																				
-																				icon="pi pi-search"
-																				value="View bookings"																				
-																				/>
-<!-- 																				update=":form:multiCarDetail"  -->
-<!-- 																				oncomplete="PF('multiCarDialog').show()"  -->
-																		</f:facet>
 																	</p:dataTable>
 																	
  <!-- ***************************************  EVENT DIALOG - MY USERS END ***************************************    -->
 
  <!-- ***************************************  EVENT DIALOG - CURRENT BOOKINGS START ***************************************    -->
 
-																	<p:dataList value="#{dataListView.cars3}" var="car"
+																	<p:dataList value="#{dataListView.myUsersBookings}" var="booking"
 																		type="ordered" paginator="true" rows="5"
-																		style="width: 100%" styleClass="paginated">
+																		style="width: 100%" styleClass="paginated"
+																		id="cbl"
+																		widgetVar="cblwar"
+																		>
 																		<f:facet name="header">
-																            Basic
+																            Bookings for the selected day:
 																        </f:facet>
-																		<h:outputText value="#{car.id}" />
-																		<h:outputText value="#{car.brand}" />
-																		<h:outputText value="#{car.year}" />
-																		<h:outputText value="#{car.color}" />
-																	</p:dataList>						
+<!-- 																		<h:outputText value="#{booking.title}" /> -->
+<!-- 																		<h:outputText value="#{booking.start}" /> -->
+<!-- 																		<h:outputText value="#{booking.end}" /> -->
+																		
+																		<h:outputText value="#{booking.key.username}" />
+																		<h:outputText value="#{booking.value.title}" />
+																		<h:outputText value="#{booking.value.start}" />
+																		<h:outputText value="#{booking.value.end}" />
+																		
+																		
+<!-- 																		<h:outputText value="#{productEntry.value}" /> -->
+<!-- 																		<h:outputText value="#{productEntry.key.productName}" /> -->
+																	</p:dataList>																		
+																						
 																	
 																	
 <!-- ***************************************  EVENT DIALOG - CURRENT BOOKINGS END ***************************************    -->										
 
-<!-- 																	<p:dialog header="Selected Cars" -->
-<!-- 																		widgetVar="multiCarDialog" modal="true" -->
-<!-- 																		showEffect="fade" hideEffect="fade" resizable="false" -->
-<!-- 																		width="220"> -->
-<!-- 																		<p:outputPanel id="multiCarDetail" -->
-<!-- 																			style="text-align:center;"> -->
-<!-- 																			<ui:repeat value="#{dataListView.cars2}" var="car"> -->
-<!-- 																				<h:outputText value="#{car.id} - #{car.brand}" -->
-<!-- 																					style="display:block" /> -->
-<!-- 																			</ui:repeat> -->
-<!-- 																		</p:outputPanel> -->
-<!-- 																	</p:dialog> -->
 
 
  <!-- ***************************************  EVENT DIALOG - EVENT DETAILS START ***************************************    -->
@@ -145,6 +143,10 @@
 																	<p:outputLabel for="title" value="Title:" />
 																	<p:inputText id="title"
 																		value="#{scheduleView.event.title}" required="true" />
+																		
+																    <p:outputLabel for="room" value="Room:" />
+																	<p:inputText id="room"
+																		value="#{scheduleView.room}" required="true" />
 
 																	<p:outputLabel for="from" value="From:" />
 																	<p:calendar id="from"
@@ -156,9 +158,9 @@
 																		value="#{scheduleView.event.endDate}" timeZone="GMT+2"
 																		pattern="dd/MM/yyyy HH:mm" />
 
-																	<p:outputLabel for="allDay" value="All Day:" />
-																	<h:selectBooleanCheckbox id="allDay"
-																		value="#{scheduleView.event.allDay}" />
+<!-- 																	<p:outputLabel for="allDay" value="All Day:" /> -->
+<!-- 																	<h:selectBooleanCheckbox id="allDay" -->
+<!-- 																		value="#{scheduleView.event.allDay}" /> -->
 
 																	<p:commandButton type="reset" value="Reset" />
 																	<p:commandButton id="addButton" value="Save"
@@ -178,55 +180,44 @@
 <!-- ################################    EVENT DIALOG END ################################    -->
 
 
-										<p:dataTable var="car" value="#{dataListView.cars3}"
+										<p:dataTable var="booking" value="#{scheduleView.bookingsMap}"
 											style="padding-bottom: 50px" paginator="true" rows="5"
-											styleClass="paginated">
+											styleClass="paginated" id="bkngs" widgetVar="bkngswar">
 											<p:column headerText="Title">
-												<h:outputText value="#{car.id}" />
+												<h:outputText value="#{booking.key.title}" />
 											</p:column>
-
+											
 											<p:column headerText="Start">
-												<h:outputText value="#{car.year}" />
+												<h:outputText value="#{booking.key.start}" />
 											</p:column>
 
 											<p:column headerText="End">
-												<h:outputText value="#{car.brand}" />
+												<h:outputText value="#{booking.key.end}" />
 											</p:column>
 
 											<p:column headerText="Room">
-												<h:outputText value="#{car.color}" />
+												<h:outputText value="#{booking.key.room}" />
+											</p:column>
+											
+											<p:column headerText="Response" >
+												<h:outputText value="#{booking.value.response}" />
 											</p:column>
 
-											<p:column headerText="Report">
-												<h:outputText value="#{car.color}" />
+											<p:column headerText="Options">
+											        <p:commandButton value="Accept" process="bkngs" update="@form" rendered ="#{scheduleView.noResp eq booking.value.response}"
+														action="#{scheduleView.acceptBooking(booking)}" >
+													</p:commandButton>
+													<p:commandButton value="Reject" process="bkngs" style="width: 96px" update="@form" rendered ="#{scheduleView.noResp eq booking.value.response}"
+														action="#{scheduleView.rejectBooking(booking)}" >
+													</p:commandButton>
 											</p:column>
-
-											<p:column headerText="Response">
-												<p:commandButton value="Accept"
-													actionListener="#{dataListView.carInTheRow(car)}">
-												</p:commandButton>
-												<p:commandButton value="Reject" style="width: 96px"
-													actionListener="#{dataListView.carInTheRow(car)}">
-												</p:commandButton>
-											</p:column>
+											
+											
+											
+											
+											
 
 										</p:dataTable>
-
-
-
-										<!-- 										<p:commandButton value="Make an appointment" id="maap" -->
-										<!-- 											action="#" update="" style="margin-left: 33%;"> -->
-										<!-- 										</p:commandButton> -->
-										<!-- 										<p:overlayPanel for="maap" global="true" showEffect="fade" -->
-										<!-- 											hideEffect="fade"> -->
-										<!-- 												<h:panelGrid columns="1" cellpadding="5" -->
-										<!-- 											style="margin-left: 27%;"> -->
-										<!-- 											<p:datePicker id="dateTemplate" value="#{editor.date1}" -->
-										<!-- 												dateTemplate="highlightDays" inline="true" /> -->
-										<!-- 										</h:panelGrid> -->
-										<!-- 										</p:overlayPanel> -->
-
-
 
 									</div>
 								</h:form>

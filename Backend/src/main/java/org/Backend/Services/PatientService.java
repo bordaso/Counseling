@@ -49,23 +49,6 @@ public class PatientService {
 	
 	
 	
-	public boolean updateBookingResponse(Long id, BookingResponse newValue) {
-		
-		boolean success=false;
-		
-		bookdDao.updateBookingDetailsResponse (id, newValue);
-		
-		BookingDetails bookingDetails = bookdDao.selectBookingDetailsById(id);
-		
-		
-		if(bookingDetails != null && bookingDetails.getResponse().equals(newValue) ) {
-			success=true;
-		}
-	
-		return success;
-	}
-	
-	
 	
 	
 }
