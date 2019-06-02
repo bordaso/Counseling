@@ -2,6 +2,8 @@ package org.Backend;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.AbstractMap;
@@ -16,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 
 import org.Backend.DAOs.BookingsDao;
 import org.Backend.DAOs.EmployeeDao;
@@ -31,6 +34,8 @@ import org.Backend.Services.CommonService;
 import org.Backend.Services.EmployeeService;
 import org.Backend.Services.PatientService;
 import org.Backend.Utilities.ReportCreator;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -57,6 +62,8 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 	private List<UserType> types = new ArrayList<UserType>();
 
 	private Map<String, String> requestParams;	
+	
+	private StreamedContent file;
 	
 	private String reportSummary ="";
 	
@@ -124,9 +131,20 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 	
 	public void viewReport(Map.Entry<Bookings, BookingDetails> selectedEntry) {
 
-		System.out.println(selectedEntry);
+		selectedBooking =  new AbstractMap.SimpleEntry<Bookings, BookingDetails>(selectedEntry.getKey(), selectedEntry.getValue());	       
 	}
 	
+
+	public StreamedContent getFile() {
+		 InputStream pdfStream = new ByteArrayInputStream(selectedBooking.getKey().getReport());
+	     file = new DefaultStreamedContent(pdfStream, "pdf", selectedBooking.getKey().getId()+"_"+selectedBooking.getKey().getTitle()+"_"+"Report.pdf"); 
+
+		return file;
+	}
+
+	public void setFile(StreamedContent file) {
+		this.file = file;
+	}
 
 	public String getReportSummary() {
 		return reportSummary;

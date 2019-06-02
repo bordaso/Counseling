@@ -67,8 +67,9 @@
 													oncomplete="PF('reportDialog').show();">
 												</p:commandButton>
 												<p:commandButton value="View report" process="bkngs" rendered="#{booking.key.archived}"
-													style="width: 96px" update="@form"
-													action="#{dashboardBean.viewReport(booking)}">
+													style="width: 96px" update="@form" onclick="PrimeFaces.monitorDownload(start, stop);"
+													ajax="false" actionListener="#{dashboardBean.viewReport(booking)}">
+       												 <p:fileDownload value="#{dashboardBean.file}" />
 												</p:commandButton>
 											</p:column>
 
