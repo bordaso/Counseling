@@ -108,14 +108,7 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));		
 		
 		return pastBookings;
-	}
-	
-//	 bkngs1.setReport(reportCreator.retrieveAsByte(bkngs1.getBookingDetails(), emp, "We had a great conversation, and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum and lorem ipsum."));		 
-//	 bkngsDao.updateBooking(bkngs1);
-//	 
-//	 final Long bkngsId3=bkngs1.getId();		 
-//	 assertEquals(true, reportCreator.generateFileFromByte(bkngsDao.selectBookingById(bkngsId3).getReport()));
-	
+	}	
 	
 	public void openSubmitDialog(Map.Entry<Bookings, BookingDetails> selectedEntry) {
 		selectedBooking =  new AbstractMap.SimpleEntry<Bookings, BookingDetails>(selectedEntry.getKey(), selectedEntry.getValue());
@@ -123,8 +116,8 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 	
 	public void submitReport() throws DocumentException {
 
-		selectedBooking.getKey().setReport(reportCreator.retrieveAsByte(selectedBooking.getKey().getBookingDetails(), selectedBooking.getValue().getEmployee(), reportSummary));
 		selectedBooking.getKey().setArchived(true);
+		selectedBooking.getKey().setReport(reportCreator.retrieveAsByte(selectedBooking.getKey().getBookingDetails(), selectedBooking.getValue().getEmployee(), reportSummary));		
 		bd.updateBooking(selectedBooking.getKey());
 		bookingsMap = getPastBookings(es.employeeFindAllUpcomingBookings("tester"));
 	}

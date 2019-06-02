@@ -17,6 +17,7 @@ import org.Backend.Entities.Bookings_;
 import org.Backend.Entities.Employee;
 import org.Backend.Entities.Patient;
 import org.Backend.Enums.BookingResponse;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -100,11 +101,13 @@ public class BookingDetailsDaoImpl implements BookingDetailsDao {
 	@Transactional
 	@Override
 	public List<BookingDetails> selectBookingDetailsByEmployee(Employee employee) {
-		CriteriaQuery<BookingDetails> query = cb.createQuery(BookingDetails.class);
+		CriteriaQuery<BookingDetails> query = cb.createQuery(BookingDetails.class);		
 		Root<BookingDetails> root = query.from(BookingDetails.class);
 		query.where(cb.equal(root.get(BookingDetails_.employee), employee));
 		TypedQuery<BookingDetails> queryExecuted = sessionFactory.getCurrentSession().createQuery(query);
 
+		//.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY); ??
+		
 		return queryExecuted.getResultList();
 	}
 

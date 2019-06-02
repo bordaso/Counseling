@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -54,6 +56,7 @@ public class Message implements Serializable {
 	
 	@Column
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="msgId")
+	@Fetch (FetchMode.SELECT) 
 	@JsonManagedReference(value="message")
 	private Set<MessageDetails> messageDetails;
 	

@@ -20,6 +20,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -48,6 +51,7 @@ public class Bookings implements Serializable {
 	
 	@Column
 	@OneToMany(mappedBy="booking", fetch = FetchType.EAGER)
+	@Fetch (FetchMode.SELECT) 
 	@JsonManagedReference(value="bookings")	
 	private List<BookingDetails> bookingDetails;
 

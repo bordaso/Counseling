@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.Backend.Enums.UserType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +41,7 @@ public class Patient extends User implements Serializable {
 	
 	@Column
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="patient")
+	@Fetch (FetchMode.SELECT) 
 	@JsonManagedReference(value="patient-bookings")
 	private Set<BookingDetails> bookingDetails;
 	
