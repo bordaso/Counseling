@@ -34,6 +34,12 @@
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
+<managed-bean>
+		<managed-bean-name>dashboardBean</managed-bean-name>
+		<managed-bean-class>org.Backend.DashboardBean
+		</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 
 
 	<managed-bean>

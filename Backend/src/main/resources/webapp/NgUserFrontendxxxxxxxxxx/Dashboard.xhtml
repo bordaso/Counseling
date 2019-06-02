@@ -7,69 +7,102 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<meta charset="UTF-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<base href="/"/>
-  <link href="assets/vendorForUserDashboard/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="assets/CustomCSS/customCss.css" rel="stylesheet"/>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<base href="/" />
+	<link
+		href="assets/vendorForUserDashboard/bootstrap/css/bootstrap.min.css"
+		rel="stylesheet" />
+	<link href="assets/CustomCSS/customCss.css" rel="stylesheet" />
 
 </h:head>
 
 <h:body>
 
-    	
-    	<ui:composition template="template/layoutTemplate.xhtml">
-    	
-    		<ui:define name="content">
-    			
 
-<div class="container">
+	<ui:composition template="template/layoutTemplate.xhtml">
+
+		<ui:define name="content">
+
+
+			<div class="container">
 				<div class="row justify-content-center">
 					<div class="col-md-8">
 						<div class="card">
-							<div class="card-header">Archived bookings</div>
+							<div class="card-header">Past bookings</div>
 							<div class="card-body">
 								<h:form id="form" class="form-horizontal">
 									<div class="form-group">
 
 
 
-					<p:dataTable var="car" value="#{dataListView.cars3}"
+										<p:dataTable var="booking"
+											value="#{dashboardBean.bookingsMap}"
 											style="padding-bottom: 50px" paginator="true" rows="5"
-											styleClass="paginated">
-											<p:column headerText="Title" filterBy="#{car.id}"
-											 filterMatchMode="contains">
-												<h:outputText value="#{car.id}" />
+											styleClass="paginated" id="bkngs" widgetVar="bkngswar">
+											<p:column headerText="Title">
+												<h:outputText value="#{booking.key.title}" />
 											</p:column>
 
 											<p:column headerText="Start">
-												<h:outputText value="#{car.year}" />
+												<h:outputText value="#{booking.key.start}" />
 											</p:column>
 
 											<p:column headerText="End">
-												<h:outputText value="#{car.brand}" />
+												<h:outputText value="#{booking.key.end}" />
 											</p:column>
 
 											<p:column headerText="Room">
-												<h:outputText value="#{car.color}" />
-											</p:column>
-
-											<p:column headerText="Report">
-												<h:outputText value="#{car.color}" />
+												<h:outputText value="#{booking.key.room}" />
 											</p:column>
 
 											<p:column headerText="Response">
-												<p:commandButton value="Submit report"
-													actionListener="#{dataListView.carInTheRow(car)}">
+												<h:outputText value="#{booking.value.response}" />
+											</p:column>
+
+											<p:column headerText="Options">
+												<p:commandButton value="Submit report" process="bkngs"
+													update="@form" rendered="#{!booking.key.archived}"
+													action="#{dashboardBean.openSubmitDialog(booking)}"
+													oncomplete="PF('reportDialog').show();">
 												</p:commandButton>
-												<p:commandButton value="View report" style="width: 96px"
-													actionListener="#{dataListView.carInTheRow(car)}">
+												<p:commandButton value="View report" process="bkngs" rendered="#{booking.key.archived}"
+													style="width: 96px" update="@form"
+													action="#{dashboardBean.viewReport(booking)}">
 												</p:commandButton>
 											</p:column>
 
 										</p:dataTable>
 
 
+
+
+
+										<p:dialog widgetVar="reportDialog" header="Event Details"
+											showEffect="clip" hideEffect="clip">
+<!-- 											<p:ajax event="close" update="" -->
+<!-- 												listener="#{dashboardBean.xxx()}" /> -->
+
+											<div class="container">
+												<div class="row justify-content-center">
+													<div class="col-md-8">
+														<div class="card">
+															<div class="card-body">
+																<h:panelGrid id="eventDetails" columns="1">
+																	
+																	<p:outputLabel for="editorid" value="Summarize what has happend during the appointment"/>
+																	<p:textEditor id="editorid" widgetVar="editorwar" value="#{dashboardBean.reportSummary}" height="300" style="margin-bottom:10px"/>
+																	<p:commandButton value="Submit"
+																		style="width: 98px" update="@form"
+																		action="#{dashboardBean.submitReport()}">
+																	</p:commandButton>
+																</h:panelGrid>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</p:dialog>
 
 									</div>
 								</h:form>
@@ -84,12 +117,12 @@
 
 
 
-    		</ui:define>
-			
-    	</ui:composition>
-    	
+		</ui:define>
 
- 
+	</ui:composition>
+
+
+
 
 </h:body>
 </html>
