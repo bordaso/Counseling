@@ -1,7 +1,5 @@
 package org.Backend;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -18,7 +16,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
 
 import org.Backend.DAOs.BookingsDao;
 import org.Backend.DAOs.EmployeeDao;
