@@ -33,7 +33,7 @@ public class Employee extends User implements Serializable {
 	@Column(updatable = false, nullable = false)
 	private String personalId;
 	
-	@Column(columnDefinition = "BINARY(1000)")
+	@Column(columnDefinition = "BINARY(100000)")
 	private Employee reportsTo;
 
 	@Column

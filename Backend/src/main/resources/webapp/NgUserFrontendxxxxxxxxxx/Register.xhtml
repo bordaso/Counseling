@@ -36,8 +36,7 @@
 						<div class="card">
 							<div class="card-header">Register</div>
 							<div class="card-body">
-								<h:form id="form">
-									<form class="form-horizontal" method="post" action="#">
+								<h:form id="form" class="form-horizontal">
 
 										<div class="form-group">
 											<label for="name" class="cols-sm-2 control-label">Your
@@ -46,8 +45,8 @@
 												<div class="input-group">
 													<span class="input-group-addon"><i
 														class="fa fa-user fa" aria-hidden="true"></i></span>
-													<p:inputText class="form-control" name="name" id="name"
-														placeholder="Enter your Name" />
+													<p:inputText class="form-control" name="name" id="name" 
+														placeholder="Enter your Name"  />
 												</div>
 											</div>
 										</div>
@@ -58,7 +57,7 @@
 												<div class="input-group">
 													<span class="input-group-addon"><i
 														class="fa fa-envelope fa" aria-hidden="true"></i></span>
-													<p:inputText type="text" class="form-control" name="email"
+													<p:inputText type="text" class="form-control" name="email" 
 														id="email" placeholder="Enter your Email" />
 												</div>
 											</div>
@@ -85,7 +84,7 @@
 															<span class="input-group-addon"><i
 																class="fa fa-envelope fa" aria-hidden="true"></i></span>
 															<p:inputText type="text" class="form-control"
-																name="medicalId" id="medicalId"
+																name="medicalId" id="medicalId" 
 																placeholder="Enter your medical Id" />
 														</div>
 													</div>
@@ -95,11 +94,40 @@
 														counselor</label>
 													<div class="cols-sm-10">
 														<div class="input-group">
-															<span class="input-group-addon"><i
-																class="fa fa-envelope fa" aria-hidden="true"></i></span>
-															<p:inputText type="text" class="form-control"
-																name="counselor" id="counselor"
-																placeholder="Enter your counselor" />
+														
+																	<p:dataTable id="counselorDT" var="user" 
+																		value="#{registerBean.employees}" selectionMode="add"
+																		selection="#{registerBean.counselorSelected}" rowKey="#{user.id}"
+																		paginator="true" rows="5" styleClass="paginated"
+																		style="margin-bottom: 50px"
+																		widgetVar="counselorTable"
+																		>
+																		
+																		<p:ajax event="rowSelect" listener="#{registerBean.onCounselorSelect}" />
+       																	
+       																	<p:ajax event="rowUnselect" listener="#{registerBean.onCounselorUnselect}"/>
+       															
+																		<p:column headerText="Name" filterBy="#{user.name}"
+																			filterMatchMode="contains">
+																			<h:outputText value="#{user.name}" />
+																		</p:column>
+																		<p:column headerText="User name">
+																			<h:outputText value="#{user.username}" />
+																		</p:column>
+																		<p:column filterBy="#{user.type}" headerText="Type"
+																			filterMatchMode="exact">
+																			<f:facet name="filter">
+																				<p:selectOneMenu onchange="PF('usersTable').filter()"
+																					styleClass="custom-filter">
+																					<f:selectItem itemLabel="Select One"
+																						itemValue="#{null}" noSelectionOption="true" />
+																					<f:selectItems value="#{registerBean.types}" />
+																				</p:selectOneMenu>
+																			</f:facet>
+																			<h:outputText value="#{user.type}" />
+																		</p:column>
+																	</p:dataTable>
+																	
 														</div>
 													</div>
 												</div>
@@ -112,7 +140,7 @@
 														<div class="input-group">
 															<span class="input-group-addon"><i
 																class="fa fa-envelope fa" aria-hidden="true"></i></span>
-															<p:inputText type="text" class="form-control"
+															<p:inputText type="text" class="form-control" 
 																name="personalId" id="personalId"
 																placeholder="Enter your personalId" />
 														</div>
@@ -123,11 +151,40 @@
 														manager</label>
 													<div class="cols-sm-10">
 														<div class="input-group">
-															<span class="input-group-addon"><i
-																class="fa fa-envelope fa" aria-hidden="true"></i></span>
-															<p:inputText type="text" class="form-control"
-																name="manager" id="manager"
-																placeholder="Enter your manager" />
+														
+															<p:dataTable id="managerDT" var="user"
+																		value="#{registerBean.employees}" selectionMode="add"
+																		selection="#{registerBean.managerSelected}" rowKey="#{user.id}"
+																		paginator="true" rows="5" styleClass="paginated"
+																		style="margin-bottom: 50px"
+																		widgetVar="managerTable"
+																		>
+																		
+																		<p:ajax event="rowSelect" listener="#{registerBean.onManagerSelect}" />
+       																	
+       																	<p:ajax event="rowUnselect" listener="#{registerBean.onManagerUnselect}"/>
+       															
+																		<p:column headerText="Name" filterBy="#{user.name}"
+																			filterMatchMode="contains">
+																			<h:outputText value="#{user.name}" />
+																		</p:column>
+																		<p:column headerText="User name">
+																			<h:outputText value="#{user.username}" />
+																		</p:column>
+																		<p:column filterBy="#{user.type}" headerText="Type"
+																			filterMatchMode="exact">
+																			<f:facet name="filter">
+																				<p:selectOneMenu onchange="PF('usersTable').filter()"
+																					styleClass="custom-filter">
+																					<f:selectItem itemLabel="Select One"
+																						itemValue="#{null}" noSelectionOption="true" />
+																					<f:selectItems value="#{registerBean.types}" />
+																				</p:selectOneMenu>
+																			</f:facet>
+																			<h:outputText value="#{user.type}" />
+																		</p:column>
+																	</p:dataTable>
+																	
 														</div>
 													</div>
 												</div>
@@ -136,11 +193,40 @@
 														patientlist</label>
 													<div class="cols-sm-10">
 														<div class="input-group">
-															<span class="input-group-addon"><i
-																class="fa fa-envelope fa" aria-hidden="true"></i></span>
-															<p:inputText type="text" class="form-control"
-																name="patientlist" id="patientlist"
-																placeholder="Enter your patientlist" />
+														
+														<p:dataTable id="patientDT" var="user"
+																		value="#{registerBean.patient}" selectionMode="add"
+																		selection="#{registerBean.patientSelected}" rowKey="#{user.id}"
+																		paginator="true" rows="5" styleClass="paginated"
+																		style="margin-bottom: 50px"
+																		widgetVar="patientTable"
+																		>
+																		
+																		<p:ajax event="rowSelect" listener="#{registerBean.onPatientSelect}" />
+       																	
+       																	<p:ajax event="rowUnselect" listener="#{registerBean.onPatientUnselect}"/>
+       															
+																		<p:column headerText="Name" filterBy="#{user.name}"
+																			filterMatchMode="contains">
+																			<h:outputText value="#{user.name}" />
+																		</p:column>
+																		<p:column headerText="User name">
+																			<h:outputText value="#{user.username}" />
+																		</p:column>
+																		<p:column filterBy="#{user.type}" headerText="Type"
+																			filterMatchMode="exact">
+																			<f:facet name="filter">
+																				<p:selectOneMenu onchange="PF('usersTable').filter()"
+																					styleClass="custom-filter">
+																					<f:selectItem itemLabel="Select One"
+																						itemValue="#{null}" noSelectionOption="true" />
+																					<f:selectItems value="#{registerBean.types}" />
+																				</p:selectOneMenu>
+																			</f:facet>
+																			<h:outputText value="#{user.type}" />
+																		</p:column>
+																	</p:dataTable>
+																	
 														</div>
 													</div>
 												</div>
@@ -151,7 +237,7 @@
 												<div class="input-group">
 													<span class="input-group-addon"><i
 														class="fa fa-users fa" aria-hidden="true"></i></span>
-													<p:inputText type="text" class="form-control"
+													<p:inputText type="text" class="form-control" 
 														name="username" id="username"
 														placeholder="Enter your Username" />
 												</div>
@@ -163,7 +249,7 @@
 												<div class="input-group">
 													<span class="input-group-addon"><i
 														class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-													<p:inputText type="password" class="form-control"
+													<p:inputText type="password" class="form-control" 
 														name="password" id="password"
 														placeholder="Enter your Password" />
 												</div>
@@ -176,7 +262,7 @@
 												<div class="input-group">
 													<span class="input-group-addon"><i
 														class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-													<p:inputText type="password" class="form-control"
+													<p:inputText type="password" class="form-control" 
 														name="confirm" id="confirm"
 														placeholder="Confirm your Password" />
 												</div>
@@ -185,15 +271,14 @@
 
 
 										<div class="form-group">
-											<input type="checkbox" checked="checked" data-toggle="toggle"
+											<input type="checkbox" checked="checked" data-toggle="toggle" 
 												data-on="Employee" data-off="Patient" name="userswitcher" id="userswitcher"/>
 										</div>
 
 										<div class="form-group ">
-											<button type="button"
-												class="btn btn-primary btn-lg btn-block login-button">Register</button>
+										
+										 <h:commandButton  value="Register" action="#{registerBean.submit}" class="btn btn-primary btn-lg btn-block login-button" />
 										</div>
-									</form>
 								</h:form>
 							</div>
 						</div>

@@ -74,13 +74,24 @@
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 <script>
-$('#userswitcher').bind('change', function () {
+$('#userswitcher').bind('change', function () {	
 
-	   if ($(this).is(':checked')){
+	   if ($(this).is(':checked')){		   
+		   PF('counselorTable').unselectAllRows();		   
 		   $('#patient').hide();
+		   
+		   $("#form\\:medicalId").prop('required',false);
+		   $("#form\\:personalId").prop('required',true);
+		   
 	       $('#employee').show();
 	   }else{
+		   PF('managerTable').unselectAllRows();
+		   PF('patientTable').unselectAllRows();
 		   $('#employee').hide();
+		   
+		   $("#form\\:medicalId").prop('required',true);
+		    $("#form\\:personalId").prop('required',false);
+		   
 	   	   $('#patient').show();
 	   }
 
@@ -90,6 +101,16 @@ $('#userswitcher').bind('change', function () {
 <script>
 $( document ).ready(function() {
     console.log( "ready!" );
+    $("#form\\:name").prop('required',true);
+    $("#form\\:email").prop('required',true);
+    $("#form\\:phonenumber").prop('required',true);
+    $("#form\\:username").prop('required',true);
+    $("#form\\:password").prop('required',true);
+    $("#form\\:confirm").prop('required',true);
+    
+    $("#form\\:medicalId").prop('required',false);
+    $("#form\\:personalId").prop('required',true);
+    
     $('#patient').hide();
 });
 </script>

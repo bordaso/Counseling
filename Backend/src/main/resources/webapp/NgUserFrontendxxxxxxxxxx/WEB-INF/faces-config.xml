@@ -37,10 +37,10 @@
 
 
 	<managed-bean>
-		<managed-bean-name>carService</managed-bean-name>
-		<managed-bean-class>org.Backend.CarService
+		<managed-bean-name>registerBean</managed-bean-name>
+		<managed-bean-class>org.Backend.RegisterBean
 		</managed-bean-class>
-		<managed-bean-scope>application</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
 </faces-config>

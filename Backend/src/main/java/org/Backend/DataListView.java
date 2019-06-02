@@ -185,6 +185,34 @@ public void onUserSelect(SelectEvent event) {
 	   
    }
 
+
+public void onUserUnselect(UnselectEvent event) {
+    System.out.println((User) event.getObject()+" UNSELECT");
+    
+    User selUser = (User) event.getObject();
+    
+    myUsersSelected.remove(selUser);
+    myUsersBookingsMap.remove(selUser);
+    
+    Set<Map.Entry<User, Bookings>> filtered = bookingsSetAdditional
+ 		   .stream()
+ 		   .filter(p-> p.getKey().equals(selUser))
+ 		   .collect(Collectors.toCollection(HashSet::new));
+
+    bookingsSetAdditional.removeAll(filtered);
+    
+//    Map<Bookings, BookingDetails> bookingMap =  selUser.getType() == UserType.PATIENT? ps.patientFindAllUpcomingBookings(selUser.getUsername()) : es.employeeFindAllUpcomingBookings(selUser.getUsername());
+//    
+//    BiPredicate<Bookings, Bookings> predicate = (p, f) -> p.equals(f);  
+//    
+//    List<Bookings> filtered = myUsersBookings
+//            .parallelStream()
+//            .filter(p -> bookingMap.keySet().parallelStream().anyMatch(s -> predicate.test(p, s)))
+//            .collect(Collectors.toCollection(ArrayList::new));
+//    
+//    myUsersBookings.removeAll(filtered);
+}
+
    private void bookingsSetup(User u) {   
 
 		   Map<Bookings, BookingDetails> bookingMap =  u.getType() == UserType.PATIENT? ps.patientFindAllUpcomingBookings(u.getUsername()) : es.employeeFindAllUpcomingBookings(u.getUsername());
@@ -235,32 +263,7 @@ private void bookingSorter(Map<Bookings, BookingDetails> bookingMap, User u) {
 	
 }
 
-public void onUserUnselect(UnselectEvent event) {
-       System.out.println((User) event.getObject()+" UNSELECT");
-       
-       User selUser = (User) event.getObject();
-       
-       myUsersSelected.remove(selUser);
-       myUsersBookingsMap.remove(selUser);
-       
-       Set<Map.Entry<User, Bookings>> filtered = bookingsSetAdditional
-    		   .stream()
-    		   .filter(p-> p.getKey().equals(selUser))
-    		   .collect(Collectors.toCollection(HashSet::new));
 
-       bookingsSetAdditional.removeAll(filtered);
-       
-//       Map<Bookings, BookingDetails> bookingMap =  selUser.getType() == UserType.PATIENT? ps.patientFindAllUpcomingBookings(selUser.getUsername()) : es.employeeFindAllUpcomingBookings(selUser.getUsername());
-//       
-//       BiPredicate<Bookings, Bookings> predicate = (p, f) -> p.equals(f);  
-//       
-//       List<Bookings> filtered = myUsersBookings
-//               .parallelStream()
-//               .filter(p -> bookingMap.keySet().parallelStream().anyMatch(s -> predicate.test(p, s)))
-//               .collect(Collectors.toCollection(ArrayList::new));
-//       
-//       myUsersBookings.removeAll(filtered);
-   }
 
 public void emptyBookings() {
     
