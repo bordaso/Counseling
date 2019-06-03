@@ -71,7 +71,7 @@ public class EmployeeService {
 		List<Employee> allEmps = empDao.selectAllEmployee();		
 		List<User> returnVals = new ArrayList<User>();
 		
-		String pudUser = "tester" ; //employeeValidationUsernameReturn();
+		String pudUser = employeeValidationUsernameReturn();
 		    
 		Employee myself = empDao.selectEmployeetByUsername(pudUser).get(0);		
 		allEmps.remove(allEmps.indexOf(myself)); 		    
@@ -86,7 +86,7 @@ public class EmployeeService {
 	
 public void createBooking(List<User> invitees, Bookings newBooking) {
 	
-	String pudUser = "tester" ; //employeeValidationUsernameReturn();
+	String pudUser = employeeValidationUsernameReturn();
 	    
 	Employee myself = empDao.selectEmployeetByUsername(pudUser).get(0);	
 
@@ -121,7 +121,7 @@ public void createBooking(List<User> invitees, Bookings newBooking) {
 
 public Map<Bookings, BookingDetails> createHighlightEventsReturnBookings(ScheduleModel sm) {
 	
-	String pudUser = "tester" ; //employeeValidationUsernameReturn();
+	String pudUser = employeeValidationUsernameReturn();
 	    
 	Employee myself = empDao.selectEmployeetByUsername(pudUser).get(0);
 		
@@ -144,8 +144,8 @@ public Map<Bookings, BookingDetails> createHighlightEventsReturnBookings(Schedul
 
 }
 
-private String employeeValidationUsernameReturn() {	
-	
+public String employeeValidationUsernameReturn() {	
+	if(false) {
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	Object princ = auth.getPrincipal();
 	UserDetails	princUD;
@@ -157,7 +157,9 @@ private String employeeValidationUsernameReturn() {
 		princUD = (UserDetails)princ;			
 	    pudUser = princUD.getUsername();	
 		}	
-	return pudUser;
+	
+	}
+	return "tester";
 }
 
 	

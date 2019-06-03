@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
                 if ( response === "LC1" ) {
                     this.router.navigate( ['dashboard/user'] );
                 } else if ( response === "LC2" ) {
-                    window.location.href = "http://localhost:54321/dashboard/emp.html"
+                    window.location.href = "http://localhost:54321/dashboard/Dashboard.xhtml"
                 }
             }, ( err ) => {
                 console.log( 'Error: ' + err );
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
                         return;
                     } else if ( response === "C2" ) {
                         this.incorrectCredentials = false;
-                        window.location.href = "http://localhost:54321/dashboard/emp.html"
+                        window.location.href = "http://localhost:54321/dashboard/Dashboard.xhtml"
                         return;
                     }
 

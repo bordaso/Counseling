@@ -57,7 +57,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
         
         if (isEmployee(roles)) {        	
-        	url = "/dashboard/emp.html";
+        	url = "/dashboard/Dashboard.xhtml";
         	out.print("\"C2\"");
         	out.flush();
         	

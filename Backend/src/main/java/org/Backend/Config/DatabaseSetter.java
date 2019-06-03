@@ -268,7 +268,7 @@ public class DatabaseSetter {
 		setupBkngs2_NtfsnStp2();	
 
 		empDao.saveEmployee(emp);
-		empDao.saveEmployee(empBoss);
+		//empDao.saveEmployee(empBoss);
 
 		patDao.savePatient(pat1);
 		patDao.savePatient(pat2);

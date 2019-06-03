@@ -4,7 +4,7 @@ import { CanActivate } from "@angular/router";
 import { ActivatedRouteSnapshot } from "@angular/router";
 import { RouterStateSnapshot } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, timer } from "rxjs";
+import { Observable, timer, Subscription } from "rxjs";
 import { Promise } from "q";
 import { Booking, BookingDetails } from "./userBoard/bookings/bookings.component";
 import { switchMap } from "rxjs/operators";
@@ -64,20 +64,20 @@ export class CounselingAPIService {
 */
     }
    
-    bookingsServiceDirectCall(dataSourceBooking: MatTableDataSource<Booking>){
+    bookingsServiceDirectCall(dataSourceBooking: MatTableDataSource<Booking>):Observable<string>{
        return this.http
-        .post<string>('http://localhost:54321/rest/service/all/bookings', ``, { headers: { 'Content-Type': 'application/json' }, responseType: 'json', withCredentials: true })        
-        .subscribe(result => {
+        .post<string>('http://localhost:54321/rest/service/all/bookings', ``, { headers: { 'Content-Type': 'application/json' }, responseType: 'json', withCredentials: true });        
+        /* .subscribe(result => {
       
       
           var resultBookings = this.utilBookingsSlicer(result); 
     
-    
+          
           dataSourceBooking.data = resultBookings;
+   
     
     
-    
-        });
+        }); */
       }
 
     bookingsService(dataSourceBooking: MatTableDataSource<Booking>){
@@ -164,7 +164,7 @@ export class CounselingAPIService {
 
 
 
-    private utilBookingsSlicer(inPut: string): Booking[] {
+    public utilBookingsSlicer(inPut: string): Booking[] {
 
         //console.log((inPut.match(/##/g) || []).length+" NUMBER OF ##")
     

@@ -203,10 +203,9 @@ public class EmployeeTest {
 			assertNotNull(empDao);
 			assertTrue(empDao.selectEmployeeByName("testEmp").isEmpty());
 			assertTrue(empDao.selectEmployeeByName("testEmp2").isEmpty());
-			empDao.saveEmployee(emp);
-			empDao.saveEmployee(emp2);
 			empBoss.setName("testEmp");
-			empDao.saveEmployee(empBoss);			
+			empDao.saveEmployee(emp);
+			empDao.saveEmployee(emp2);			
 			assertTrue(empDao.selectEmployeeByName("testEmp").size()==2);
 			assertTrue(empDao.selectEmployeeByName("testEmp2").size()==1);
 			}
@@ -260,7 +259,7 @@ public class EmployeeTest {
 			assertTrue(empDao.selectEmployeetByUsername("tester").isEmpty());
 			assertTrue(empDao.selectEmployeetByUsername("testerBoss").isEmpty());
 			empDao.saveEmployee(emp);
-			empDao.saveEmployee(empBoss);
+			//empDao.saveEmployee(empBoss);
 			
 			assertTrue(empDao.selectEmployeetByUsername("tester").size()==1);
 			assertTrue(empDao.selectEmployeetByUsername("testerBoss").size()==1);

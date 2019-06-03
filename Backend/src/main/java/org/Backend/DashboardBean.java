@@ -88,7 +88,7 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 	@PostConstruct
 	public void init() {
 		
-		bookingsMap = getPastBookings(es.employeeFindAllUpcomingBookings("tester"));
+		bookingsMap = getPastBookings(es.employeeFindAllUpcomingBookings(es.employeeValidationUsernameReturn()));
 		
 		
 		
@@ -116,7 +116,7 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 		selectedBooking.getKey().setArchived(true);
 		selectedBooking.getKey().setReport(reportCreator.retrieveAsByte(selectedBooking.getKey().getBookingDetails(), selectedBooking.getValue().getEmployee(), reportSummary));		
 		bd.updateBooking(selectedBooking.getKey());
-		bookingsMap = getPastBookings(es.employeeFindAllUpcomingBookings("tester"));
+		bookingsMap = getPastBookings(es.employeeFindAllUpcomingBookings(es.employeeValidationUsernameReturn()));
 	}
 	
 	public void viewReport(Map.Entry<Bookings, BookingDetails> selectedEntry) {

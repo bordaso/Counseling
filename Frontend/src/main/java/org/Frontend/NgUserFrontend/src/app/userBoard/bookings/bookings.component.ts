@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer } from '@angular/core';
 import { MatCalendarCellCssClasses, MatPaginator, MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { CounselingAPIService } from 'src/app/CounselingAPIService';
@@ -53,20 +53,51 @@ export class BookingsComponent implements OnInit {
   ngOnInit() {
     this.dataSourceBooking.paginator = this.paginator;
     this.subscription = this.cas.bookingsService(this.dataSourceBooking);
+    this.cas.bookingsServiceDirectCall(this.dataSourceBooking).subscribe(result => {
+      
+      
+      var resultBookings = this.cas.utilBookingsSlicer(result); 
+
+      
+      this.dataSourceBooking.data = resultBookings;
+
+      this.dataSourceBooking.data.map(e => e.start).forEach(e=> {this.bookingDatesToHighlight.push(e);});
+
+      console.log(this.bookingDatesToHighlight.length);
+
+    });   
+   
+
+    
+    
+
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  constructor(private cas: CounselingAPIService) { }
+  constructor(private cas: CounselingAPIService) { 
+
+  }
   
 
 
   acceptAppointment(row: Booking) {    
     this.cas.bookingsResponseService(row.details.id, 1);  
 
-    this.cas.bookingsServiceDirectCall(this.dataSourceBooking);   
+    this.cas.bookingsServiceDirectCall(this.dataSourceBooking).subscribe(result => {
+      
+      
+      var resultBookings = this.cas.utilBookingsSlicer(result); 
+
+      
+      this.dataSourceBooking.data = resultBookings;
+
+
+
+    });
+
     this.proposedAppointment(row, true);
     this.bookingDatesToHighlight.push(row.start);
     console.log("Accepted appointment "+row);
@@ -74,7 +105,20 @@ export class BookingsComponent implements OnInit {
 
   rejectAppointment(row: Booking) {
     this.cas.bookingsResponseService(row.details.id, 0);
-    this.cas.bookingsServiceDirectCall(this.dataSourceBooking);  
+    this.cas.bookingsServiceDirectCall(this.dataSourceBooking).subscribe(result => {
+      
+      
+      var resultBookings = this.cas.utilBookingsSlicer(result); 
+
+      
+      this.dataSourceBooking.data = resultBookings;
+
+
+
+    });
+    
+    
+
     this.proposedAppointment(row, true);
     console.log("Rejected appointment "+row);
   }

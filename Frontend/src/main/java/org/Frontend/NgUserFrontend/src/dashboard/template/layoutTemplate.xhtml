@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<base href="/"/>
+  <link href="../assets/vendorForUserDashboard/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/CustomCSS/customCss.css" rel="stylesheet"/>    
+  	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"/>
+  	
+
+
+</h:head>
+
+<h:body>
+	
+	
+<!--  <div>	 -->
+<!--  	<h:form> -->
+<!--  		<p:inputText rendered="true" /> -->
+<!-- 	   <p:editor value="#{editor.value}" /> -->
+<!-- 	</h:form> -->
+<!-- </div>   -->
+
+
+  <div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <!--div class="sidebar-heading">Menu </div-->
+      <div class="list-group list-group-flush">
+        <a href="/dashboard/Dashboard.xhtml" class="list-group-item list-group-item-action bg-light" >Dashboard</a>
+        <a href="/dashboard/Register.xhtml" class="list-group-item list-group-item-action bg-light" >Register</a>  
+        <a href="/dashboard/Bookings.xhtml" class="list-group-item list-group-item-action bg-light" >Bookings</a>        
+        <a href="/dashboard/Messages.xhtml" class="list-group-item list-group-item-action bg-light" >Messages</a>
+        <a href="/dashboard/Profile.xhtml" class="list-group-item list-group-item-action bg-light" >Profile</a>
+        <a href="http://localhost:54321/logout" class="list-group-item list-group-item-action bg-light" >Logout</a>
+      </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+	
+	    
+	    <div id="content">
+	  	<ui:insert name="content" >	 </ui:insert>
+	    </div>
+
+
+
+
+
+
+
+
+
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+<!--   <script src="../assets/vendorForUserDashboard/jquery/jquery.min.js"></script> -->
+  <script src="../assets/vendorForUserDashboard/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+<script>
+$('#userswitcher').bind('change', function () {	
+
+	   if ($(this).is(':checked')){		   
+		   PF('counselorTable').unselectAllRows();		   
+		   $('#patient').hide();
+		   
+		   $("#form\\:medicalId").prop('required',false);
+		   $("#form\\:personalId").prop('required',true);
+		   
+	       $('#employee').show();
+	   }else{
+		   PF('managerTable').unselectAllRows();
+		   PF('patientTable').unselectAllRows();
+		   $('#employee').hide();
+		   
+		   $("#form\\:medicalId").prop('required',true);
+		    $("#form\\:personalId").prop('required',false);
+		   
+	   	   $('#patient').show();
+	   }
+
+	});
+</script>
+
+<script>
+$( document ).ready(function() {
+    console.log( "ready!" );
+    $("#form\\:name").prop('required',true);
+    $("#form\\:email").prop('required',true);
+    $("#form\\:phonenumber").prop('required',true);
+    $("#form\\:username").prop('required',true);
+    $("#form\\:password").prop('required',true);
+    $("#form\\:confirm").prop('required',true);
+    
+    $("#form\\:medicalId").prop('required',false);
+    $("#form\\:personalId").prop('required',true);
+    
+    $('#patient').hide();
+});
+</script>
+
+  	  <script>
+  	//<![CDATA[ 
+    function highlightDays(date) {
+    	console.log("------------- "+date +" -------------------");
+    	
+    	
+    	var myAppointments = "#{editor.finalex}";
+    	console.log(myAppointments);
+    	 var myAppointmentsArr = myAppointments.split(";");
+    	 console.log(myAppointmentsArr);
+    	var dateMy = new Date(myAppointmentsArr[0]);
+    	var dateYour = new Date(date.year+"-"+date.month+"-"+date.day);
+    	console.log(dateMy.getDate());
+    	console.log(dateYour.getDate());
+    	
+    	if(dateYour.getDate() < dateMy.getDate()){
+    		return '<span style="background-color:' + '#80A8C9' + ';border-radius:50%;padding: .25em;width: 1.75em; height:1.75em; display:block;">' + date.day + '</span>';
+    	}
+    	
+    	 
+    	
+    	if(dateYour.getDate() === dateMy.getDate()){
+    		 return '<span style="background-color:' + '#81C784' + ';border-radius:50%;padding: .25em;width: 1.75em; height:1.75em; display:block;">' + date.day + '</span>';
+    	}
+    	  
+    	if(dateYour.getDate() === dateMy.getDate()+1){
+   		 return '<span style="background-color:' + 'grey' + ';border-radius:50%;padding: .25em;width: 1.75em; height:1.75em; display:block;">' + date.day + '</span>';
+   	}
+    	
+    	
+    	   return '<span style="background-color:' + 'inherit' + ';border-radius:50%;padding: .25em;width: 1.75em; height:1.75em; display:block;">' + date.day + '</span>';
+    	   
+     //   return '<span style="background-color:' + ((date.day < 21 && date.day > 10) ? '#81C784' : 'inherit') + ';border-radius:50%;padding: .25em;width: 1.75em; height:1.75em; display:block;">' + date.day + '</span>';
+     //   return '<span style="background-color:' + ((dateYour.getDate() > dateMy.getDate()) ? '#81C784' : 'inherit') + ';border-radius:50%;padding: .25em;width: 1.75em; height:1.75em; display:block;">' + date.day + '</span>';
+    }
+    //]]>
+</script>
+
+</h:body>
+</html>

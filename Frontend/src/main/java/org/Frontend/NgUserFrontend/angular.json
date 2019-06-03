@@ -21,7 +21,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/dashboard"
+              "src/dashboard",
+              "src/WEB-INF"
             ],
             "styles": [
               "src/styles.css"

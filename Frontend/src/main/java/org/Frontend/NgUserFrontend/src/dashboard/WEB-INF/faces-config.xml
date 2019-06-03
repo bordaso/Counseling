@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee /WEB-INF/schema/web-facesconfig_2_0.xsd"
+	version="2.0" metadata-complete="false">
+
+
+	<managed-bean>
+		<managed-bean-name>editor</managed-bean-name>
+		<managed-bean-class>org.Backend.EditorBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>dataListView</managed-bean-name>
+		<managed-bean-class>org.Backend.DataListView
+		</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean> 
+	
+	<managed-bean>
+		<managed-bean-name>dtFilterView</managed-bean-name>
+		<managed-bean-class>org.Backend.FilterView
+		</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean> 
+
+
+	<managed-bean>
+		<managed-bean-name>scheduleView</managed-bean-name>
+		<managed-bean-class>org.Backend.ScheduleView
+		</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+<managed-bean>
+		<managed-bean-name>dashboardBean</managed-bean-name>
+		<managed-bean-class>org.Backend.DashboardBean
+		</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+
+	<managed-bean>
+		<managed-bean-name>registerBean</managed-bean-name>
+		<managed-bean-class>org.Backend.RegisterBean
+		</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+</faces-config>

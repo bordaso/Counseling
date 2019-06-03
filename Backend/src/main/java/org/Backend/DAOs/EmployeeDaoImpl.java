@@ -67,6 +67,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public void updateEmployee(Employee toBeUpdated){
 		sessionFactory.getCurrentSession().update(toBeUpdated);
+		sessionFactory.getCurrentSession().flush();
 	}	
 	
 	@Transactional

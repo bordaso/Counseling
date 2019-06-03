@@ -1,12 +1,16 @@
 package org.Backend.Entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -35,8 +39,13 @@ public class Employee extends User implements Serializable {
 	@Column(updatable = false, nullable = false)
 	private String personalId;
 	
-	@Column(columnDefinition = "BINARY(100000)")
+	@ManyToOne(fetch=FetchType.EAGER, cascade={CascadeType.ALL})
+    @JoinColumn(name="manager_id")
 	private Employee reportsTo;
+	
+	@OneToMany(mappedBy="reportsTo")
+    private Set<Employee> subordinates = new HashSet<Employee>();
+
 
 	@Column
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="counselor")
@@ -92,6 +101,14 @@ public class Employee extends User implements Serializable {
 	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Set<Employee> getSubordinates() {
+		return subordinates;
+	}
+
+	public void setSubordinates(Set<Employee> subordinates) {
+		this.subordinates = subordinates;
 	}
 
 	@Override

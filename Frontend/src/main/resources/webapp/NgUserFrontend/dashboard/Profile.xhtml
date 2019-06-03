@@ -10,18 +10,22 @@
 	<meta charset="UTF-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<base href="/"/>
+  <link href="assets/vendorForUserDashboard/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="assets/CustomCSS/customCss.css" rel="stylesheet"/>
 
 </h:head>
 
 <h:body>
-	
-	
- <div>	
- 	<h:form>
- 		<p:inputText rendered="false" />
-	   <p:editor value="#{front.value}" />
-	</h:form>
-</div>  
 
+
+   	<ui:composition template="template/layoutTemplate.xhtml">
+    	
+    		<ui:define name="content">
+    			<h1>This is Profile</h1>
+    		</ui:define>
+			
+    	</ui:composition>
+
+ 
 </h:body>
 </html>
