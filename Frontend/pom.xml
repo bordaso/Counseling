@@ -87,7 +87,7 @@
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<executable>C:/Users/Oliver/consultancy_poc_workspace_v2/Main/Frontend/src/main/resources/angular_build.bat</executable>
+							<executable>${basedir}/src/main/resources/angular_build.bat</executable>
 						</configuration>
 					</execution>
 				</executions>
