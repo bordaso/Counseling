@@ -122,7 +122,7 @@ public class Config  extends WebSecurityConfigurerAdapter{
 		 	.antMatchers("/rest/service/admin/**").access("hasRole('ROLE_EMPLOYEE') and hasRole('ROLE_ADMIN')")
 	        .antMatchers("/dashboard/**").access("hasRole('ROLE_EMPLOYEE')")
 	        .and().userDetailsService(userDetailsService).formLogin()
-	        .loginPage("/login.component.html")
+	        .loginPage("/#/login")
 	        .loginProcessingUrl("/dashboard/login")
 	        .successHandler(customSuccessHandler)	
 	        .failureHandler(customAuthenticationFailureHandler)

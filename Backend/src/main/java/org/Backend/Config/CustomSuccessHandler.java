@@ -60,9 +60,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         	url = "/dashboard/Dashboard.xhtml";
         	out.print("\"C2\"");
         	out.flush();
-        	
+     
         } else if (isPatient(roles)) {
-            url = "/dashboard/usr.html";
+            url = "/#/dashboard/user";
             out.print("\"C1\"");
         	out.flush();
         } else {

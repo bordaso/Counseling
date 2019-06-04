@@ -24,18 +24,18 @@ public class CustomAccessDeniedHandler extends AccessDeniedHandlerImpl {
         if (auth != null) {
         	
         	if (auth instanceof AnonymousAuthenticationToken) {
-                response.sendRedirect("/login.component.html");
+                response.sendRedirect("/#/login");
                 super.handle(request, response, e);
                 return;
             }
         	
         	if (auth.getAuthorities().iterator().next().getAuthority().equals("ROLE_EMPLOYEE") || auth.getAuthorities().iterator().next().getAuthority().equals("ROLE_ADMIN") ) {
-        		 response.sendRedirect("/dashboard/emp.html");
+        		 response.sendRedirect("/dashboard/Dashboard.xhtml");
                  super.handle(request, response, e);
                  return;
         	} 
     
-        	 response.sendRedirect("/dashboard/usr.html");
+        	 response.sendRedirect("/#/dashboard/user");
         
         }
         
