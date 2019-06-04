@@ -45,77 +45,25 @@ public class DataListView extends SpringBeanAutowiringSupport implements Seriali
    private List<UserType> types = new ArrayList<UserType>();
    
    private List<User> myUsersSelected = new ArrayList<User>();
-	
-   private List<Car> cars1;
-    
-   private List<Car> cars2;
-    
-   private List<Car> cars3;
-    
-   private Car selectedCar;
-   
-   private String testt = "HELLLOOOO";   
    
    @Autowired
    private PatientService ps;
    
    @Autowired
    private EmployeeService es;
-   
-   
-    
-   public String getTestt() {
-	return testt;
-}
 
-public void setTestt(String testt) {
-	this.testt = testt;
-}
-
-@Autowired
-   private CarService service;
-
-@Autowired
-private EmployeeService empService;
-   
-
-public void carInTheRow(Car selectedCar) {
-	   System.out.println(selectedCar);
-	
-}
+   @Autowired
+   private EmployeeService empService;
     
    @PostConstruct
    public void init() { 
 	   
 	   myUsers = empService.selectMyUsers();
-	   
 	   types = Arrays.asList(UserType.values());
-	   
-	   
-       cars1 = service.createCars(10);
-     //  cars2 = service.createCars(5);
-       cars2 = new ArrayList<Car>();
-       cars3 = service.createCars(50);
    }
-
-   public List<Car> getCars1() {
-       return cars1;
-   }
-
-   public List<Car> getCars2() {
-       return cars2;
-   }
-
-   public List<Car> getCars3() {
-       return cars3;
-   }    
-
    
    
-   
-   
-   
-   public List<UserType> getTypes() {
+public List<UserType> getTypes() {
 	return types;
 }
 
@@ -139,25 +87,17 @@ public void setMyUsers(List<User> myUsers) {
 	this.myUsers = myUsers;
 }   
    
-   //public List<Bookings> getMyUsersBookings() {
 
-	   public List<Map.Entry<User, Bookings>> getMyUsersBookings() {
 
-		    Set<Map.Entry<User, Bookings>> bookingsSet = myUsersBookingsMap.entrySet();
-		    
-		   // bookingsSetAdditional.stream().forEach(e -> bookingsSet.add(e));
-		    
-		    bookingsSet.forEach(e-> bookingsSetAdditional.add(e));
-		    
+public List<Map.Entry<User, Bookings>> getMyUsersBookings() {
+
+		    Set<Map.Entry<User, Bookings>> bookingsSet = myUsersBookingsMap.entrySet();		    
+		    bookingsSet.forEach(e-> bookingsSetAdditional.add(e));		    
 		    return new ArrayList<Map.Entry<User, Bookings>>(bookingsSetAdditional);
-
-	
-	   
-	   
-//	return myUsersBookings;
 }
 
-   public void setMyUsersBookings(List<Bookings> myUsersBookings) {
+	   
+public void setMyUsersBookings(List<Bookings> myUsersBookings) {
 	this.myUsersBookings = myUsersBookings;
 }
    
@@ -213,7 +153,7 @@ public void onUserUnselect(UnselectEvent event) {
 //    myUsersBookings.removeAll(filtered);
 }
 
-   private void bookingsSetup(User u) {   
+private void bookingsSetup(User u) {   
 
 		   Map<Bookings, BookingDetails> bookingMap =  u.getType() == UserType.PATIENT? ps.patientFindAllUpcomingBookings(u.getUsername()) : es.employeeFindAllUpcomingBookings(u.getUsername());
 		   
@@ -253,11 +193,6 @@ private void bookingSorter(Map<Bookings, BookingDetails> bookingMap, User u) {
 			   }
 			   
 			   myUsersBookingsMap.put(u, bks);
-			   
-
-			   
-			   
-			   
 		   }
 	   }
 	
@@ -271,8 +206,6 @@ public void emptyBookings() {
     myUsersBookingsMap.clear();
     myUsersSelected.clear();
     bookingsSetAdditional.clear();
-
-
 }
 
    

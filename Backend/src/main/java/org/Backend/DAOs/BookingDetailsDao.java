@@ -34,7 +34,6 @@ public interface BookingDetailsDao {
 	
 	void updateBookingDetailsResponse(Long id, BookingResponse newValue);
 	
-	
 	void clearBookingDetails();
 
 	void setMyProxy(BookingDetailsDao proxy);

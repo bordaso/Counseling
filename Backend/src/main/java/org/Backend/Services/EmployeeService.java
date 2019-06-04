@@ -145,7 +145,7 @@ public Map<Bookings, BookingDetails> createHighlightEventsReturnBookings(Schedul
 }
 
 public String employeeValidationUsernameReturn() {	
-	if(false) {
+	
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	Object princ = auth.getPrincipal();
 	UserDetails	princUD;
@@ -158,8 +158,8 @@ public String employeeValidationUsernameReturn() {
 	    pudUser = princUD.getUsername();	
 		}	
 	
-	}
-	return "tester";
+	
+	return pudUser;
 }
 
 	

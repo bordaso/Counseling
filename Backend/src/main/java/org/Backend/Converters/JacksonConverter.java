@@ -27,8 +27,6 @@ public final class JacksonConverter {
 		// mapper.writeValue(new File("/emp.json"), emp);
 		// Java objects to JSON string - pretty-print
 		String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(var);
-		
-		//System.err.println(jsonInString);
 
 		return jsonInString;
 	}

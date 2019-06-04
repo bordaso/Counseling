@@ -50,7 +50,6 @@ public class CounselingAPI {
 	@Autowired
 	private CommonService comService;
 
-	// temprarily for testing
 	@Autowired
 	private PatientDao patDao;
 	

@@ -8,9 +8,7 @@
 		<artifactId>Main</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>consultancy_poc_v2</groupId>
 	<artifactId>Backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>Backend</name>
 	<url>http://maven.apache.org</url>
 	<properties>

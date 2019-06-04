@@ -36,19 +36,11 @@ public class CommonService {
 		
 		BookingDetails bookingDetails = bookdDao.selectBookingDetailsById(id);
 		
-		
-		
 		if(bookingDetails != null && bookingDetails.getResponse().equals(newValue) ) {
 			success=true;
 		}
 	
 		return success;
 	}
-	
-	
-
-	
-	
-	
 	
 }

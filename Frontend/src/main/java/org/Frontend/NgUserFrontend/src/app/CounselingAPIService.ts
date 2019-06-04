@@ -151,19 +151,6 @@ export class CounselingAPIService {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     public utilBookingsSlicer(inPut: string): Booking[] {
 
         //console.log((inPut.match(/##/g) || []).length+" NUMBER OF ##")

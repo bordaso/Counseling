@@ -42,23 +42,13 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 
 	private Map<Bookings, BookingDetails> bookingsMap = new HashMap<Bookings, BookingDetails>();
 	
-	private Set<Map.Entry<User, Bookings>> bookingsSetAdditional = new HashSet<Map.Entry<User, Bookings>>();
-	
 	private Entry<Bookings, BookingDetails> selectedBooking; 	
 
 	private List<Employee> employees;
 
 	private List<Patient> patient;
-
-	private List<Employee> managerSelected = new ArrayList<Employee>();
-
-	private List<Employee> counselorSelected = new ArrayList<Employee>();
-
-	private List<Patient> patientSelected = new ArrayList<Patient>();
-
+	
 	private List<UserType> types = new ArrayList<UserType>();
-
-	private Map<String, String> requestParams;	
 	
 	private StreamedContent file;
 	
@@ -74,12 +64,6 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 	private EmployeeDao ed;
 
 	@Autowired
-	private CommonService cs;
-
-	@Autowired
-	private PatientService ps;
-
-	@Autowired
 	private PatientDao pd;
 	
 	@Autowired
@@ -88,10 +72,7 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 	@PostConstruct
 	public void init() {
 		
-		bookingsMap = getPastBookings(es.employeeFindAllUpcomingBookings(es.employeeValidationUsernameReturn()));
-		
-		
-		
+		bookingsMap = getPastBookings(es.employeeFindAllUpcomingBookings(es.employeeValidationUsernameReturn()));		
 		employees = ed.selectAllEmployee();
 		patient = pd.selectAllPatient();
 		types = Arrays.asList(UserType.values());
@@ -152,8 +133,5 @@ public class DashboardBean extends SpringBeanAutowiringSupport implements Serial
 		this.bookingsMap = bookingsMap;
 	}
 
-	
-	private void clearUp() {		
-	}
 
 }
